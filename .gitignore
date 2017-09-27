@@ -1,0 +1,12 @@
+*.a
+*.o
+*.TMP
+board/ExtDll.iex
+board/JLinkLog.txt
+board/JLinkSettings.ini
+board/Listings/
+board/Output/
+board/arm_startup_nrf51.lst
+board/drl51822project.map
+board/drl51822project.uvguix.Administrator
+board/drl51822project.uvoptx
