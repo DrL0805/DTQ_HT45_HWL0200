@@ -38,7 +38,7 @@ void POWER_SysOnToSleep(void)
 	
 	TIMER_ADCStop();
 	
-	TIMER_SysOffStart();		// 45min自动关机定时器开启	
+//	TIMER_SysOffStart();		// 45min自动关机定时器开启	
 	
 	
 	LCD_Sleep();
@@ -63,7 +63,7 @@ void POWER_SysSleepToOn(void)
 	
 	TIMER_SysStateStart();				//30S休眠定时器开启
 	
-	TIMER_SysOffStop();					//45min自动关机定时器关闭	
+//	TIMER_SysOffStop();					//45min自动关机定时器关闭	
 	
 	LCD_WakeUp();
 }

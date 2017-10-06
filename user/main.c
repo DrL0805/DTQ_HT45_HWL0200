@@ -22,12 +22,12 @@ int main (void)
 	LCD_DRV_Init();	
 
 	TIMER_RxWindowStart();
-//	TIMER_SysStateStart();	
+	TIMER_SysStateStart();	
 	
 	LCD_ClearScreen();
 	LCD_DisplayDeviceId();
-	LCD_DisplaySignal(RSSI_0);
-	LCD_DisplayBattery(BATTERY_LEVEL_0);
+	LCD_DisplaySignal(RSSI_4);
+	LCD_DisplayBattery(BATTERY_LEVEL_2);
 	LCD_DisplayStudentName();
 	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 	

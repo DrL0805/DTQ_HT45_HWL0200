@@ -27,23 +27,7 @@ void TEST_RssiTest(void)
 #define LCD_TEST_DELAY 500
 void TEST_LcdTest(void)
 {
-	static bool LcdTestFlg = true;
-	
-	if(LcdTestFlg)
-	{
-		LcdTestFlg = false;
-		for(uint8_t i = 0;i < 2;i++)
-		{
-			LCD_DisplayAll();	
-			LCD_WriteMultData(0x00,18,LCD_RAM); 
-			nrf_delay_ms(LCD_TEST_DELAY);
-			
-			LCD_ClearScreen();
-			LCD_WriteMultData(0x00,18,LCD_RAM); 
-			nrf_delay_ms(LCD_TEST_DELAY);		
-		}
-	}
-	ADC_LcdDisValue();
+
 }
 
 
