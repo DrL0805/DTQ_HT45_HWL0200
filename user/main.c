@@ -85,23 +85,9 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
-//	KEY_Scan();
-//	LCD_DisplayStudentName(KEY.ScanValue);
-//	LCD_DisplayQuestionNum(45);
-//	LCD_DisplayScoreValue(87);
-
-
-//	LED_ON(LED_0);
-//	nrf_delay_ms(200);
-//	LED_OFF(LED_0);
-//	nrf_delay_ms(200);
+	uint8_t TmpBuf[2] = {0xb5,0xa5};
 	
-//		LCD_DRV_DisplayTest(0x00,0x00);
-//		nrf_delay_ms(500);			
-//		LCD_DRV_DisplayPicture(BMP);
-//		nrf_delay_ms(500);
-//		LCD_DRV_DisplayTest(0xAA,0xFF);
-//		nrf_delay_ms(500);	
+	LCD_DRV_DisplayOne(46,1,TmpBuf);
 }
 
 

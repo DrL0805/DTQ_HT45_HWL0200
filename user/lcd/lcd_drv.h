@@ -73,11 +73,29 @@
 #define LCD_SDA_HIGH()				nrf_gpio_pin_set(LCD_PIN_SDA)
 #define LCD_SDA_LOW()				nrf_gpio_pin_clear(LCD_PIN_SDA)
 
+
+// ASCII±àÂë
+#define ASCII_A				0x41
+#define ASCII_B				0x42
+#define ASCII_C				0x43
+#define ASCII_D				0x44
+#define ASCII_0				0x30
+#define ASCII_1				0x31
+#define ASCII_2				0x32
+#define ASCII_3				0x33
+#define ASCII_4				0x34
+#define ASCII_5				0x35
+#define ASCII_6				0x36
+#define ASCII_7				0x37
+#define ASCII_8				0x38
+#define ASCII_9				0x39
+
+
+
 extern void LCD_DRV_Init(void);
 extern void LCD_DRV_Init_TEST(uint8_t test);
 extern void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl);
-extern void LCD_DRV_DisplayPicture(uint8_t pic[]);
-extern void LCD_DRV_DisplayJie(void);
+extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint8_t* DotCode);
 extern void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode);
 extern void LCD_DRV_DisplayAscii(uint8_t Hang, uint8_t Lie, uint8_t* ASCIIDotMatrix);
 extern void LCD_DRV_DisplayDigit(uint8_t Hang, uint8_t Lie, uint8_t Digit);

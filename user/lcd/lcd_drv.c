@@ -97,60 +97,73 @@ void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl)
 	}	
 }
 
-//图片写入
-void LCD_DRV_DisplayPicture(uint8_t pic[])
+/*
+* 功能：LCD显示一个字符（汉字或者ASCII码）
+* Location：显示位置，从左到后从上到下依次为0~63，一个汉字占2个位置，一个ACSSI码占1个位置
+* DotType：点阵类型：字母数字/汉字
+* DotBuf：显示点阵内容
+*/
+ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint8_t* DotCode)
 {
-	uint8_t i,page;
-
-	for(page=0;page<9;page++)
-	{
-		LCD_DRV_WriteCmd(0x10);
-		LCD_DRV_WriteCmd(0x00);
-		LCD_DRV_WriteCmd(page+0xb0);
-		for(i=0;i<128 ;i++)
-		{
-			LCD_DRV_WriteData(*pic);
-			pic++;
-		}
-	}
-}
-
-
-void LCD_DRV_DisplayJie(void)
-{
-	uint8_t i,j;
-	uint8_t Bmp[]=
-	{
-//		0x82,0x42,0x31,0x00,0x00,0x10,0x60,0x07,0x10,0x60,0x00,0x00,0x11,0xE2,0x02,0x00,
-//		0x00,0x08,0x08,0x88,0x48,0x28,0x18,0xFF,0x18,0x28,0x48,0x88,0x08,0x08,0x00,0x00,
+	uint8_t i, DotBuf[32];
 	
-//		/*--  文字:  杰，图像上下翻转  --*/
-//		/*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
-//		0x41,0x42,0x8C,0x00,0x00,0x08,0x06,0xE0,0x08,0x06,0x00,0x00,0x88,0x47,0x40,0x00,
-//		0x00,0x10,0x10,0x11,0x12,0x14,0x18,0xFF,0x18,0x14,0x12,0x11,0x10,0x10,0x00,0x00
+	if(Location > 63)
+		return;
+	
+	switch(DotType)
+	{
+		case 0:	// ascii码		
+			switch(*DotCode)
+			{
+				case ASCII_A:
+					memcpy(DotBuf, DotMatrix_A, 16);
+					break;
+				case ASCII_B:
+					memcpy(DotBuf, DotMatrix_B, 16);
+					break;
+				case ASCII_C:
+					memcpy(DotBuf, DotMatrix_C, 16);
+					break;
+				case ASCII_D:
+					memcpy(DotBuf, DotMatrix_D, 16);
+					break;
+				default:
+					memset(DotBuf, 0x00, 16);
+					break;
+			}
 		
-		/*--  文字:  杰，图像上下不翻转  --*/
-		/*--  宋体12;  此字体下对应的点阵为：宽x高=16x16   --*/
-		0x00,0x08,0x08,0x88,0x48,0x28,0x18,0xFF,0x18,0x28,0x48,0x88,0x08,0x08,0x00,0x00,
-		0x82,0x42,0x31,0x00,0x00,0x10,0x60,0x07,0x10,0x60,0x00,0x00,0x11,0xE2,0x02,0x00
-	};
-	
-	LCD_DRV_WriteCmd(0x10);
-	LCD_DRV_WriteCmd(0x00);			
-	LCD_DRV_WriteCmd(0+0xb0);		// page
-	for(i=0;i<16 ;i++)
-	{
-		LCD_DRV_WriteData(Bmp[i]);
-	}
-	
-	LCD_DRV_WriteCmd(0x10);
-	LCD_DRV_WriteCmd(0x00);
-	LCD_DRV_WriteCmd(1+0xb0);
-	for(i=0;i<16 ;i++)
-	{
-		LCD_DRV_WriteData(Bmp[i+16]);
+			LCD_DRV_WriteCmd((Location/16)*2 + 0xb0);						// 设置在第几行显示
+			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));			
+			for(i=0;i<8 ;i++)
+				LCD_DRV_WriteData(DotBuf[i]);
+			
+			LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);			
+			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));
+			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
+			for(i=8;i<16 ;i++)
+				LCD_DRV_WriteData(DotBuf[i]);		
+			break;
+		case 1:	// 汉字
+			W25_SpiReadHanziDot(DotBuf, (uint16_t)(DotCode[0]<<8 | DotCode[1]));
+		
+			LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
+			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
+			for(i=0;i<16 ;i++)
+				LCD_DRV_WriteData(DotBuf[i]);
+			
+			LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);		
+			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
+			for(i=16;i<32 ;i++)
+				LCD_DRV_WriteData(DotBuf[i]);		
+			break;
+		default:
+			break;
 	}
 }
+
 
 /*
 * Hang:从上到下0~3

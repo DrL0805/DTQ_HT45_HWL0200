@@ -93,6 +93,8 @@ typedef struct
 	uint8_t					DotMatrix[32];
 }LCD_PARAMETERS_T;
 
+
+
 extern LCD_PARAMETERS_T LCD;
 
 void LCD_Init(void);
