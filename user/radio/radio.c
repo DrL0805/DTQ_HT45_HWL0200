@@ -100,7 +100,7 @@ uint32_t RADIO_Config(void)
 	nrf_esb_config_t nrf_esb_config         = NRF_ESB_DEFAULT_CONFIG;
 	nrf_esb_config.protocol                 = NRF_ESB_PROTOCOL_ESB_DPL;
 	nrf_esb_config.retransmit_delay         = 600;
-	nrf_esb_config.bitrate                  = NRF_ESB_BITRATE_1MBPS;
+	nrf_esb_config.bitrate                  = NRF_ESB_BITRATE_2MBPS;
 	nrf_esb_config.event_handler            = nrf_esb_event_handler;
 	nrf_esb_config.mode                     = NRF_ESB_MODE_PRX;
 	nrf_esb_config.selective_auto_ack       = true;	
