@@ -78,7 +78,7 @@ void APP_KeyHandler(void)
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;
 							
-							APP_KeySingleHandler();
+							APP_KeySingleChoiceHandler();
 							break;
 						case QUE_JUDGE:						// 判断
 							
@@ -93,7 +93,7 @@ void APP_KeyHandler(void)
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;							
 						
-							APP_KeyMultiHandler();
+							APP_KeyMultiChoiceHandler();
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
@@ -103,10 +103,10 @@ void APP_KeyHandler(void)
 							APP_KeyActivityHandler();
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:
-							
+							APP_KeyMultiSingleChoiceHandler();
 							break;
 						case QUE_FREE:
-							
+							APP_KeyFreeHandler();
 							break;
 						default:
 							break;
@@ -204,6 +204,8 @@ void APP_KeyFnAddOKHandler(void)
 void APP_KeyClearHandler(void)
 {
 	APP.QUE.Answer = 0;
+	APP.QUE.pMultiAnswerNum = 0;
+	memset(APP.QUE.MultiAnswer, 0x00, 16);
 	LCD_DRV_DisplayLetter(APP.QUE.Answer);	
 	LCD_DRV_ClearSendArea();
 }
@@ -273,6 +275,68 @@ void APP_KeySendHandler(void)
 	
 	// 把RADIO.TX结构体的数据发送出去
 	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
+}
+
+void APP_KeyMultiSendHandler(void)
+{
+	uint8_t i,j;
+	uint8_t CmdPackLen;			// CMD_QUESTION包长（包括CmdType、CmdLen、CmdData），单独计算出来，让代码更好看
+	
+	//若没收到题目，发送键无效
+	if(false == APP.QUE.ReceiveQueFlg)
+		return;
+	
+	//发送允许标志，用于控制按发送键的频率
+	if(false == APP.QUE.KeySendAllowFlg)
+		return;
+	
+	// 没有作答，发送键无效
+	if(0x00 == APP.QUE.MultiAnswer[0])
+		return;
+	
+	/*
+		答题器2.4G链路层数据格式
+		0：包头0x61
+		1：源ID，因为还没有绑定成功，所以全为0
+		5：目标ID，接收器UID
+		9：设备类型，答题器 = 0x11
+		10：协议版本 = 0x21
+		11：帧号+1
+		12：包号+1
+		13：扩展字节长度 = 0
+		14：包长，广播包长 = 23
+		----------包内容--------------
+			15：命令类型 = 0x10
+			16：命令长度 = 
+			---------命令内容---------
+				17~20：题目包号
+				21：题目类型
+				22~37：作答结果
+		------------------------------
+		38：校验
+		39：包尾0x21
+	*/	
+	RADIO.TX.DataLen = 40;
+	
+	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
+	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+	memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+	RADIO.TX.Data[9] = 0x11;							// 设备ID
+	RADIO.TX.Data[10] = 0x20;
+	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
+	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+	RADIO.TX.Data[13] = 0;						// 扩展字节长度
+	RADIO.TX.Data[14] = 23;					// PackLen
+	RADIO.TX.Data[15] = 0x10;				// 命令类型
+	RADIO.TX.Data[16] = 21;					// 命令长度，
+	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
+	RADIO.TX.Data[21] = APP.QUE.Type;
+	memcpy(RADIO.TX.Data+22, APP.QUE.MultiAnswer, 16);	
+	RADIO.TX.Data[38] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[39] = NRF_DATA_END;
+	
+	// 把RADIO.TX结构体的数据发送出去
+	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);	
 }
 
 void APP_KeyLastHandler(void)
@@ -374,7 +438,7 @@ void APP_KeyFnAdd7Handler(void)
 }
 
 //单选题按键处理函数
-void APP_KeySingleHandler(void)
+void APP_KeySingleChoiceHandler(void)
 {
 	uint8_t TmpAnswer = 0;
 	
@@ -463,7 +527,7 @@ void APP_KeySingleHandler(void)
 }
 
 //多选题按键处理函数
-void APP_KeyMultiHandler(void)
+void APP_KeyMultiChoiceHandler(void)
 {
 	switch(KEY.ScanValue)
 	{
@@ -550,6 +614,93 @@ void APP_KeyMultiHandler(void)
 			break;
 	}
 }	
+
+// 多题单选
+void APP_KeyMultiSingleChoiceHandler(void)
+{
+	uint8_t Tmp;
+	
+	switch(KEY.ScanValue)
+	{
+		case KEY_APP_A_1:
+			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x01;
+			Tmp = ASCII_A;
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);
+			break;
+		case KEY_APP_B_2:
+			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x02;
+			Tmp = ASCII_B;
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			break;
+		case KEY_APP_C_3:
+			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x04;
+			Tmp = ASCII_C;
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			break;
+		case KEY_APP_D_4: 
+			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x08;
+			Tmp = ASCII_D;
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			break;
+		case KEY_APP_RINGHT:
+			APP_KeyMultiSendHandler();			
+			break;
+		case KEY_APP_WRONG:					
+			APP_KeyClearHandler();
+			break;
+		case KEY_APP_FN:					// 红包键				
+			break;
+		default:
+			break;
+	}	
+}
+
+void APP_KeyFreeHandler(void)
+{
+	uint8_t TmpAnswer = 0;
+	
+	switch(KEY.ScanValue)
+	{
+		case KEY_APP_A_1:
+			APP.QUE.Answer = 0x01;
+			LCD_DRV_DisplayLetter(APP.QUE.Answer);
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_B_2:
+			APP.QUE.Answer = 0x02;
+			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_C_3:
+			APP.QUE.Answer = 0x04;
+			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_D_4: 
+			APP.QUE.Answer = 0x08;
+			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_RINGHT:
+			APP.QUE.Answer = 0x10;
+			LCD_DisplayJudge(JUDGE_TRUE);
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_WRONG:	
+			APP.QUE.Answer = 0x20;
+			LCD_DisplayJudge(JUDGE_FALSE);
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_FN:
+			APP.QUE.Answer = 0x40;
+			LCD_DRV_ClearInputArea();
+			LCD_DRV_DisplayHanzi(3,1,0xA1EF);	
+			APP_KeySendHandler();
+			break;
+		default:
+			break;
+	}
+}
 
 //判断题按键处理函数
 void APP_KeyActivityHandler(void)
@@ -830,6 +981,9 @@ void APP_CmdQuestionHandler(void)
 	// 清空之前的作答和LCD显示
 	LCD_DRV_ClearInputArea();
 	APP.QUE.Answer = 0;
+	APP.QUE.pMultiAnswerNum = 0;
+	memset(APP.QUE.MultiAnswer, 0x00, 16);	
+	
 	
 	// 显示题目内容
 	LCD_DRV_ClearSceneArea();

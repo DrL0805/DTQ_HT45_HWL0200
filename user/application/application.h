@@ -71,7 +71,11 @@ typedef struct
 	uint8_t 			LastPackNum[4];						// 上次接收的题目包号，占4bit，用于区分是否是新的题目包
 	
 	APP_QUE_TYPE 		Type;
-	uint8_t				Answer;		//作答结果
+	uint8_t				Answer;			// 作答结果
+	
+	// 多题单选作答相关
+	uint8_t 			MultiAnswer[16];	
+	uint8_t 			pMultiAnswerNum;
 }QUE_PARAMETERS_T;
 
 typedef struct
@@ -100,6 +104,7 @@ void APP_KeyPowerHandler(void);
 void APP_KeyFnHandler(void);
 void APP_KeyClearHandler(void);
 void APP_KeySendHandler(void);
+void APP_KeyMultiSendHandler(void);
 void APP_KeyLastHandler(void);
 void APP_KeyNextHandler(void);
 void APP_KeyFnAdd1Handler(void);
@@ -112,8 +117,10 @@ void APP_KeyFnAdd7Handler(void);
 void APP_KeyFnAdd8Handler(void);
 void APP_KeyFnAddOKHandler(void);
 
-void APP_KeySingleHandler(void);
-void APP_KeyMultiHandler(void);
+void APP_KeySingleChoiceHandler(void);
+void APP_KeyMultiChoiceHandler(void);
+void APP_KeyMultiSingleChoiceHandler(void);
+void APP_KeyFreeHandler(void);
 void APP_KeyActivityHandler(void);
 void APP_KeyFigureHandler(void);
 void APP_KeyJudgeHandler(void);
