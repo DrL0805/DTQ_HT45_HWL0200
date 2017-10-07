@@ -45,10 +45,12 @@ typedef enum
 
 typedef enum
 {
-	QUE_SINGLE 		= 0x01,				// 单选判断题
-	QUE_JUDGE		= 0x02,				
-	QUE_MULTI  		= 0x03,				// 多选题
-	QUE_ACTIVITY    = 0x04				// 抢红包活动题
+	QUE_SINGLE_CHOICE = 0x01,				// 单题单选
+	QUE_JUDGE = 0x02,				// 单题判断
+	QUE_MULTI_CHOICE = 0x03,				// 单题多选
+	QUE_ACTIVITY    = 0x04,				// 抢红包
+	QUE_MULTI_SINGLE_CHOICE = 0x05,		// 多题单选
+	QUE_FREE = 0x06						// 通用题
 }APP_QUE_TYPE;
 
 typedef struct
@@ -66,7 +68,7 @@ typedef struct
 	bool				KeyQueryAllowFlg;					// 按键举手允许标志
 	bool				KeyAttendAllowFlg;					// 按键考勤允许标志
 	
-	uint8_t 			LastPackNum;						// 上次接收的题目包号，占4bit，用于区分是否是新的题目包
+	uint8_t 			LastPackNum[4];						// 上次接收的题目包号，占4bit，用于区分是否是新的题目包
 	
 	APP_QUE_TYPE 		Type;
 	uint8_t				Answer;		//作答结果

@@ -72,7 +72,7 @@ void APP_KeyHandler(void)
 				{
 					switch(APP.QUE.Type)
 					{
-						case QUE_SINGLE:					// 单选
+						case QUE_SINGLE_CHOICE:					// 单选
 							
 							//发送允许标志，用于控制按发送键的频率
 							if(false == APP.QUE.KeySendAllowFlg)
@@ -88,7 +88,7 @@ void APP_KeyHandler(void)
 							
 							APP_KeyJudgeHandler();
 							break;
-						case QUE_MULTI:						// 多选
+						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;							
@@ -101,6 +101,12 @@ void APP_KeyHandler(void)
 								return;									
 						
 							APP_KeyActivityHandler();
+							break;
+						case QUE_MULTI_SINGLE_CHOICE:
+							
+							break;
+						case QUE_FREE:
+							
 							break;
 						default:
 							break;
@@ -234,19 +240,19 @@ void APP_KeySendHandler(void)
 		11：帧号+1
 		12：包号+1
 		13：扩展字节长度 = 0
-		14：包长，广播包长 = 5
+		14：包长，广播包长 = 8
 		----------包内容--------------
 			15：命令类型 = 0x10
-			16：命令长度 = 3
+			16：命令长度 = 6
 			---------命令内容---------
-				17：题目包号
-				18：题目类型
-				19：作答结果
+				17~20：题目包号
+				21：题目类型
+				22：作答结果
 		------------------------------
-		20：校验
-		21：包尾0x21
+		23：校验
+		24：包尾0x21
 	*/	
-	RADIO.TX.DataLen = 22;
+	RADIO.TX.DataLen = 25;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
 	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
@@ -256,14 +262,14 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
-	RADIO.TX.Data[14] = 5;				// PackLen
-	RADIO.TX.Data[15] = 0x10;			// 命令类型
-	RADIO.TX.Data[16] = 3;			// 命令长度，命令总长度 - CmdType1字节 - CmdLen1字节
-	RADIO.TX.Data[17] = 0;			// 题目包号	
-	RADIO.TX.Data[18] = APP.QUE.Type;
-	RADIO.TX.Data[19] = APP.QUE.Answer;
-	RADIO.TX.Data[20] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[21] = NRF_DATA_END;
+	RADIO.TX.Data[14] = 8;					// PackLen
+	RADIO.TX.Data[15] = 0x10;				// 命令类型
+	RADIO.TX.Data[16] = 6;					// 命令长度，
+	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
+	RADIO.TX.Data[21] = APP.QUE.Type;
+	RADIO.TX.Data[22] = APP.QUE.Answer;
+	RADIO.TX.Data[23] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[24] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
 	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
@@ -565,7 +571,7 @@ void APP_KeyActivityHandler(void)
 		case KEY_APP_POWER:	
 			break;
 		case KEY_APP_FN:
-			APP.QUE.Answer = 0x00;
+			APP.QUE.Answer = 0x01;
 			LCD_DRV_ClearInputArea();
 			LCD_DRV_DisplayHanzi(3,1,0xA1EF);	
 			APP_KeySendHandler();
@@ -804,7 +810,7 @@ void APP_CmdQuestionHandler(void)
 	{
 		APP.QUE.ReceiveQueFlg = true;
 		APP.QUE.KeySendAllowFlg = true;
-		APP.QUE.LastPackNum = APP.CMD.CmdData[0];
+		memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 	}
 	else
 	{
@@ -817,9 +823,9 @@ void APP_CmdQuestionHandler(void)
 //			return;		//相同题目，直接退出函数
 //		}
 	}
-
+	
 	// 解析题目信息
-	APP.QUE.Type = APP.CMD.CmdData[1];
+	APP.QUE.Type = APP.CMD.CmdData[4];
 	
 	// 清空之前的作答和LCD显示
 	LCD_DRV_ClearInputArea();
@@ -827,10 +833,10 @@ void APP_CmdQuestionHandler(void)
 	
 	// 显示题目内容
 	LCD_DRV_ClearSceneArea();
-	TmpHanziNum = (APP.CMD.CmdLen - 2) / 2;
+	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
 	for(i = 0;i < TmpHanziNum;i++)
 	{
-		LCD_DRV_DisplayHanzi(2,i,(uint16_t)((APP.CMD.CmdData[2+2*i] << 8) | APP.CMD.CmdData[2+2*i+1]));	
+		LCD_DRV_DisplayHanzi(2,i,(uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));	
 	}
 }
 

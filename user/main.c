@@ -87,7 +87,7 @@ static void MAIN_DebugFun(void)
 {
 	uint8_t TmpBuf[2] = {0xb5,0xa5};
 	
-	LCD_DRV_DisplayOne(46,1,TmpBuf);
+//	LCD_DRV_DisplayOne(46,1,TmpBuf);
 }
 
 
