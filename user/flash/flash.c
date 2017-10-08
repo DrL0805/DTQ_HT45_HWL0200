@@ -38,11 +38,8 @@ FLASH_PARAMETERS_T 		FLASH;
 
 void FLASH_Init(void)
 {
-	FLASH.PageSize = NRF_FICR->CODEPAGESIZE;
-    FLASH.PageNum  = NRF_FICR->CODESIZE;  
-
 	// 使用51822最后一页flash来存储用户数据
-	FLASH.UserAddr = (uint32_t *)(FLASH.PageSize * (FLASH.PageNum - 1));	
+	FLASH.UserAddr = (uint32_t *)(NRF_FICR->CODEPAGESIZE * (NRF_FICR->CODESIZE - 1));	
 }
 
 

@@ -75,7 +75,8 @@
 
 
 // ASCII编码
-#define ASCII_NULL			0x00	//清空显示
+#define ASCII_NULL			0x01	// 不做处理
+#define ASCII_CLEAR			0x00	// 清空显示
 #define ASCII_A				0x41
 #define ASCII_B				0x42
 #define ASCII_C				0x43

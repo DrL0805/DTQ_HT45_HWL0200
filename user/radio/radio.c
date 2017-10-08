@@ -61,27 +61,7 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
 				{
 					TIMER_RxWindowStart();
 				}			
-			}
-		
-
-			
-		
-		
-//			LCD_DisplaySendResult(SEND_RESULT_OK);
-//			if(0 == get_tx_fifo_count())
-//			{
-//				RADIO.IM.RxWindowWaitFlg = false;
-//				TIMER_TxOvertimeStop();
-//				
-//				if(RADIO.IM.TxIngFlg)	//如果在发送数据，增加RX窗口，等待"ACK"
-//				{
-//					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
-//				}	
-//				else
-//				{
-//					TIMER_RxWindowStart();
-//				}				
-//			}				
+			}			
             break;
         case NRF_ESB_EVENT_TX_FAILED:
             break;

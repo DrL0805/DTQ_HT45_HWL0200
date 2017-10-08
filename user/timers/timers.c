@@ -250,21 +250,21 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
-//	APP_ERROR_CHECK(err_code);
+	uint32_t err_code;
+	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
+	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateStop(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_stop(sys_state_timer_id);
-//	APP_ERROR_CHECK(err_code);
+	uint32_t err_code;
+	err_code = app_timer_stop(sys_state_timer_id);
+	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateHandler(void * p_context)
 {
-//	POWER_SysOnToSleep();
+	POWER_SysOnToSleep();
 }
 
 void TIMER_KeyPowerStart(void)

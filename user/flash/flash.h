@@ -11,8 +11,6 @@
 // Typedefs -----------------------------------------------------------
 typedef struct 
 {
-	uint32_t 		PageSize;			// == 2014
-	uint32_t		PageNum;			// == 256
 	uint32_t*		UserAddr;			// 存储用户信息的地址，为51822最后一页flash，地址为0x3FC00，共1K
 }FLASH_PARAMETERS_T;
 

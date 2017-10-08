@@ -68,6 +68,12 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 		case LCD_DRV_DOT_ASCII:	// ascii码		
 			switch((uint8_t)DotCode)
 			{
+				case ASCII_NULL:
+					return;			// 不做处理
+					break;
+				case ASCII_CLEAR:
+					memset(DotBuf, 0x00, 16);
+					break;
 				case ASCII_A:
 					memcpy(DotBuf, DotMatrix_A, 16);
 					break;
@@ -110,8 +116,7 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 				case ASCII_0:
 					memcpy(DotBuf, DotMatrix_0, 16);
 					break;
-				default:
-					memset(DotBuf, 0x00, 16);
+				default:				
 					break;
 			}
 		
@@ -128,19 +133,22 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 				LCD_DRV_WriteData(DotBuf[i]);		
 			break;
 		case LCD_DRV_DOT_HANZI:	// 汉字
-			W25_SpiReadHanziDot(DotBuf, DotCode);
-		
-			LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
-			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
-			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
-			for(i=0;i<16 ;i++)
-				LCD_DRV_WriteData(DotBuf[i]);
-			
-			LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);		
-			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
-			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
-			for(i=16;i<32 ;i++)
-				LCD_DRV_WriteData(DotBuf[i]);		
+			if((DotCode >> 8) >= 0x81)	
+			{
+				W25_SpiReadHanziDot(DotBuf, DotCode);
+				
+				LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
+				LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+				LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
+				for(i=0;i<16 ;i++)
+					LCD_DRV_WriteData(DotBuf[i]);
+				
+				LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);		
+				LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+				LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
+				for(i=16;i<32 ;i++)
+					LCD_DRV_WriteData(DotBuf[i]);					
+			}
 			break;
 		default:
 			break;

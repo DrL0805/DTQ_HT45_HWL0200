@@ -94,7 +94,7 @@ void LCD_ClearScreen(void)
 {
 	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
+	memset(TmpBuf, ASCII_CLEAR, 64);
 	LCD_DRV_DisplayN(0, 64, TmpBuf);		
 }
 
@@ -184,21 +184,20 @@ void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult)
 	
 	switch(SendResult)
 	{
-		case SEND_RESULT_CLEAR:
-			memset(TmpBuf, 0x00, 64);
-			LCD_DRV_DisplayN(56, 8, TmpBuf);			
+		case SEND_RESULT_CLEAR:	
+			LCD_DisplayDeviceId();
 			break;
 		case SEND_RESULT_OK:
-			LCD_DRV_DisplayOne(56, LCD_DRV_DOT_HANZI, 0xB7A2);
-			LCD_DRV_DisplayOne(58, LCD_DRV_DOT_HANZI, 0xCBCD);
-			LCD_DRV_DisplayOne(60, LCD_DRV_DOT_HANZI, 0xB3C9);
-			LCD_DRV_DisplayOne(62, LCD_DRV_DOT_HANZI, 0xB9A6);
+			LCD_DRV_DisplayOne(4, LCD_DRV_DOT_HANZI, 0xB7A2);
+			LCD_DRV_DisplayOne(6, LCD_DRV_DOT_HANZI, 0xCBCD);
+			LCD_DRV_DisplayOne(8, LCD_DRV_DOT_HANZI, 0xB3C9);
+			LCD_DRV_DisplayOne(10, LCD_DRV_DOT_HANZI, 0xB9A6);
 			break;
 		case SEND_RESULT_FAIL:
-			LCD_DRV_DisplayOne(56, LCD_DRV_DOT_HANZI, 0xB7A2);
-			LCD_DRV_DisplayOne(58, LCD_DRV_DOT_HANZI, 0xCBCD);
-			LCD_DRV_DisplayOne(60, LCD_DRV_DOT_HANZI, 0xCAA7);
-			LCD_DRV_DisplayOne(62, LCD_DRV_DOT_HANZI, 0xB0DC);
+			LCD_DRV_DisplayOne(4, LCD_DRV_DOT_HANZI, 0xB7A2);
+			LCD_DRV_DisplayOne(6, LCD_DRV_DOT_HANZI, 0xCBCD);
+			LCD_DRV_DisplayOne(8, LCD_DRV_DOT_HANZI, 0xCAA7);
+			LCD_DRV_DisplayOne(10, LCD_DRV_DOT_HANZI, 0xB0DC);
 			break;
 		default:
 			break;
@@ -360,6 +359,9 @@ void LCD_DisplayDeviceId(void)
 		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
 		TmpUid = TmpUid/10;
 	}
+	
+	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
+	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
 }
 
 
@@ -367,7 +369,7 @@ void LCD_ClearInputArea(void)
 {
 	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
+	memset(TmpBuf, ASCII_CLEAR, 64);
 	LCD_DRV_DisplayN(48, 16, TmpBuf);	
 }
 
@@ -375,14 +377,14 @@ void LCD_ClearSceneArea(void)
 {
 	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
+	memset(TmpBuf, ASCII_CLEAR, 64);
 	LCD_DRV_DisplayN(32, 16, TmpBuf);		
 }
 void LCD_ClearNameArea(void)
 {
 	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
+	memset(TmpBuf, ASCII_CLEAR, 64);
 	LCD_DRV_DisplayN(16, 12, TmpBuf);	
 }
 
@@ -390,7 +392,7 @@ void LCD_ClearScoreArea(void)
 {
 	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
+	memset(TmpBuf, ASCII_CLEAR, 64);
 	LCD_DRV_DisplayN(28, 6, TmpBuf);	
 }
 

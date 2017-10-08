@@ -30,8 +30,6 @@ void APP_Init(void)
 		memset(RADIO.MATCH.JsqUid,0xFF,4);			
 		memset(RADIO.MATCH.DtqUid,0xFF,4);				
 	}
-
-	
 }
 
 
