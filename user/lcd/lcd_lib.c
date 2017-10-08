@@ -139,13 +139,19 @@ void LCD_WakeUp(void)
 //全屏清屏
 void LCD_ClearScreen(void)
 {
-	LCD_DRV_DisplayTest(0x00,0x00);
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0x00, 64);
+	LCD_DRV_DisplayN(0, 64, TmpBuf);		
 }
 
 //全屏显示
 void LCD_DisplayAll(void)
 {
-	LCD_DRV_DisplayTest(0xff,0xff);
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0xFF, 64);
+	LCD_DRV_DisplayN(0, 64, TmpBuf);
 }
 
 
@@ -174,7 +180,7 @@ void LCD_DisplayLetter(uint8_t data)
 void LCD_DisplayJudge(uint8_t Value)
 {
 	
-	LCD_DRV_ClearInputArea();
+	LCD_ClearInputArea();
 	
 	switch(Value)
 	{
@@ -182,10 +188,10 @@ void LCD_DisplayJudge(uint8_t Value)
 			
 			break;
 		case JUDGE_TRUE:
-			LCD_DRV_DisplayHanzi(3,1,0xA1CC);
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1CC);
 			break;
 		case JUDGE_FALSE:
-			LCD_DRV_DisplayHanzi(3,1,0xA1C1);
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1C1);
 			break;
 		default:
 			break;
@@ -194,22 +200,25 @@ void LCD_DisplayJudge(uint8_t Value)
 
 void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult)
 {
+	uint8_t TmpBuf[64];
+	
 	switch(SendResult)
 	{
 		case SEND_RESULT_CLEAR:
-			LCD_DRV_ClearSendArea();
+			memset(TmpBuf, 0x00, 64);
+			LCD_DRV_DisplayN(56, 8, TmpBuf);			
 			break;
 		case SEND_RESULT_OK:
-			LCD_DRV_DisplayHanzi(3,4,0xB7A2);
-			LCD_DRV_DisplayHanzi(3,5,0xCBCD);			
-			LCD_DRV_DisplayHanzi(3,6,0xB3C9);
-			LCD_DRV_DisplayHanzi(3,7,0xB9A6);
+			LCD_DRV_DisplayOne(56, LCD_DRV_DOT_HANZI, 0xB7A2);
+			LCD_DRV_DisplayOne(58, LCD_DRV_DOT_HANZI, 0xCBCD);
+			LCD_DRV_DisplayOne(60, LCD_DRV_DOT_HANZI, 0xB3C9);
+			LCD_DRV_DisplayOne(62, LCD_DRV_DOT_HANZI, 0xB9A6);
 			break;
 		case SEND_RESULT_FAIL:
-			LCD_DRV_DisplayHanzi(3,4,0xB7A2);
-			LCD_DRV_DisplayHanzi(3,5,0xCBCD);
-			LCD_DRV_DisplayHanzi(3,6,0xCAA7);
-			LCD_DRV_DisplayHanzi(3,7,0xB0DC);
+			LCD_DRV_DisplayOne(56, LCD_DRV_DOT_HANZI, 0xB7A2);
+			LCD_DRV_DisplayOne(58, LCD_DRV_DOT_HANZI, 0xCBCD);
+			LCD_DRV_DisplayOne(60, LCD_DRV_DOT_HANZI, 0xCAA7);
+			LCD_DRV_DisplayOne(62, LCD_DRV_DOT_HANZI, 0xB0DC);
 			break;
 		default:
 			break;
@@ -313,7 +322,7 @@ void LCD_DisplayStudentName(void)
 {
 	uint8_t i, TmpNameLen = 0;
 
-	LCD_DRV_ClearNameArea();
+	LCD_ClearNameArea();
 	
 	// 计算名字长度
 	for(i = 0;i < 12;i++)
@@ -330,14 +339,15 @@ void LCD_DisplayStudentName(void)
 	{
 		for(i = 0;i < TmpNameLen;i++)
 		{
-			LCD_DRV_DisplayHanzi(1,1+i,(RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]);	// 无
+//			LCD_DRV_DisplayHanzi(1,1+i,(RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]);	
+			LCD_DRV_DisplayOne(18+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]));
 		}	
 	}
 	else
 	{
-		LCD_DRV_DisplayHanzi(1,1,0xCEDE);	// 无
-		LCD_DRV_DisplayHanzi(1,2,0xD0D5);	// 姓
-		LCD_DRV_DisplayHanzi(1,3,0xC3FB);	// 名
+		LCD_DRV_DisplayOne(18, LCD_DRV_DOT_HANZI, 0xCEDE);// 无
+		LCD_DRV_DisplayOne(20, LCD_DRV_DOT_HANZI, 0xD0D5);// 姓
+		LCD_DRV_DisplayOne(22, LCD_DRV_DOT_HANZI, 0xC3FB);// 名
 	}
 }
 
@@ -350,7 +360,7 @@ void LCD_DisplayScoreValue(uint16_t grade_value)
 {
 	uint8_t Tmp;
 	
-	LCD_DRV_ClearScoreArea();	
+	LCD_ClearScoreArea();	
 	
 	Tmp = grade_value % 10;
 	LCD_DRV_DisplayDigit(1, 14, Tmp);		// 个位
@@ -379,17 +389,36 @@ void LCD_DisplayDeviceId(void)
 }
 
 
-void LCD_DisplayScene(uint8_t Scene)
+void LCD_ClearInputArea(void)
 {
+	uint8_t TmpBuf[64];
 	
-	LCD_DRV_DisplayHanzi(2,1,0xB5A5);	
-	LCD_DRV_DisplayHanzi(2,2,0xD1A1);	
-	LCD_DRV_DisplayHanzi(2,3,0xCCE2);	
-	LCD_DRV_DisplayHanzi(2,4,0xD7F7);	
-	LCD_DRV_DisplayHanzi(2,5,0xB4F0);	
-	
+	memset(TmpBuf, 0x00, 64);
+	LCD_DRV_DisplayN(48, 16, TmpBuf);	
 }
 
+void LCD_ClearSceneArea(void)
+{
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0x00, 64);
+	LCD_DRV_DisplayN(32, 16, TmpBuf);		
+}
+void LCD_ClearNameArea(void)
+{
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0x00, 64);
+	LCD_DRV_DisplayN(16, 12, TmpBuf);	
+}
+
+void LCD_ClearScoreArea(void)
+{
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0x00, 64);
+	LCD_DRV_DisplayN(28, 6, TmpBuf);	
+}
 
 
 #define DISPLAY_TIME 		(200)						//显示的时间

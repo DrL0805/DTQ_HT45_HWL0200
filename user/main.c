@@ -33,23 +33,6 @@ int main (void)
 	
 	POWER.SysInitializedFlg = true;
 	
-//	while(1)
-//	{
-//		for(uint8_t i=18; i<0x28;i++)
-//		{
-//			LCD_DRV_Init_TEST(i);
-//			
-//			LCD_ClearScreen();
-//			LCD_DisplayDeviceId();
-//			LCD_DisplaySignal(RSSI_0);
-//			LCD_DisplayBattery(BATTERY_LEVEL_0);
-//			LCD_DisplayStudentName();
-//			LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);			
-//			
-//			nrf_delay_ms(2000);
-//		}
-//	}
-	
 	while(true)
 	{
 		switch(POWER.SysState)
@@ -83,8 +66,10 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
-	
-//	LCD_DRV_DisplayOne(46,LCD_DRV_DOT_HANZI,0XA3A1);
+//	uint8_t TmpBuf[] = {0xB9, 0xA7, 0xCF, 0xB2, 0xC4, 0xE3, 0xA3, 0xA1, 0xB4, 0xF0, 0xB6, 0xD4, 0xC1, 0xCB};
+//	
+//	LCD_DRV_DisplayN(40, 14, TmpBuf);
+//	LCD_DRV_DisplayOne(43, 0, ASCII_2);
 }
 
 

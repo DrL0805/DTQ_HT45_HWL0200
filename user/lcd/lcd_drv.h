@@ -75,6 +75,7 @@
 
 
 // ASCII编码
+#define ASCII_NULL			0x00	//清空显示
 #define ASCII_A				0x41
 #define ASCII_B				0x42
 #define ASCII_C				0x43
@@ -97,68 +98,17 @@
 
 
 extern void LCD_DRV_Init(void);
-extern void LCD_DRV_Init_TEST(uint8_t test);
-extern void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl);
 extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode);
+extern void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf);
+
 extern void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode);
 extern void LCD_DRV_DisplayAscii(uint8_t Hang, uint8_t Lie, uint8_t* ASCIIDotMatrix);
 extern void LCD_DRV_DisplayDigit(uint8_t Hang, uint8_t Lie, uint8_t Digit);
 extern void LCD_DRV_DisplayLetter(uint8_t Letter);
-extern void LCD_DRV_ClearInputArea(void);
-extern void LCD_DRV_ClearSceneArea(void);
-extern void LCD_DRV_ClearNameArea(void);
-extern void LCD_DRV_ClearScoreArea(void);
-extern void LCD_DRV_ClearSendArea(void);
 
-extern void LCD_DRV_DisplayBattery(void);
-extern void LCD_DRV_DisplaySignal(void);
+
 extern void LCD_DRV_WriteCmd(uint8_t Cmd);
 extern void LCD_DRV_WriteData(uint8_t Data);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#define LCD_DATA          		(8u)
-#define LCD_WRB          		(9u)
-#define LCD_CSB          		(10u)
-#define LCD_POWER				(18u)
-
-#define LCD_PowerCtrlOff()			nrf_gpio_pin_set(LCD_POWER)
-#define LCD_PowerCtrlOn()			nrf_gpio_pin_clear(LCD_POWER)
-
-//---------------------LCD控制命令---------------------------------
-#define SYSDIS 				0x00 //关闭系统振荡器
-#define SYSEN 				0x01 //打开系统振荡器
-#define LCDOFF 				0x02 //关闭LCF偏压
-#define LCDON 				0x03 //打开LCF偏压
-#define RC256 				0x18 //使用内部时钟
-#define BIAS_1_3			0x29 //LCD1/3偏压设置
-#define LCD_DRIVE_DELAY()	do{ __nop();__nop(); }while(0)
-//#define LCD_DRIVE_DELAY()	nrf_delay_us(10)
-
-
-extern uint8_t 					LCD_RAM[18];
-
-
-
-
-void LCD_WriteData(uint8_t data, uint8_t count, uint8_t flag);
-void LCD_WriteCommand(uint8_t cmd);
-void LCD_WriteSignleData(uint8_t addr, uint8_t data);
-void LCD_WriteMultData(uint8_t addr, uint8_t len, uint8_t * data);
-void LCD_ClearRam(uint8_t ram1, uint8_t ram2);
-void LCD_ModifyRam(uint8_t ram1, uint8_t ram2, uint8_t data1, uint8_t data2);
-void LCD_ModifySegment(uint8_t ram1, uint8_t ram2, uint8_t data);
 
 
 #endif 

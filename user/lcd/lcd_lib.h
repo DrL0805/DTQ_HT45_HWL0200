@@ -117,10 +117,14 @@ void LCD_DisplayStudentName(void);
 void LCD_DisplayQuestionNum(uint16_t question_num);
 void LCD_DisplayScoreValue(uint16_t grade_value);
 void LCD_DisplayDeviceId(void);
-void LCD_DisplayScene(uint8_t Scene);
+
+extern void LCD_ClearInputArea(void);
+extern void LCD_ClearSceneArea(void);
+extern void LCD_ClearNameArea(void);
+extern void LCD_ClearScoreArea(void);
+extern void LCD_ClearSendArea(void);
 
 void LCD_DisplayTest(void);
-
 
 #endif 
 

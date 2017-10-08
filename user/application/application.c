@@ -210,7 +210,7 @@ void APP_KeyClearHandler(void)
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);
 	LCD_DRV_DisplayLetter(APP.QUE.Answer);	
-	LCD_DRV_ClearSendArea();
+	LCD_DisplaySendResult(SEND_RESULT_CLEAR);
 }
 
 void APP_KeyFnHandler(void)
@@ -691,8 +691,9 @@ void APP_KeyFreeHandler(void)
 			break;
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x40;
-			LCD_DRV_ClearInputArea();
-			LCD_DRV_DisplayHanzi(3,1,0xA1EF);	
+
+			LCD_ClearInputArea();
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
 			APP_KeySendHandler();
 			break;
 		default:
@@ -721,8 +722,10 @@ void APP_KeyActivityHandler(void)
 			break;
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x01;
-			LCD_DRV_ClearInputArea();
-			LCD_DRV_DisplayHanzi(3,1,0xA1EF);	
+
+			LCD_ClearInputArea();
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
+			
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_CLEAR:	
@@ -931,10 +934,9 @@ void APP_KeyEmptyHandler(void)
 			LCD_DisplayJudge(JUDGE_FALSE);
 			break;
 		case KEY_APP_FN:
-			LCD_DRV_ClearInputArea();
-			LCD_DRV_DisplayHanzi(3,1,0xA1EF);	
-//			LCD_DRV_DisplayHanzi(3,1,0xBAEC);	// 红
-//			LCD_DRV_DisplayHanzi(3,2,0xB0FC);	// 包
+			
+			LCD_ClearInputArea();
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
 			break;
 		default:
 			break;
@@ -977,18 +979,20 @@ void APP_CmdQuestionHandler(void)
 	APP.QUE.Type = APP.CMD.CmdData[4];
 	
 	// 清空之前的作答和LCD显示
-	LCD_DRV_ClearInputArea();
+
+	LCD_ClearInputArea();
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
 	
 	
 	// 显示题目内容
-	LCD_DRV_ClearSceneArea();
+	LCD_ClearSceneArea();
 	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
 	for(i = 0;i < TmpHanziNum;i++)
 	{
-		LCD_DRV_DisplayHanzi(2,i,(uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));	
+//		LCD_DRV_DisplayHanzi(2,i,(uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));	
+		LCD_DRV_DisplayOne(32+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));
 	}
 }
 
@@ -1100,18 +1104,7 @@ void APP_CmdLcdCtrlHandler(void)
 		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6, 4))
 		{
 			// 根据指令更新LCD显示
-			LCD_DRV_ClearSceneArea();
-			if(Flg)
-			{
-				Flg = false;
-				LCD_DRV_DisplayOne(46,LCD_DRV_DOT_HANZI,0xBABA);
-			}
-			else
-			{
-				Flg = true;
-				LCD_DRV_DisplayOne(43,LCD_DRV_DOT_HANZI,0xBABA);
-			}
-			
+			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
 			
 			// 返回回显确认信息
 			RADIO.TX.DataLen = 27;	
@@ -1159,8 +1152,9 @@ void APP_ClearQuestionInfo(void)
 	
 	APP.QUE.Answer = 0;
 	
-	LCD_DRV_ClearSceneArea();
-	LCD_DRV_ClearInputArea();
+	LCD_ClearSceneArea();
+
+	LCD_ClearInputArea();
 }
 
 
