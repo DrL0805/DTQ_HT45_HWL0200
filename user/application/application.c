@@ -48,7 +48,9 @@ void APP_ParUpdate(void)
 	RADIO.MATCH.Student.Score = 0;
 	
 	LCD_DisplayStudentName();
-	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);	
+	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
+
+	RADIO.IM.LastRxPackNum = 0;
 }
 
 void APP_KeyHandler(void)
@@ -209,7 +211,7 @@ void APP_KeyClearHandler(void)
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);
-	LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+	LCD_DisplayLetter(APP.QUE.Answer);	
 	LCD_DisplaySendResult(SEND_RESULT_CLEAR);
 }
 
@@ -449,22 +451,22 @@ void APP_KeySingleChoiceHandler(void)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.Answer = 0x01;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);
+			LCD_DisplayLetter(APP.QUE.Answer);
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.Answer = 0x02;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.Answer = 0x04;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.Answer = 0x08;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_E_5:
@@ -536,83 +538,29 @@ void APP_KeyMultiChoiceHandler(void)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.Answer |= 0x01;
-//			APP.QUE.Answer ^= 0x01;						//二次输入删除
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);		
+			LCD_DisplayLetter(APP.QUE.Answer);		
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.Answer |= 0x02;
-//			APP.QUE.Answer ^= 0x02;						//二次输入删除
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);		
+			LCD_DisplayLetter(APP.QUE.Answer);		
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.Answer |= 0x04;
-//			APP.QUE.Answer ^= 0x04;						//二次输入删除
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);		
+			LCD_DisplayLetter(APP.QUE.Answer);		
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.Answer |= 0x08;
-//			APP.QUE.Answer ^= 0x08;						//二次输入删除
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);		
-			break;
-		case KEY_APP_E_5:
-		case KEY_APP_F_6:		
+			LCD_DisplayLetter(APP.QUE.Answer);		
 			break;
 		case KEY_APP_RINGHT:
-			APP_KeySendHandler();			// 发送键
+			APP_KeySendHandler();			
 			break;
-		case KEY_APP_WRONG:					// 清除键
+		case KEY_APP_WRONG:					
 			APP_KeyClearHandler();
-			break;
-		case KEY_APP_QUERY:				
-			break;
-		case KEY_APP_POWER:	
 			break;
 		case KEY_APP_FN:				
 			break;
-		case KEY_APP_CLEAR:	
-			APP_KeyClearHandler();
-			break;
-		case KEY_APP_SEND:   
-			APP_KeySendHandler();
-			break;
-		case KEY_APP_LAST:	
-			APP_KeyLastHandler();
-			break;			
-		case KEY_APP_NEXT:	
-			APP_KeyNextHandler();
-			break;
-		case KEY_APP_FN_ADD_1:	
-			APP_KeyFnAdd1Handler();
-			break;
-		case KEY_APP_FN_ADD_2:	
-			APP_KeyFnAdd2Handler();
-			break;
-		case KEY_APP_FN_ADD_3:	
-			APP_KeyFnAdd3Handler();
-			break;
-		case KEY_APP_FN_ADD_4:	
-			APP_KeyFnAdd4Handler();
-			break;
-		case KEY_APP_FN_ADD_5:	
-			APP_KeyFnAdd5Handler();
-			break;
-		case KEY_APP_FN_ADD_6:	
-			APP_KeyFnAdd6Handler();
-			break;
-		case KEY_APP_FN_ADD_7:	
-			APP_KeyFnAdd7Handler();
-			break;
-		case KEY_APP_FN_ADD_OK:			//Fn+ok 按键考勤
-			APP_KeyFnAddOKHandler();
-			break;
-		case KEY_APP_FN_ADD_8:			//Fn+? 按键举手
-			APP_KeyFnAdd8Handler();
-			break;
-		case KEY_APP_FN_ADD_UP:			// Fn+上题，进入24G配对模式
-			POWER_SysOnToMatch();
-			break;
-		case KEY_APP_FN_ADD_DOWN:		
-			break;	
+
 		default:
 			break;
 	}
@@ -661,22 +609,22 @@ void APP_KeyFreeHandler(void)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.Answer = 0x01;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);
+			LCD_DisplayLetter(APP.QUE.Answer);
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.Answer = 0x02;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.Answer = 0x04;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.Answer = 0x08;
-			LCD_DRV_DisplayLetter(APP.QUE.Answer);	
+			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_RINGHT:
@@ -691,9 +639,7 @@ void APP_KeyFreeHandler(void)
 			break;
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x40;
-
-			LCD_ClearInputArea();
-			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
+			LCD_DisplayHongbao(HONGBAO_DISPLAY);
 			APP_KeySendHandler();
 			break;
 		default:
@@ -701,7 +647,7 @@ void APP_KeyFreeHandler(void)
 	}
 }
 
-//判断题按键处理函数
+
 void APP_KeyActivityHandler(void)
 {
 	switch(KEY.ScanValue)
@@ -723,8 +669,7 @@ void APP_KeyActivityHandler(void)
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x01;
 
-			LCD_ClearInputArea();
-			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
+			LCD_DisplayHongbao(HONGBAO_DISPLAY);
 			
 			APP_KeySendHandler();
 			break;
@@ -916,16 +861,16 @@ void APP_KeyEmptyHandler(void)
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
-			LCD_DRV_DisplayLetter(LCD_A);
+			LCD_DisplayLetter(LCD_A);
 			break;
 		case KEY_APP_B_2:
-			LCD_DRV_DisplayLetter(LCD_B);
+			LCD_DisplayLetter(LCD_B);
 			break;
 		case KEY_APP_C_3:
-			LCD_DRV_DisplayLetter(LCD_C);
+			LCD_DisplayLetter(LCD_C);
 			break;
 		case KEY_APP_D_4: 	
-			LCD_DRV_DisplayLetter(LCD_D);
+			LCD_DisplayLetter(LCD_D);
 			break;
 		case KEY_APP_RINGHT:	
 			LCD_DisplayJudge(JUDGE_TRUE);
@@ -934,9 +879,7 @@ void APP_KeyEmptyHandler(void)
 			LCD_DisplayJudge(JUDGE_FALSE);
 			break;
 		case KEY_APP_FN:
-			
-			LCD_ClearInputArea();
-			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);
+			LCD_DisplayHongbao(HONGBAO_DISPLAY);
 			break;
 		default:
 			break;

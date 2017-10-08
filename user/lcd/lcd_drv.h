@@ -100,11 +100,9 @@
 extern void LCD_DRV_Init(void);
 extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode);
 extern void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf);
+extern void LCD_DRV_DisplayDigit(uint8_t Location, uint8_t DigitValue);
 
 extern void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode);
-extern void LCD_DRV_DisplayAscii(uint8_t Hang, uint8_t Lie, uint8_t* ASCIIDotMatrix);
-extern void LCD_DRV_DisplayDigit(uint8_t Hang, uint8_t Lie, uint8_t Digit);
-extern void LCD_DRV_DisplayLetter(uint8_t Letter);
 
 
 extern void LCD_DRV_WriteCmd(uint8_t Cmd);

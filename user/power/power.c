@@ -7,7 +7,6 @@ void POWER_Init(void)
 {
 	//结构体参数初始化
 	POWER.SysState = SYS_ON;
-	POWER.SysOffCount = 0;
 	
 	POWER_DCDCEnable();
 }
@@ -36,10 +35,7 @@ void POWER_SysOnToSleep(void)
 	
 	RADIO_Sleep();
 	
-	TIMER_ADCStop();
-	
-//	TIMER_SysOffStart();		// 45min自动关机定时器开启	
-	
+	TIMER_ADCStop();	
 	
 	LCD_Sleep();
 }
@@ -62,8 +58,6 @@ void POWER_SysSleepToOn(void)
 	TIMER_ADCStart();
 	
 	TIMER_SysStateStart();				//30S休眠定时器开启
-	
-//	TIMER_SysOffStop();					//45min自动关机定时器关闭	
 	
 	LCD_WakeUp();
 }
@@ -93,7 +87,6 @@ void POWER_SysOnToMatch(void)
 	MATCH_LCDDisplayPIN(MATCH.SelectIndex);	
 	
 	// 清除LCD多余显示信息
-	LCD_ClearLetter();
 	LCD_DisplayJudge(JUDGE_CLEAR);
 
 }

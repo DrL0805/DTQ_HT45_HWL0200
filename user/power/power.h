@@ -19,8 +19,6 @@ typedef struct
 	bool					SysInitializedFlg;		//系统初始化完成标志
 	
 	POWER_SYSTEM_STATE_TYPE	SysState;
-	
-	uint8_t 				SysOffCount;		//45min自动关机计数，
 }POWER_PARAMETERS_T;
 
 

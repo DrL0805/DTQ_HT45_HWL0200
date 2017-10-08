@@ -71,54 +71,10 @@ const uint8_t Signal_0[64] = {
 
 void LCD_Init(void)
 {
-	
-	nrf_gpio_cfg_output(LCD_PIN_POWER);
-	nrf_gpio_cfg_output(LCD_PIN_CSB);
-	nrf_gpio_cfg_output(LCD_PIN_RST);
-	nrf_gpio_cfg_output(LCD_PIN_A0);	
-	nrf_gpio_cfg_output(LCD_PIN_SCL);
-	nrf_gpio_cfg_output(LCD_PIN_SDA);		
-	
+		
+	LCD_DRV_Init();	
 }
 
-//刷新LCD_RAM，更新LCD显示
-void LCD_Update(void)
-{
-	uint8_t TmpLcdRam[18];		//临时保存LCDRAM信息
-	
-	if(LCD.UpdateFlg)
-	{
-		LCD.UpdateFlg = false;	
-		
-		switch(LCD.DisType)
-		{
-			case LCD_DIS_UPDATE:
-				
-				break;
-			case LCD_DIS_VER:
-				
-				break;
-			case LCD_DIS_RSSI:
-				
-				break;
-			case LCD_DIS_VOLTAGE:
-			
-				break;
-			case LCD_DIS_CHANNAL:
-			
-				break;
-			case LCD_DIS_ATTEND:
-				
-				break;
-			case LCD_DIS_DATE:
-				
-				break;
-			default:
-				LCD.DisType = LCD_DIS_UPDATE;
-				break;
-		}
-	}
-}
 
 //关闭LCD显示，进入睡眠（低功耗）状态
 void LCD_Sleep(void)
@@ -131,10 +87,7 @@ void LCD_Sleep(void)
 void LCD_WakeUp(void)
 {
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
-	
-
 }
-
 
 //全屏清屏
 void LCD_ClearScreen(void)
@@ -155,26 +108,34 @@ void LCD_DisplayAll(void)
 }
 
 
-void LCD_ClearLetter(void)
+void LCD_DisplayLetter(uint8_t Letter)
 {
-
-}
-
-void LCD_DisplayLetter(uint8_t data)
-{
-	switch(data)
+	LCD_ClearInputArea();
+	uint8_t pLcdLetter = 0;
+	
+	if((Letter & LCD_A) == LCD_A)
 	{
-		case LCD_A:
-			
-			break;
-		case LCD_B:
-			break;
-		case LCD_C:
-			break;
-		case LCD_D:
-			break;
-		
+		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_A);
+		pLcdLetter++;
 	}
+	
+	if((Letter & LCD_B) == LCD_B)
+	{
+		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_B);
+		pLcdLetter++;
+	}
+
+	if((Letter & LCD_C) == LCD_C)
+	{
+		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_C);
+		pLcdLetter++;
+	}
+
+	if((Letter & LCD_D) == LCD_D)
+	{
+		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_D);
+		pLcdLetter++;
+	}	
 }
 
 void LCD_DisplayJudge(uint8_t Value)
@@ -196,6 +157,25 @@ void LCD_DisplayJudge(uint8_t Value)
 		default:
 			break;
 	}	
+}
+
+void LCD_DisplayHongbao(uint8_t Value)
+{
+	LCD_ClearInputArea();
+	
+	switch(Value)
+	{
+		case HONGBAO_DISPLAY:
+			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1EF);	
+			break;
+		case HONGBAO_CLEAR:
+			
+			break;
+		default:
+			break;
+	}	
+	
+	
 }
 
 void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult)
@@ -312,11 +292,6 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 	
 }
 
-void LCD_ClearSegment(void)
-{
-
-}
-
 
 void LCD_DisplayStudentName(void)
 {
@@ -363,12 +338,11 @@ void LCD_DisplayScoreValue(uint16_t grade_value)
 	LCD_ClearScoreArea();	
 	
 	Tmp = grade_value % 10;
-	LCD_DRV_DisplayDigit(1, 14, Tmp);		// 个位
-	Tmp = (grade_value % 100) / 10;			
-	LCD_DRV_DisplayDigit(1, 13, Tmp);		// 十位
-	Tmp = (grade_value % 1000) / 100;				
-	LCD_DRV_DisplayDigit(1, 12, Tmp);		// 百位
-	
+	LCD_DRV_DisplayDigit(28, Tmp);
+	Tmp = (grade_value % 100) / 10;	
+	LCD_DRV_DisplayDigit(29, Tmp);
+	Tmp = (grade_value % 1000) / 100;	
+	LCD_DRV_DisplayDigit(30, Tmp);
 }
 
 
@@ -383,7 +357,7 @@ void LCD_DisplayDeviceId(void)
 
 	for(i = 0;i < 6;i++)
 	{
-		LCD_DRV_DisplayDigit(0, 10-i, TmpUid%10);
+		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
 		TmpUid = TmpUid/10;
 	}
 }
@@ -419,15 +393,6 @@ void LCD_ClearScoreArea(void)
 	memset(TmpBuf, 0x00, 64);
 	LCD_DRV_DisplayN(28, 6, TmpBuf);	
 }
-
-
-#define DISPLAY_TIME 		(200)						//显示的时间
-void LCD_DisplayTest(void)
-{
-}
-
-
-
 
 
 

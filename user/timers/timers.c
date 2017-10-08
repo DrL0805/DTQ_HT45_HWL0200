@@ -362,8 +362,6 @@ void TIMER_SysOffStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(sys_off_timer_id,SYS_OFF_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
-	
-	POWER.SysOffCount = 0;		//计数从零开始
 }
 
 void TIMER_SysOffStop(void)
@@ -375,11 +373,7 @@ void TIMER_SysOffStop(void)
 
 void TIMER_SysOffHandler(void * p_context)
 {
-	//POWER.SysOffCount每分钟+1，到达系统关机计数时，系统关机
-	if(++POWER.SysOffCount > SYS_OFF_COUNT)
-	{
-		POWER_SysOnToOff();
-	}
+
 }
 
 void TIMER_WaitDataStart(uint8_t time_ms)

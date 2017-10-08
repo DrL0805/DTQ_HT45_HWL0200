@@ -19,7 +19,7 @@ int main (void)
 	LED_Init();
 //	TIMER_TempStart();
 	W25_Init();
-	LCD_DRV_Init();	
+	LCD_Init();
 
 	TIMER_RxWindowStart();
 	TIMER_SysStateStart();	

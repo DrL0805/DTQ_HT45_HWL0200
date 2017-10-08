@@ -96,19 +96,19 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 					memcpy(DotBuf, DotMatrix_5, 16);
 					break;
 				case ASCII_6:
-					memcpy(DotBuf, DotMatrix_7, 16);
+					memcpy(DotBuf, DotMatrix_6, 16);
 					break;
 				case ASCII_7:
-					memcpy(DotBuf, DotMatrix_8, 16);
+					memcpy(DotBuf, DotMatrix_7, 16);
 					break;
 				case ASCII_8:
-					memcpy(DotBuf, DotMatrix_9, 16);
+					memcpy(DotBuf, DotMatrix_8, 16);
 					break;
 				case ASCII_9:
-					memcpy(DotBuf, DotMatrix_0, 16);
+					memcpy(DotBuf, DotMatrix_9, 16);
 					break;
 				case ASCII_0:
-					memcpy(DotBuf, DotMatrix_D, 16);
+					memcpy(DotBuf, DotMatrix_0, 16);
 					break;
 				default:
 					memset(DotBuf, 0x00, 16);
@@ -166,6 +166,44 @@ void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf)
 	}while(pLocation < CodeLen);
 }
 
+void LCD_DRV_DisplayDigit(uint8_t Location, uint8_t DigitValue)
+{
+	switch(DigitValue)
+	{
+		case 0:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_0);
+			break;
+		case 1:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_1);
+			break;
+		case 2:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_2);
+			break;
+		case 3:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_3);
+			break;
+		case 4:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_4);
+			break;
+		case 5:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_5);
+			break;
+		case 6:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_6);
+			break;
+		case 7:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_7);
+			break;
+		case 8:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_8);
+			break;
+		case 9:
+			LCD_DRV_DisplayOne(Location, LCD_DRV_DOT_ASCII, ASCII_9);
+			break;
+		default:
+			break;
+	}
+}
 
 /*
 * Hang:从上到下0~3
@@ -196,115 +234,6 @@ void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode)
 		LCD_DRV_WriteData(DotBuf[i]);
 	}	
 }
-
-/*
-* Hang:从上到下0~3
-* Lie：从左到右0~15
-* DotMatrix：字符点阵，8*16
-*/
-void LCD_DRV_DisplayAscii(uint8_t Hang, uint8_t Lie, uint8_t* ASCIIDotMatrix)
-{
-	uint8_t i;
-	uint8_t lie_p;
-	
-	lie_p = Lie*8;
-	
-	LCD_DRV_WriteCmd(Hang*2+0+0xb0);			// page
-	LCD_DRV_WriteCmd(0x10 + (lie_p >> 4));
-	LCD_DRV_WriteCmd(0x00 + (lie_p &  0x0f));	
-	for(i=0;i<8 ;i++)
-	{
-		LCD_DRV_WriteData(ASCIIDotMatrix[i]);
-	}
-	
-	LCD_DRV_WriteCmd(Hang*2+1+0xb0);			// page
-	LCD_DRV_WriteCmd(0x10 + (lie_p >> 4));
-	LCD_DRV_WriteCmd(0x00 + (lie_p &  0x0f));		
-	for(i=8;i<16 ;i++)
-	{
-		LCD_DRV_WriteData(ASCIIDotMatrix[i]);
-	}	
-}
-
-void LCD_DRV_DisplayDigit(uint8_t Hang, uint8_t Lie, uint8_t Digit)
-{
-	uint8_t DigitDotMatrix[16];
-	
-	
-	switch (Digit)
-    {
-    	case 1:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_1);
-    		break;
-    	case 2:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_2);
-    		break;
-		case 3:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_3);
-    		break;
-		case 4:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_4);
-    		break;
-		case 5:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_5);
-    		break;
-		case 6:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_6);
-    		break;
-		case 7:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_7);
-    		break;
-		case 8:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_8);
-    		break;
-		case 9:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_9);
-    		break;
-		case 0:
-			LCD_DRV_DisplayAscii(Hang, Lie, DotMatrix_0);
-    		break;
-    	default:
-    		break;
-    }
-}
-
-
-void LCD_DRV_DisplayLetter(uint8_t Letter)
-{
-	uint8_t i, TmpDisplaySite = 0;		// 显示位置
-	
-
-	LCD_ClearInputArea();
-	
-	if((Letter & LCD_A) == LCD_A)
-	{
-		LCD_DRV_DisplayAscii(3, 2+TmpDisplaySite, DotMatrix_A);
-		TmpDisplaySite++;
-	}
-	
-	if((Letter & LCD_B) == LCD_B)
-	{
-		LCD_DRV_DisplayAscii(3, 2+TmpDisplaySite, DotMatrix_B);
-		TmpDisplaySite++;
-	}
-
-	if((Letter & LCD_C) == LCD_C)
-	{
-		LCD_DRV_DisplayAscii(3, 2+TmpDisplaySite, DotMatrix_C);
-		TmpDisplaySite++;
-	}
-
-	if((Letter & LCD_D) == LCD_D)
-	{
-		LCD_DRV_DisplayAscii(3, 2+TmpDisplaySite, DotMatrix_D);
-		TmpDisplaySite++;
-	}	
-}
-
-
-
-
-
 
 void LCD_DRV_WriteCmd(uint8_t Cmd)
 {

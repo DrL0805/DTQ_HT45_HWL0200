@@ -47,6 +47,12 @@ typedef enum
 	JUDGE_FALSE		= 0X02
 }LCD_JUDGE_TYPE;		
 
+typedef enum
+{
+	HONGBAO_DISPLAY,
+	HONGBAO_CLEAR
+}LCD_HONGBAO_TYPE;
+
 typedef enum 
 {
 	BATTERY_LEVEL_0 = 0X00,
@@ -97,34 +103,28 @@ typedef struct
 
 extern LCD_PARAMETERS_T LCD;
 
-void LCD_Init(void);
-void LCD_Update(void);
+extern void LCD_Init(void);
+extern void LCD_Sleep(void);
+extern void LCD_WakeUp(void);
 
-void LCD_Sleep(void);
-void LCD_WakeUp(void);
+extern void LCD_ClearScreen(void);
+extern void LCD_DisplayAll(void);
+extern void LCD_DisplayLetter(uint8_t Letter);
+extern void LCD_DisplayJudge(uint8_t Value);
+extern void LCD_DisplayHongbao(uint8_t Value);
+extern void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult);
+extern void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value);
+extern void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value);
 
-void LCD_ClearScreen(void);
-void LCD_DisplayAll(void);
-void LCD_ClearLetter(void);
-void LCD_DisplayLetter(uint8_t data);
-void LCD_DisplayJudge(uint8_t Value);
-void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult);
-void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value);
-void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value);
-void LCD_ClearSegment(void);
-
-void LCD_DisplayStudentName(void);
-void LCD_DisplayQuestionNum(uint16_t question_num);
-void LCD_DisplayScoreValue(uint16_t grade_value);
-void LCD_DisplayDeviceId(void);
+extern void LCD_DisplayDeviceId(void);
+extern void LCD_DisplayStudentName(void);
+extern void LCD_DisplayQuestionNum(uint16_t question_num);
+extern void LCD_DisplayScoreValue(uint16_t grade_value);
 
 extern void LCD_ClearInputArea(void);
 extern void LCD_ClearSceneArea(void);
 extern void LCD_ClearNameArea(void);
 extern void LCD_ClearScoreArea(void);
-extern void LCD_ClearSendArea(void);
-
-void LCD_DisplayTest(void);
 
 #endif 
 
