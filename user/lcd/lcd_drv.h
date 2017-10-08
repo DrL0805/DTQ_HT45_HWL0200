@@ -90,12 +90,16 @@
 #define ASCII_8				0x38
 #define ASCII_9				0x39
 
+// LCD点阵显示类型
+#define LCD_DRV_DOT_ASCII	0
+#define LCD_DRV_DOT_HANZI	1
+
 
 
 extern void LCD_DRV_Init(void);
 extern void LCD_DRV_Init_TEST(uint8_t test);
 extern void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl);
-extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint8_t* DotCode);
+extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode);
 extern void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode);
 extern void LCD_DRV_DisplayAscii(uint8_t Hang, uint8_t Lie, uint8_t* ASCIIDotMatrix);
 extern void LCD_DRV_DisplayDigit(uint8_t Hang, uint8_t Lie, uint8_t Digit);

@@ -32,12 +32,13 @@ typedef enum
 	CMD_TEST_SELF		= 0xF1,
 	CMD_PRE				= 0x51,					// 前导帧
 	CMD_ACK				= 0x52,
-	CMD_START_MANUAL_MATCH	= 0x40,				
+	CMD_START_MANUAL_MATCH = 0x40,				
 	CMD_AFFIRM_MANUAL_MATCH = 0x41,				
 	CMD_STOP_MANUAL_MATCH = 0x42,
 	CMD_BROADCAST = 0x43,
 	CMD_AUTO_MATCH = 0x44,
 	CMD_SET_SCORE = 0X12,			// 设置学分
+	CMD_LCD_CTRL = 0x13,			// 控制LCD显示（回显）
 	
 	CMD_TEST = 0xFF
 }APP_CMD_TYPE;
@@ -137,6 +138,7 @@ void APP_CmdStartManualMatchHandler(void);
 void APP_CmdAffirmManualMatchHandler(void);
 void APP_CmdStopManualMatchHandler(void);
 void APP_CmdSetScoreHandler(void);
+void APP_CmdLcdCtrlHandler(void);
 
 void APP_FetchQuesInfo(void);
 void APP_PackQuestionInfo(void);

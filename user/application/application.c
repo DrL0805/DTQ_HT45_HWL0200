@@ -177,6 +177,9 @@ void APP_CmdHandler(void)
 		case CMD_SET_SCORE:
 			APP_CmdSetScoreHandler();
 			break;
+		case CMD_LCD_CTRL:
+			APP_CmdLcdCtrlHandler();
+			break;
 		default	:		
 			break;
 	}
@@ -618,29 +621,24 @@ void APP_KeyMultiChoiceHandler(void)
 // 多题单选
 void APP_KeyMultiSingleChoiceHandler(void)
 {
-	uint8_t Tmp;
-	
+
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x01;
-			Tmp = ASCII_A;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x02;
-			Tmp = ASCII_B;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);	
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x04;
-			Tmp = ASCII_C;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);	
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x08;
-			Tmp = ASCII_D;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,0,&Tmp);	
+			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);	
 			break;
 		case KEY_APP_RINGHT:
 			APP_KeyMultiSendHandler();			
@@ -1069,6 +1067,75 @@ void APP_CmdSetScoreHandler(void)
 		}
 	}
 
+}
+
+void APP_CmdLcdCtrlHandler(void)
+{		
+	/*
+		答题器2.4G链路层数据格式
+		0：包头0x61
+		1：源ID，因为还没有绑定成功，所以全为0
+		5：目标ID，接收器UID
+		9：设备类型，答题器 = 0x11
+		10：协议版本 = 0x21
+		11：帧号+1
+		12：包号+1
+		13：扩展字节长度 = 0
+		14：包长，广播包长 = 10
+		----------包内容--------------
+			15：命令类型 = 0x13
+			16：命令长度 = 6
+			---------命令内容---------
+				17~20：序列号
+				21~24：答题器UID
+		------------------------------
+		25：校验
+		26：包尾0x21
+	*/
+	uint8_t i, TmpNum;
+	static bool Flg = false;
+	
+	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
+	{
+		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6, 4))
+		{
+			// 根据指令更新LCD显示
+			LCD_DRV_ClearSceneArea();
+			if(Flg)
+			{
+				Flg = false;
+				LCD_DRV_DisplayOne(46,LCD_DRV_DOT_HANZI,0xBABA);
+			}
+			else
+			{
+				Flg = true;
+				LCD_DRV_DisplayOne(43,LCD_DRV_DOT_HANZI,0xBABA);
+			}
+			
+			
+			// 返回回显确认信息
+			RADIO.TX.DataLen = 27;	
+			
+			RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
+			memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+			memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+			RADIO.TX.Data[9] = 0x11;							// 设备ID
+			RADIO.TX.Data[10] = 0x20;
+			RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
+			RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+			RADIO.TX.Data[13] = 0;						// 扩展字节长度
+			RADIO.TX.Data[14] = 10;					// PackLen
+			RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
+			RADIO.TX.Data[16] = 8;					// 命令长度，
+			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2, 4);	// 序列号原样返回
+			memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
+			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+			RADIO.TX.Data[26] = NRF_DATA_END;	
+			
+			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY);					
+			break;
+		}
+	}
 }
 
 

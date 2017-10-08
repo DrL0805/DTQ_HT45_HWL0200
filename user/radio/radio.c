@@ -258,6 +258,9 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			// 开启重发定时器，定时器到后检测是否发送成功
 			TIMER_RetransmitStart();				
     		break;
+		case RADIO_TX_NO_RETRY:
+			RADIO_StartLinkTx();
+			break;
     	case RADIO_TX_ACK:
     		break;
 		case RADIO_TX_STATE:

@@ -6,7 +6,7 @@ static void MAIN_DebugFun(void);
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
-
+	
 	GPIO_Default();
 	CLOCK_Init();
 	TIMERS_Init();
@@ -50,8 +50,6 @@ int main (void)
 //		}
 //	}
 	
-	
-	
 	while(true)
 	{
 		switch(POWER.SysState)
@@ -85,9 +83,8 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
-	uint8_t TmpBuf[2] = {0xb5,0xa5};
 	
-//	LCD_DRV_DisplayOne(46,1,TmpBuf);
+//	LCD_DRV_DisplayOne(46,LCD_DRV_DOT_HANZI,0XA3A1);
 }
 
 

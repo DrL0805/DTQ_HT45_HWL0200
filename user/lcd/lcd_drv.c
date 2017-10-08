@@ -103,7 +103,7 @@ void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl)
 * DotType：点阵类型：字母数字/汉字
 * DotBuf：显示点阵内容
 */
- void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint8_t* DotCode)
+void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 {
 	uint8_t i, DotBuf[32];
 	
@@ -113,7 +113,7 @@ void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl)
 	switch(DotType)
 	{
 		case 0:	// ascii码		
-			switch(*DotCode)
+			switch((uint8_t)DotCode)
 			{
 				case ASCII_A:
 					memcpy(DotBuf, DotMatrix_A, 16);
@@ -145,7 +145,7 @@ void LCD_DRV_DisplayTest(uint8_t ph, uint8_t pl)
 				LCD_DRV_WriteData(DotBuf[i]);		
 			break;
 		case 1:	// 汉字
-			W25_SpiReadHanziDot(DotBuf, (uint16_t)(DotCode[0]<<8 | DotCode[1]));
+			W25_SpiReadHanziDot(DotBuf, DotCode);
 		
 			LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
 			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
