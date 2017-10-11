@@ -43,6 +43,7 @@ APP_TIMER_DEF(retransmit_timer_id);				/* 链路层的重发定时器 */
 APP_TIMER_DEF(tx_result_display_timer_id);		/* LCD显示按键发送结果（成功/失败） */
 APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
 APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
+APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 
 
 void TIMERS_Init(void)
@@ -85,7 +86,7 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&adc_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_ADCHandler);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = app_timer_create(&wait_data_timer_id,APP_TIMER_MODE_REPEATED,TIMER_WaitDataHandler);
+	err_code = app_timer_create(&wait_data_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_WaitDataHandler);
 	APP_ERROR_CHECK(err_code);
 
 	err_code = app_timer_create(&tx_result_display_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxResultDisplayHandler);
@@ -96,6 +97,9 @@ void TIMERS_Init(void)
 	
 	err_code = app_timer_create(&send_allow_timer_id,APP_TIMER_MODE_REPEATED,TIMER_SendAllowHandler);
 	APP_ERROR_CHECK(err_code);		
+
+	err_code = app_timer_create(&tx_random_delay_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxRandomDelayHandler);
+	APP_ERROR_CHECK(err_code);	
 }
 
 void TIMER_EventHandler(void)
@@ -198,9 +202,6 @@ void TIMER_RxWindowReset(void)
 
 void TIMER_RxWindowAdd(uint8_t time_ms)
 {
-
-
-
 	my_esb_mode_change(NRF_ESB_MODE_PRX, RADIO.IM.RxChannal);
 	nrf_esb_start_rx();	
 	
@@ -247,21 +248,21 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-	uint32_t err_code;
-	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
-	APP_ERROR_CHECK(err_code);
+//	uint32_t err_code;
+//	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
+//	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateStop(void)
 {
-	uint32_t err_code;
-	err_code = app_timer_stop(sys_state_timer_id);
-	APP_ERROR_CHECK(err_code);
+//	uint32_t err_code;
+//	err_code = app_timer_stop(sys_state_timer_id);
+//	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateHandler(void * p_context)
 {
-	POWER_SysOnToSleep();
+//	POWER_SysOnToSleep();
 }
 
 void TIMER_KeyPowerStart(void)
@@ -492,3 +493,27 @@ void TIMER_SendAllowHandler(void * p_context)
 	APP.QUE.KeySendAllowFlg = true;
 }
 
+void TIMER_TxRandomDelayStart(void)
+{
+	uint32_t err_code;
+	uint32_t random_delay;
+	
+	random_delay = 5 + GetRandomNumber() / 5;		
+	
+	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
+	APP_ERROR_CHECK(err_code);
+}
+
+
+void TIMER_TxRandomDelayStop(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_stop(tx_random_delay_timer_id);
+	APP_ERROR_CHECK(err_code);
+}
+
+
+void TIMER_TxRandomDelayHandler(void * p_context)
+{
+	RADIO_StartLinkTx();
+}

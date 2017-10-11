@@ -69,6 +69,9 @@ void TIMER_SendAllowStart(void);
 void TIMER_SendAllowStop(void);
 void TIMER_SendAllowHandler(void * p_context);
 
+void TIMER_TxRandomDelayStart(void);
+void TIMER_TxRandomDelayStop(void);
+void TIMER_TxRandomDelayHandler(void * p_context);
 #endif 
 
 

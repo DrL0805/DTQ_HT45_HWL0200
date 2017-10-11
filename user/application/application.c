@@ -1071,12 +1071,12 @@ void APP_CmdLcdCtrlHandler(void)
 	
 	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
 	{
-		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6, 4))
+		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6 + i*56, 4))
 		{			
 			TEST.HuiXianNum++;
 			
 			// 根据指令更新LCD显示
-			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
+//			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
 			LCD_DisplayDeviceId();
 			
 			
@@ -1099,7 +1099,7 @@ void APP_CmdLcdCtrlHandler(void)
 			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
 			RADIO.TX.Data[26] = NRF_DATA_END;	
 			
-			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY);					
+			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
 			break;
 		}
 	}

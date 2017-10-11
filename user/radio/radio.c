@@ -241,6 +241,9 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 		case RADIO_TX_NO_RETRY:
 			RADIO_StartLinkTx();
 			break;
+		case RADIO_TX_NO_RETRY_RANDOM_DELAY:
+			TIMER_TxRandomDelayStart();
+			break;
     	case RADIO_TX_ACK:
     		break;
 		case RADIO_TX_STATE:
