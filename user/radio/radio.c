@@ -20,12 +20,12 @@ void RADIO_Init(void)
 {
 	ret_code_t err_code;
 	
-	RADIO.ConfigType = RADIO_CONFIG_DTQ;
+
 	
 	//默认参数
-	RADIO.IM.TxChannal = NRF_DEFAULT_TX_CHANNEL;			
-	RADIO.IM.RxChannal = NRF_DEFAULT_RX_CHANNEL;	
-	RADIO.IM.TxPower = NRF_DEFAULT_TX_POWER;
+	RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
+	RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
+	RADIO.IM.TxPower = RADIO.MATCH.TxPower;
 	
 
 	
@@ -134,7 +134,7 @@ void RADIO_RxDataHandler(void)
 			memcpy(RADIO.RX.PackData, rx_payload.data+15+RADIO.RX.ExtendLen, RADIO.RX.PackLen);
 			RADIO.RX.Xor 		= rx_payload.data[RADIO.RX.Len-2];		
 			RADIO.RX.End 		= rx_payload.data[RADIO.RX.Len-1];					
-
+			
 			
 			//是否是已匹配的接收器发过来的或广播
 			if(ArrayCmp(RADIO.RX.SrcId,RADIO.MATCH.JsqUid,4) || ArrayCmp(RADIO.RX.SrcId,RADIO.MATCH.PublicUid, 4))

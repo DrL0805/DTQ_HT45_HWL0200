@@ -20,6 +20,7 @@ int main (void)
 //	TIMER_TempStart();
 	W25_Init();
 	LCD_Init();
+	TEST_Init();
 
 	TIMER_RxWindowStart();
 	TIMER_SysStateStart();	
@@ -70,6 +71,9 @@ static void MAIN_DebugFun(void)
 //	
 //	LCD_DRV_DisplayN(40, 14, TmpBuf);
 //	LCD_DRV_DisplayOne(43, 0, ASCII_2);
+	
+//	LED_TOG(LED_0);
+//	nrf_delay_ms(100);
 }
 
 

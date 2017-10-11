@@ -167,14 +167,7 @@ void TIMER_ButtonHandler(void * p_context)
 void TIMER_RxWindowStart(void)
 {
 	uint32_t err_code;
-	
-	// 若当前RADIO配置为24G考勤，则配置为答题配置
-	if(RADIO_CONFIG_DTQ != RADIO.ConfigType)
-	{
-		RADIO.ConfigType = RADIO_CONFIG_DTQ;
-		RADIO_Init();
-	}
-	
+
 	if(RADIO.IM.RxWindowOnFlg)		//当前RX打开，则关闭
 	{
 		nrf_esb_stop_rx();	
@@ -193,15 +186,20 @@ void TIMER_RxWindowStart(void)
 	APP_ERROR_CHECK(err_code);
 }
 
+// 接收器重置，按约定比例循环开关
+void TIMER_RxWindowReset(void)
+{
+	RADIO.IM.RxWindowWaitFlg = false;
+	RADIO.IM.RxWindowOnFlg = false;
+	
+	TIMER_RxWindowStop();
+	TIMER_RxWindowStart();
+}
+
 void TIMER_RxWindowAdd(uint8_t time_ms)
 {
 
-	// 若当前RADIO配置为24G考勤，则配置为答题配置
-	if(RADIO_CONFIG_DTQ != RADIO.ConfigType)
-	{
-		RADIO.ConfigType = RADIO_CONFIG_DTQ;
-		RADIO_Init();
-	}
+
 
 	my_esb_mode_change(NRF_ESB_MODE_PRX, RADIO.IM.RxChannal);
 	nrf_esb_start_rx();	
@@ -222,7 +220,6 @@ void TIMER_RxWindowStop(void)
 
 void TIMER_RxWindowHandler(void * p_context)
 {
-
 	RADIO.IM.RxWindowWaitFlg = false;
 	RADIO.IM.RxWindowAddFlg = false;
 	TIMER_RxWindowStop();

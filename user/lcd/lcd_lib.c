@@ -349,19 +349,26 @@ void LCD_DisplayDeviceId(void)
 {
 	uint32_t TmpUid, i;
 	
-	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
-			   RADIO.MATCH.DtqUid[1] << 8  |
-			   RADIO.MATCH.DtqUid[2] << 16 |
-			   RADIO.MATCH.DtqUid[3] << 24 ;
+//	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
+//			   RADIO.MATCH.DtqUid[1] << 8  |
+//			   RADIO.MATCH.DtqUid[2] << 16 |
+//			   RADIO.MATCH.DtqUid[3] << 24 ;
 
-	for(i = 0;i < 6;i++)
-	{
-		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
-		TmpUid = TmpUid/10;
-	}
+//	for(i = 0;i < 6;i++)
+//	{
+//		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
+//		TmpUid = TmpUid/10;
+//	}
+//	
+//	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
+//	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
 	
-	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
-	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
+	// ÏÔÊ¾²âÊÔÄÚÈÝ
+//	LCD_DRV_DisplayDigit(5,(TEST.HuiXianNum%10000)/1000);
+	LCD_DRV_DisplayDigit(6,(TEST.HuiXianNum%1000)/100);
+	LCD_DRV_DisplayDigit(7,(TEST.HuiXianNum%100)/10);
+	LCD_DRV_DisplayDigit(8,TEST.HuiXianNum%10);
+	
 }
 
 

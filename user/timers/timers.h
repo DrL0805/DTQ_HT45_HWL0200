@@ -21,6 +21,7 @@ void TIMER_ButtonHandler(void * p_context);
 
 void TIMER_RxWindowStart(void);
 void TIMER_RxWindowAdd(uint8_t time_ms);
+void TIMER_RxWindowReset(void);
 void TIMER_RxWindowStop(void);
 void TIMER_RxWindowHandler(void * p_context);
 

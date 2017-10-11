@@ -24,11 +24,17 @@ void APP_Init(void)
 		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
 		memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
 		RADIO.MATCH.Student.Score = 0;
+		RADIO.MATCH.TxChannal = NFC.DataRead[8];			
+		RADIO.MATCH.RxChannal = NFC.DataRead[9];	
+		RADIO.MATCH.TxPower = NFC.DataRead[10];	
 	}
 	else
 	{
 		memset(RADIO.MATCH.JsqUid,0xFF,4);			
-		memset(RADIO.MATCH.DtqUid,0xFF,4);				
+		memset(RADIO.MATCH.DtqUid,0xFF,4);
+		RADIO.MATCH.TxChannal = NRF_DEFAULT_TX_CHANNEL;			
+		RADIO.MATCH.RxChannal = NRF_DEFAULT_RX_CHANNEL;		
+		RADIO.MATCH.TxPower = NRF_DEFAULT_TX_POWER;
 	}
 }
 
@@ -40,10 +46,23 @@ void APP_ParUpdate(void)
 	TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
 	M24SR_Deselect();
 
-	memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
-	memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
-	memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
-	RADIO.MATCH.Student.Score = 0;
+	NFC.MatchSucceedFlg = true;
+	
+	if(NFC.MatchSucceedFlg)
+	{
+		memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
+		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
+		memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
+		RADIO.MATCH.Student.Score = 0;
+		RADIO.MATCH.TxChannal = NFC.DataRead[8];			
+		RADIO.MATCH.RxChannal = NFC.DataRead[9];	
+		RADIO.MATCH.TxPower = NFC.DataRead[10];	
+		
+		// 更新当前收发频点
+		RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
+		RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
+		RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
+	}
 	
 	LCD_DisplayStudentName();
 	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
@@ -133,27 +152,40 @@ void APP_KeyHandler(void)
 
 void APP_CmdHandler(void)
 {
+	
+	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
+	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
+	{
+		TIMER_RxWindowReset();
+	}
+
+	// 如果命令类型不是CMD_PRE，则更新包号信息
+	if(CMD_PRE != APP.CMD.CmdType)
+	{
+		RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
+	}	
+	else
+	{
+		LED_TOG(LED_0);
+	}
+	
 	switch(APP.CMD.CmdType)
 	{
 		case CMD_TEST:						//测试指令
 			APP_CmdTestHandler();
 			break;    
 		case CMD_QUESTION:	
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdQuestionHandler();
 			break;
 		case CMD_SYS_OFF:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdSysOffHandler();
 			break;
 		case CMD_TEST_SELF:	
 			break;
 		case CMD_CLEAR_SCREEN:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdClearScreenHandler();
 			break;
 		case CMD_GET_STATE:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdGetStateHandler();
 			break;
 		case CMD_PRE:
@@ -163,15 +195,12 @@ void APP_CmdHandler(void)
 			APP_CmdAckHandler();
 			break;
 		case CMD_START_MANUAL_MATCH:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdStartManualMatchHandler();
 			break;
 		case CMD_AFFIRM_MANUAL_MATCH:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdAffirmManualMatchHandler();
 			break;
 		case CMD_STOP_MANUAL_MATCH:
-			RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 			APP_CmdStopManualMatchHandler();
 			break;
 		case CMD_SET_SCORE:
@@ -1043,9 +1072,13 @@ void APP_CmdLcdCtrlHandler(void)
 	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
 	{
 		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6, 4))
-		{
+		{			
+			TEST.HuiXianNum++;
+			
 			// 根据指令更新LCD显示
 			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
+			LCD_DisplayDeviceId();
+			
 			
 			// 返回回显确认信息
 			RADIO.TX.DataLen = 27;	

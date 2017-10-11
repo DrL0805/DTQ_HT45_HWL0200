@@ -30,9 +30,8 @@
 #define		NRF_LINK_DATA_LEN				(17)		// 链路层定义数据长度
 
 
-
-#define RX_WINDOW_ADD_WAIT_ACK			(20)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
-#define RX_WINDOW_ADD_WAIT_DATA			(20)	//接收到前导帧后，增加RX窗等待有效数据的时间
+#define RX_WINDOW_ADD_WAIT_ACK			(30)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
+#define RX_WINDOW_ADD_WAIT_DATA			(30)	//接收到前导帧后，增加RX窗等待有效数据的时间
 #define RX_WINDOW_ON					(2)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间
 #define RETURN_ACK_DELAY				(300)	//随机回复ACK的最大时间
@@ -102,6 +101,7 @@ typedef struct
 	STUDENT_PARAMETERS_T	Student;
 	uint8_t 				TxChannal;						// 配对的发送频点
 	uint8_t					RxChannal;						// 配对的接收频点
+	uint8_t					TxPower;
 }NRF_MATCH_PARAMETERS_T;
 
 // 实时通信参数

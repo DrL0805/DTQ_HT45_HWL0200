@@ -14,6 +14,9 @@ typedef struct
 	uint8_t 	TxRssi;				//答题器发出接收器收到的RSSI
 	
 	uint8_t 	LcdLetterVal;		//存储LCD字母键值	
+	
+	
+	uint16_t	HuiXianNum;
 }TEST_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------

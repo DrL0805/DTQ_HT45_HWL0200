@@ -17,6 +17,7 @@ void TEST_Init(void)
 {
 	TEST.RxRssi = 0;
 	TEST.TxRssi = 0;
+	TEST.HuiXianNum = 0;
 }
 
 void TEST_RssiTest(void)

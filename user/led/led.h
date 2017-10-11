@@ -6,8 +6,8 @@
 #include "main.h"
 
 // Defines ------------------------------------------------------------
-#define LED_SUPORT		(0)
-#define LED_0 			(17)
+#define LED_SUPORT		(1)
+#define LED_0 			(30)
 
 #if LED_SUPORT
 #define LED_ON(LED_PIN)		nrf_gpio_pin_clear(LED_PIN)
@@ -18,7 +18,7 @@
 #define LED_OFF(...)	
 #define LED_TOG(...)	
 #endif
-
+					
 
 // Typedefs -----------------------------------------------------------
 
