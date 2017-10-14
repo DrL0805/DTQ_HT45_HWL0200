@@ -2,26 +2,36 @@
 #include "main.h"
 
 static void MAIN_DebugFun(void);
-	
+
+app_fifo_t my_fifo;
+
+uint16_t buffer_size = 2048;
+uint8_t	buffer[2048];	
+
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
 	
 	GPIO_Default();
 	CLOCK_Init();
+//	DEBUG_Init();
+	nrf_gpio_cfg_output(TX_PIN_NUMBER_2);
+	nrf_gpio_cfg_output(RX_PIN_NUMBER_2);
+	
 	TIMERS_Init();
 	KEY_Init();
 	NFC_Init();
 	FLASH_Init();
 	POWER_Init();	
 	APP_Init();
+	
 	RADIO_Init();
 	LED_Init();
 //	TIMER_TempStart();
 	W25_Init();
 	LCD_Init();
 	TEST_Init();
-
+	
 	TIMER_RxWindowStart();
 	TIMER_SysStateStart();	
 	
@@ -57,9 +67,9 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}			
-		MAIN_DebugFun();
-		__WFE();							
-		__WFI();		
+//		MAIN_DebugFun();
+//		__WFE();							
+//		__WFI();		
 	}
 }
 
@@ -67,6 +77,12 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
+	uint32_t err_code;
+	uint32_t i,j=38,k;
+	uint8_t m=4,n=98,p;
+	uint32_t data_len = 1024;
+	uint8_t write_data[1024] = {1, 2, 3, 4, 5};
+	uint8_t  read_data[1024];  	
 //	uint8_t TmpBuf[] = {0xB9, 0xA7, 0xCF, 0xB2, 0xC4, 0xE3, 0xA3, 0xA1, 0xB4, 0xF0, 0xB6, 0xD4, 0xC1, 0xCB};
 //	
 //	LCD_DRV_DisplayN(40, 14, TmpBuf);
@@ -74,6 +90,135 @@ static void MAIN_DebugFun(void)
 	
 //	LED_TOG(LED_0);
 //	nrf_delay_ms(100);
+	
+//	while(1)
+//	{
+//		nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//		nrf_gpio_pin_set(RX_PIN_NUMBER_2);
+//		LCD_Refresh(0xFF);
+////		nrf_delay_ms(500);
+//		nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//		nrf_gpio_pin_clear(RX_PIN_NUMBER_2);
+//		LCD_Refresh(0x00);
+////		nrf_delay_ms(500);
+//	}
+	
+
+//	err_code = app_fifo_init(&my_fifo, buffer, (uint16_t)sizeof(buffer));
+//	
+//	data_len = 1024;
+//	err_code = app_fifo_write(&my_fifo, write_data, &data_len);
+//	if (err_code == NRF_SUCCESS)
+//	{
+//		if (data_len < 5)
+//		{
+//			// Attempt another write operation using data_len value as offset
+//		}
+//	}
+//	else if (err_code == NRF_ERROR_NO_MEM)
+//	{
+//		// FIFO is full
+//	}
+//	else
+//	{
+//		// API parameters incorrect, should not happen
+//	}	
+
+//		nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//		nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	// Read 5 elements to the FIFO
+//	data_len = 1024;
+//	err_code = app_fifo_read(&my_fifo, read_data, &data_len);
+//	// Check if write was successful
+//	if (err_code == NRF_SUCCESS)
+//	{
+//		// Check if read was partial
+//		if (data_len < 5)
+//		{
+//			// Not as many elements in array as requested
+//		}
+//	}
+//	else if (err_code == NRF_ERROR_NOT_FOUND)
+//	{
+//		// FIFO is empty
+//	}
+//	else
+//	{
+//		// API parameters incorrect, should not happen
+//	}
+//		nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//		nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(100);
+
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);		
+//	memset(read_data, 0x00, 256);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);
+
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);		
+//	memcpy(read_data, write_data, 1024);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);
+	
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	i=0;
+//	do
+//	{
+//		i++;
+//	}while(i<1024);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);	
+
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	for(i = 1024;i > 0;i--)
+//	{
+//	}
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);	
+
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	i=0;
+//	do
+//	{
+//		i++;
+//		k=i/j;
+//	}while(i<1024);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);
+
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	i=0;
+//	do
+//	{
+//		i++;
+//		p=m/n;
+//	}while(i<1024);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);
+
+	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+	i=0;
+	do
+	{
+		i++;
+		j=j<<6;
+	}while(i<1024);
+	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+	nrf_delay_ms(50);
 }
 
 

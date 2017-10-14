@@ -50,6 +50,22 @@ void LCD_DRV_Init(void)
 	LCD_DRV_WriteCmd(0x40);         				//Initial Display Line
 }
 
+void LCD_Refresh(uint8_t dot)
+{
+	int page,i;
+
+	for(page=0;page<9;page++)			
+	{
+		LCD_DRV_WriteCmd(0x10);			// Set AX Address H
+		LCD_DRV_WriteCmd(0x00);			// Set AX Address L
+		LCD_DRV_WriteCmd(page+0xB0);	// 选择页码，共8页
+		for(i=0;i<128;i++)				// 	
+		{
+			LCD_DRV_WriteData(dot);
+		}
+	}
+}
+
 /*
 * 功能：LCD显示一个字符（汉字或者ASCII码）
 * Location：显示位置，从左到后从上到下依次为0~63，一个汉字占2个位置，一个ACSSI码占1个位置

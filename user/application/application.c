@@ -154,13 +154,13 @@ void APP_CmdHandler(void)
 {
 	
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
-	{
-		TIMER_RxWindowReset();
-	}
-
+//	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
+//	{
+//		TIMER_RxWindowReset();
+//	}
+	
 	// 如果命令类型不是CMD_PRE，则更新包号信息
-	if(CMD_PRE != APP.CMD.CmdType)
+	if((CMD_PRE != APP.CMD.CmdType) && (CMD_LCD_CTRL != APP.CMD.CmdType))
 	{
 		RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 	}	
@@ -1076,8 +1076,8 @@ void APP_CmdLcdCtrlHandler(void)
 			TEST.HuiXianNum++;
 			
 			// 根据指令更新LCD显示
-//			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
-			LCD_DisplayDeviceId();
+			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
+//			LCD_DisplayDeviceId();
 			
 			
 			// 返回回显确认信息
@@ -1094,7 +1094,7 @@ void APP_CmdLcdCtrlHandler(void)
 			RADIO.TX.Data[14] = 10;					// PackLen
 			RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
 			RADIO.TX.Data[16] = 8;					// 命令长度，
-			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2, 4);	// 序列号原样返回
+			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
 			memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
 			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
 			RADIO.TX.Data[26] = NRF_DATA_END;	

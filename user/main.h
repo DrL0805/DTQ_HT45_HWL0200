@@ -15,6 +15,7 @@
 #include "nrf_gpio.h"
 #include "app_timer.h"
 #include "app_error.h"
+#include "app_fifo.h"
 
 #include "simple_uart.h"
 #include "uart.h"
