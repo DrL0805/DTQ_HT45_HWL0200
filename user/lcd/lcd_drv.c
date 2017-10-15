@@ -27,7 +27,9 @@ void LCD_DRV_Init(void)
 	nrf_gpio_cfg_output(LCD_PIN_RST);
 	nrf_gpio_cfg_output(LCD_PIN_A0);	
 	nrf_gpio_cfg_output(LCD_PIN_SCL);
-	nrf_gpio_cfg_output(LCD_PIN_SDA);		
+	nrf_gpio_cfg_output(LCD_PIN_SDA);	
+
+	LCD_POWER_OFF();
 	
 	LCD_RST_LOW();
 	nrf_delay_ms(50);
@@ -136,6 +138,8 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 					break;
 			}
 		
+			LCD_DRV_WriteCmd(0x40); 
+			
 			LCD_DRV_WriteCmd((Location/16)*2 + 0xb0);						// 设置在第几行显示
 			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
 			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));			
@@ -152,6 +156,8 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 			if((DotCode >> 8) >= 0x81)	
 			{
 				W25_SpiReadHanziDot(DotBuf, DotCode);
+				
+				LCD_DRV_WriteCmd(0x40); 
 				
 				LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
 				LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
@@ -227,36 +233,6 @@ void LCD_DRV_DisplayDigit(uint8_t Location, uint8_t DigitValue)
 		default:
 			break;
 	}
-}
-
-/*
-* Hang:从上到下0~3
-* Lie：从左到右0~7
-* DotMatrix：汉字点阵，16*16
-*/
-void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode)
-{
-	uint8_t i;
-	uint8_t DotBuf[32];
-	
-	W25_SpiReadHanziDot(DotBuf, GBKCode);
-	
-	
-	LCD_DRV_WriteCmd(Hang*2+0+0xb0);			// page
-	LCD_DRV_WriteCmd(0x10+Lie);
-	LCD_DRV_WriteCmd(0x00);	
-	for(i=0;i<16 ;i++)
-	{
-		LCD_DRV_WriteData(DotBuf[i]);
-	}
-	
-	LCD_DRV_WriteCmd(Hang*2+1+0xb0);		// page
-	LCD_DRV_WriteCmd(0x10+Lie);
-	LCD_DRV_WriteCmd(0x00);		
-	for(i=16;i<32 ;i++)
-	{
-		LCD_DRV_WriteData(DotBuf[i]);
-	}	
 }
 
 void LCD_DRV_WriteCmd(uint8_t Cmd)

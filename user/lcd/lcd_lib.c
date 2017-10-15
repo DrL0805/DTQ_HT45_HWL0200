@@ -79,14 +79,32 @@ void LCD_Init(void)
 //关闭LCD显示，进入睡眠（低功耗）状态
 void LCD_Sleep(void)
 {
+	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
 	LCD_DRV_WriteCmd(LCD_DISPLAY_OFF);	
-
+	
+	TIMER_LCDStop();
 }
 
 //LCD唤醒，重新显示LCD_RAM内容
 void LCD_WakeUp(void)
 {
-	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
+	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
+
+	TIMER_LCDStart();
+}
+
+void LCD_Update(void)
+{
+	if(LCD.UpdateFlg)
+	{
+		LCD.UpdateFlg = false;
+		
+		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+//		LCD_DisplayDeviceId();
+		LCD_DisplaySignal(RSSI_4);
+		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+	}
 }
 
 //全屏清屏
@@ -313,7 +331,6 @@ void LCD_DisplayStudentName(void)
 	{
 		for(i = 0;i < TmpNameLen;i++)
 		{
-//			LCD_DRV_DisplayHanzi(1,1+i,(RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]);	
 			LCD_DRV_DisplayOne(18+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]));
 		}	
 	}

@@ -30,15 +30,17 @@ int main (void)
 //	TIMER_TempStart();
 	W25_Init();
 	LCD_Init();
+	ADC_Init();
 	TEST_Init();
 	
 	TIMER_RxWindowStart();
 	TIMER_SysStateStart();	
+	TIMER_LCDStart();
 	
 	LCD_ClearScreen();
 	LCD_DisplayDeviceId();
 	LCD_DisplaySignal(RSSI_4);
-	LCD_DisplayBattery(BATTERY_LEVEL_2);
+	LCD_DisplayBattery(BATTERY_LEVEL_3);
 	LCD_DisplayStudentName();
 	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 	
@@ -51,6 +53,7 @@ int main (void)
 			case SYS_ON:
 				RADIO_RxDataHandler();
 				APP_KeyHandler();
+				LCD_Update();
 				break;
 			case SYS_SLEEP:
 				RADIO_RxDataHandler();
@@ -67,7 +70,7 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}			
-//		MAIN_DebugFun();
+		MAIN_DebugFun();
 //		__WFE();							
 //		__WFI();		
 	}
@@ -77,12 +80,16 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
-	uint32_t err_code;
-	uint32_t i,j=38,k;
-	uint8_t m=4,n=98,p;
-	uint32_t data_len = 1024;
-	uint8_t write_data[1024] = {1, 2, 3, 4, 5};
-	uint8_t  read_data[1024];  	
+//	LCD_POWER_ON();
+//	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+//	LCD_DRV_WriteCmd(0x40); 
+	
+//	uint32_t err_code;
+//	uint32_t i,j=38,k;
+//	uint8_t m=4,n=98,p;
+//	uint32_t data_len = 1024;
+//	uint8_t write_data[1024] = {1, 2, 3, 4, 5};
+//	uint8_t  read_data[1024];  	
 //	uint8_t TmpBuf[] = {0xB9, 0xA7, 0xCF, 0xB2, 0xC4, 0xE3, 0xA3, 0xA1, 0xB4, 0xF0, 0xB6, 0xD4, 0xC1, 0xCB};
 //	
 //	LCD_DRV_DisplayN(40, 14, TmpBuf);
@@ -208,17 +215,17 @@ static void MAIN_DebugFun(void)
 //	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
 //	nrf_delay_ms(50);
 
-	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
-	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
-	i=0;
-	do
-	{
-		i++;
-		j=j<<6;
-	}while(i<1024);
-	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
-	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
-	nrf_delay_ms(50);
+//	nrf_gpio_pin_set(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_set(RX_PIN_NUMBER_2);	
+//	i=0;
+//	do
+//	{
+//		i++;
+//		j=j<<6;
+//	}while(i<1024);
+//	nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
+//	nrf_gpio_pin_clear(RX_PIN_NUMBER_2);	
+//	nrf_delay_ms(50);
 }
 
 

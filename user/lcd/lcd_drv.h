@@ -104,7 +104,6 @@ extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCo
 extern void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf);
 extern void LCD_DRV_DisplayDigit(uint8_t Location, uint8_t DigitValue);
 
-extern void LCD_DRV_DisplayHanzi(uint8_t Hang, uint8_t Lie, uint16_t GBKCode);
 
 
 extern void LCD_DRV_WriteCmd(uint8_t Cmd);

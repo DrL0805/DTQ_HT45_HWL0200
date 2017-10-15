@@ -13,7 +13,7 @@
 #define APP_TIMER_OP_QUEUE_SIZE 15
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(3000, 	APP_TIMER_PRESCALER)
-#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(150, 	APP_TIMER_PRESCALER)
+#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(2998, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(50, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
 #define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30000,	APP_TIMER_PRESCALER)
@@ -25,7 +25,7 @@
 #define RETRANSMIT_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(70, 	APP_TIMER_PRESCALER)
 #define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
 #define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
-#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
+#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(500,APP_TIMER_PRESCALER)
 
 
 APP_TIMER_DEF(temp_timer_id);
@@ -248,21 +248,21 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
-//	APP_ERROR_CHECK(err_code);
+	uint32_t err_code;
+	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
+	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateStop(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_stop(sys_state_timer_id);
-//	APP_ERROR_CHECK(err_code);
+	uint32_t err_code;
+	err_code = app_timer_stop(sys_state_timer_id);
+	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateHandler(void * p_context)
 {
-//	POWER_SysOnToSleep();
+	POWER_SysOnToSleep();
 }
 
 void TIMER_KeyPowerStart(void)

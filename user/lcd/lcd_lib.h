@@ -106,6 +106,7 @@ extern LCD_PARAMETERS_T LCD;
 extern void LCD_Init(void);
 extern void LCD_Sleep(void);
 extern void LCD_WakeUp(void);
+extern void LCD_Update(void);
 
 extern void LCD_ClearScreen(void);
 extern void LCD_DisplayAll(void);

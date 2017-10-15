@@ -935,14 +935,14 @@ void APP_CmdQuestionHandler(void)
 	}
 	else
 	{
-//		if(APP.QUE.LastPackNum != (APP.CMD.CmdData[0] & 0x0F))
-//		{
-//			APP.QUE.LastPackNum = APP.CMD.CmdData[0] & 0x0F;
-//		}
-//		else
-//		{
-//			return;		//相同题目，直接退出函数
-//		}
+		if(ArrayCmp(APP.CMD.CmdData, APP.QUE.LastPackNum, 4))
+		{
+			return;	//相同题目，直接退出函数
+		}
+		else
+		{
+			memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
+		}
 	}
 	
 	// 解析题目信息
@@ -961,7 +961,6 @@ void APP_CmdQuestionHandler(void)
 	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
 	for(i = 0;i < TmpHanziNum;i++)
 	{
-//		LCD_DRV_DisplayHanzi(2,i,(uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));	
 		LCD_DRV_DisplayOne(32+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));
 	}
 }
