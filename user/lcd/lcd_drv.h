@@ -81,6 +81,30 @@
 #define ASCII_B				0x42
 #define ASCII_C				0x43
 #define ASCII_D				0x44
+#define ASCII_E				0x45
+#define ASCII_F				0x46
+#define ASCII_G				0x47
+#define ASCII_H				0x48
+#define ASCII_I				0x49
+#define ASCII_J				0x4A
+#define ASCII_K				0x4B
+#define ASCII_L				0x4C
+#define ASCII_M				0x4D
+#define ASCII_N				0x4E
+#define ASCII_O				0x4F
+#define ASCII_P				0x50
+#define ASCII_Q				0x51
+#define ASCII_R				0x52
+#define ASCII_S				0x53
+#define ASCII_T				0x54
+#define ASCII_U				0x55
+#define ASCII_V				0x56
+#define ASCII_W				0x57
+#define ASCII_X				0x58
+#define ASCII_Y				0x59
+#define ASCII_Z				0x5A
+
+
 #define ASCII_0				0x30
 #define ASCII_1				0x31
 #define ASCII_2				0x32

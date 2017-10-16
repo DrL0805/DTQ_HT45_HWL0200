@@ -100,12 +100,6 @@ void LCD_Update(void)
 	{
 		LCD.UpdateFlg = false;
 		
-		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
-//		LCD_DisplayDeviceId();
-		LCD_DisplaySignal(RSSI_4);
-		ADC_LcdDisValue();
-//		LCD_DisplayBattery(BATTERY_LEVEL_3);		
-	
 		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
 		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
 		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
@@ -113,6 +107,13 @@ void LCD_Update(void)
 		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
 		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
 		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)	
+	
+		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+//		LCD_DisplayDeviceId();
+		LCD_DisplaySignal(RSSI_4);
+		ADC_LcdDisValue();
+//		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+		
 	}
 }
 
@@ -258,6 +259,8 @@ void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value)					//显示信号强度
 			break;
 	}
 	
+	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示	
+	
 	LCD_DRV_WriteCmd(0+0xb0);			// page
 	LCD_DRV_WriteCmd(0x10 + 0);
 	LCD_DRV_WriteCmd(0x00 + 0);
@@ -298,6 +301,8 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 			break;
 	}	
 
+	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示		
+	
 	LCD_DRV_WriteCmd(0+0xb0);			// page
 	LCD_DRV_WriteCmd(0x10 + 6);
 	LCD_DRV_WriteCmd(0x00 + 0);

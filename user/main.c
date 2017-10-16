@@ -39,7 +39,6 @@ int main (void)
 	LCD_ClearScreen();
 	LCD_DisplayDeviceId();
 	LCD_DisplaySignal(RSSI_4);
-//	LCD_DisplayBattery(BATTERY_LEVEL_3);
 	LCD_DisplayStudentName();
 	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 	
