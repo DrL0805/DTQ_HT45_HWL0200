@@ -64,35 +64,9 @@ static void adc_event_handler(nrf_drv_adc_evt_t const * p_event)
         {
 			adc_value = adc_value + adc_buffer[i];
         }
-		adc_value = 3600 *  adc_value / (ADC_BUFFER_SIZE -10) / 1024;
-		
-		ADC.LatestADCVal = adc_value;
-//		LCD_DisplayStudentName((uint16_t)(ADC.LatestADCVal / 10));
-		
-		//"施密特"原理，
-		//注意：第一次显示的时候不能用"施密特"，因为有可能采集的电压刚好不在范围内，导致不显示
-		if(ADC.FirstSampleFlg)
-		{
-			if(adc_value >= 2900)
-				LCD_DisplayBattery(BATTERY_LEVEL_3);
-			else if(adc_value >= 2800 && adc_value < 2900)
-				LCD_DisplayBattery(BATTERY_LEVEL_2);
-			else if(adc_value >= 2700 && adc_value < 2800)
-				LCD_DisplayBattery(BATTERY_LEVEL_1);
-			else
-				LCD_DisplayBattery(BATTERY_LEVEL_0);			
-		}
-		else
-		{
-			if(adc_value > 2920)
-				LCD_DisplayBattery(BATTERY_LEVEL_3);
-			else if(adc_value > 2820 && adc_value < 2880)
-				LCD_DisplayBattery(BATTERY_LEVEL_2);
-			else if(adc_value > 2720 && adc_value < 2780)
-				LCD_DisplayBattery(BATTERY_LEVEL_1);
-			else if(adc_value < 2680)
-				LCD_DisplayBattery(BATTERY_LEVEL_0);			
-		}
+		ADC.LatestADCVal = 3600 *  adc_value / (ADC_BUFFER_SIZE -10) / 1024;
+
+		LCD.DATA.RefreshFlg |= LCD_REFRESH_BATTERY;
 		ADC.FirstSampleFlg = false;
     }
 }
@@ -143,6 +117,9 @@ void bubbleSort(int16_t *buf, uint16_t len)
 
 void ADC_LcdDisValue(void)
 {
+	
+	//"施密特"原理，
+	//注意：第一次显示的时候不能用"施密特"，因为有可能采集的电压刚好不在范围内，导致不显示	
 	if(ADC.FirstSampleFlg)
 	{
 		if(ADC.LatestADCVal >= 2900)

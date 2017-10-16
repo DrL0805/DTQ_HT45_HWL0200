@@ -231,8 +231,8 @@ void MATCH_KeyNextHandler(void)
 void MATCH_LCDDisplayPIN(uint8_t Index)
 {
 //	LCD_DisplayStudentName(Index + 1);			// Åä¶ÔÐòºÅ == Ë÷ÒýºÅ+1
-	LCD_DisplayQuestionNum((MATCH.UID[Index].PIN[0] & 0x0F) + (MATCH.UID[Index].PIN[0] >> 4)*10);
-	LCD_DisplayScoreValue((MATCH.UID[Index].PIN[1] & 0x0F) + (MATCH.UID[Index].PIN[1] >> 4)*10);
+//	LCD_DisplayQuestionNum((MATCH.UID[Index].PIN[0] & 0x0F) + (MATCH.UID[Index].PIN[0] >> 4)*10);
+//	LCD_DisplayScoreValue((MATCH.UID[Index].PIN[1] & 0x0F) + (MATCH.UID[Index].PIN[1] >> 4)*10);
 }
 
 

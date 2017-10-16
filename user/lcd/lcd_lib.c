@@ -96,24 +96,61 @@ void LCD_WakeUp(void)
 
 void LCD_Update(void)
 {
-	if(LCD.UpdateFlg)
-	{
-		LCD.UpdateFlg = false;
-		
-		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
-		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
-		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
-		LCD_DRV_WriteCmd(0x1e);							// Set EV L	0x20	 
-		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
-		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
-		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)	
+//	if(LCD.UpdateFlg)
+//	{
+//		LCD.UpdateFlg = false;
+//		
+//		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
+//		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
+//		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
+//		LCD_DRV_WriteCmd(0x1e);							// Set EV L	0x20	 
+//		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
+//		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
+//		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)	
+//		
+//		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+
+
+////		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+//		
+//	}
 	
-		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
-//		LCD_DisplayDeviceId();
-		LCD_DisplaySignal(RSSI_4);
-		ADC_LcdDisValue();
-//		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+	if(LCD.DATA.RefreshFlg)
+	{
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SIGNAL)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SIGNAL;
+			LCD_DisplaySignal(RSSI_4);
+		}
 		
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_BATTERY)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_BATTERY;
+			ADC_LcdDisValue();
+		}
+
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_STUDEN_ID)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_STUDEN_ID;
+			LCD_DisplayDeviceId();
+		}
+
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SCENE)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SCENE;
+			LCD_DisplaySceneArea();
+		}
+		
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_INPUT)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_INPUT;
+			
+		}	
+		if(LCD.DATA.RefreshFlg & LCD_REFRESH_RESULT)
+		{
+			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_RESULT;
+			LCD_DisplaySendResult(LCD.DATA.SendResultState);
+		}		
 	}
 }
 
@@ -202,8 +239,6 @@ void LCD_DisplayHongbao(uint8_t Value)
 		default:
 			break;
 	}	
-	
-	
 }
 
 void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult)
@@ -431,6 +466,10 @@ void LCD_ClearScoreArea(void)
 	LCD_DRV_DisplayN(28, 6, TmpBuf);	
 }
 
+void  LCD_DisplaySceneArea(void)
+{
+	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);
+}
 
 
 

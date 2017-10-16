@@ -178,7 +178,8 @@ void RADIO_TxSuccess(void)
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
-			LCD_DisplaySendResult(SEND_RESULT_OK);
+			LCD.DATA.SendResultState = SEND_RESULT_OK;
+			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;			
 			TIMER_TxResultDisplayStop();
 			TIMER_TxResultDisplayStart();
 			break;
@@ -201,7 +202,8 @@ void RADIO_TxFailed(void)
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
-			LCD_DisplaySendResult(SEND_RESULT_FAIL);
+			LCD.DATA.SendResultState = SEND_RESULT_FAIL;
+			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;		
 			TIMER_TxResultDisplayStop();
 			TIMER_TxResultDisplayStart();
 			break;

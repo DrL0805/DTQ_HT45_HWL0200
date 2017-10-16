@@ -17,8 +17,7 @@ void POWER_SysOnToOff(void)
 	POWER.SysState = SYS_OFF;			//切换系统状态
 	
 	RADIO_Sleep();						//停止RADIO外设				
-	
-	LCD_ClearScreen();					
+					
 	LCD_Sleep();						//关闭LCD显示
 	
 	CLOCK_HFCLKStop();					//停止外部时钟

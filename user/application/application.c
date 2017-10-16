@@ -64,8 +64,8 @@ void APP_ParUpdate(void)
 		RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
 	}
 	
-	LCD_DisplayStudentName();
-	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
+//	LCD_DisplayStudentName();
+//	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 
 	RADIO.IM.LastRxPackNum = 0;
 }
@@ -239,7 +239,8 @@ void APP_KeyClearHandler(void)
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);
 	LCD_DisplayLetter(APP.QUE.Answer);	
-	LCD_DisplaySendResult(SEND_RESULT_CLEAR);
+	LCD.DATA.SendResultState = SEND_RESULT_CLEAR;
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;	
 }
 
 void APP_KeyFnHandler(void)
@@ -1028,7 +1029,7 @@ void APP_CmdSetScoreHandler(void)
 		if(ArrayCmp(RADIO.MATCH.DtqUid, APP.CMD.CmdData+5*i, 4))
 		{
 			RADIO.MATCH.Student.Score = APP.CMD.CmdData[5*i + 4];
-			LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
+//			LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 		}
 	}
 
@@ -1066,8 +1067,9 @@ void APP_CmdLcdCtrlHandler(void)
 			TEST.HuiXianNum++;
 			
 			// 根据指令更新LCD显示
-			LCD_DRV_DisplayN(16, 48, RADIO.RX.PackData+10);
-//			LCD_DisplayDeviceId();
+			LCD.DATA.Scene[0] = 48;		
+			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10, LCD.DATA.Scene[0]);
+			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 			
 			
 			// 返回回显确认信息

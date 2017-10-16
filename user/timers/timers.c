@@ -449,8 +449,9 @@ void TIMER_TxResultDisplayStop(void)
 
 void TIMER_TxResultDisplayHandler(void * p_context)
 {
-	LCD_DisplaySendResult(SEND_RESULT_CLEAR);		//取消发送结果显示
-	APP.QUE.KeySendAllowFlg = true;					//允许按键发送
+	LCD.DATA.SendResultState = SEND_RESULT_CLEAR;
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;
+	APP.QUE.KeySendAllowFlg = true;					// 允许按键发送
 }
 
 void TIMER_DisVerStart(void)

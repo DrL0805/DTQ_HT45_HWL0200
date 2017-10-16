@@ -37,11 +37,9 @@ int main (void)
 	TIMER_ADCStart();
 	
 	LCD_ClearScreen();
-	LCD_DisplayDeviceId();
-	LCD_DisplaySignal(RSSI_4);
-	LCD_DisplayStudentName();
-	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
 	
 	while(true)
