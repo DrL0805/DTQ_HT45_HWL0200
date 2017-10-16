@@ -37,6 +37,7 @@ void ADC_Init(void)
 
     nrf_drv_adc_channel_enable(&m_channel_config);	
 	
+	ADC.FirstSampleFlg = true;
 }
 
 void ADC_StartSample(void)
@@ -101,7 +102,7 @@ void ADC_Update(void)
 	if(ADC.SampleFlg)
 	{
 		//ADC采集时，尽量与大功耗外设的运行错开，使采集结果更加准确
-		if(nrf_esb_is_idle() && (false == LCD.UpdateFlg))
+//		if(nrf_esb_is_idle() && (false == LCD.UpdateFlg))
 		{		
 			ADC.SampleFlg = false;
 			ADC_StartSample();			

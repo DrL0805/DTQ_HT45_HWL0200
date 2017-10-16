@@ -103,7 +103,16 @@ void LCD_Update(void)
 		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
 //		LCD_DisplayDeviceId();
 		LCD_DisplaySignal(RSSI_4);
-		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+		ADC_LcdDisValue();
+//		LCD_DisplayBattery(BATTERY_LEVEL_3);		
+	
+		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
+		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
+		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
+		LCD_DRV_WriteCmd(0x1e);							// Set EV L	0x20	 
+		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
+		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
+		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)	
 	}
 }
 
@@ -198,8 +207,6 @@ void LCD_DisplayHongbao(uint8_t Value)
 
 void LCD_DisplaySendResult(LCD_SEND_RESULT_TYPE SendResult)
 {
-	uint8_t TmpBuf[64];
-	
 	switch(SendResult)
 	{
 		case SEND_RESULT_CLEAR:	

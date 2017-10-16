@@ -56,7 +56,6 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 void KEY_MatrixPinInit(void)
 {
 	ret_code_t err_code;
-	uint8_t i;
 	
 //	nrf_gpio_range_cfg_output(KEY_COL1, KEY_COL4);
 	nrf_gpio_cfg_output(KEY_COL2);
@@ -121,7 +120,7 @@ void KEY_PowerPinInit(void)
 
 void KEY_Scan(void)
 {
-	uint8_t KeyColBit = 0, KeyRowBit = 0, KeyBit = 0;
+	uint8_t KeyBit = 0;
 	static uint8_t KEY_FirstValue = 0;				// 第一次扫描到的值
 	static uint8_t KEY_NextValue = 0;				// 之后扫描到的值,用于与第一次扫描的到值进行比较
 	

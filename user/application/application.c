@@ -249,9 +249,6 @@ void APP_KeyFnHandler(void)
 
 void APP_KeySendHandler(void)
 {
-	uint8_t i,j;
-	uint8_t CmdPackLen;			// CMD_QUESTION包长（包括CmdType、CmdLen、CmdData），单独计算出来，让代码更好看
-	
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
 		return;
@@ -311,9 +308,6 @@ void APP_KeySendHandler(void)
 
 void APP_KeyMultiSendHandler(void)
 {
-	uint8_t i,j;
-	uint8_t CmdPackLen;			// CMD_QUESTION包长（包括CmdType、CmdLen、CmdData），单独计算出来，让代码更好看
-	
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
 		return;
@@ -472,8 +466,6 @@ void APP_KeyFnAdd7Handler(void)
 //单选题按键处理函数
 void APP_KeySingleChoiceHandler(void)
 {
-	uint8_t TmpAnswer = 0;
-	
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
@@ -630,8 +622,6 @@ void APP_KeyMultiSingleChoiceHandler(void)
 
 void APP_KeyFreeHandler(void)
 {
-	uint8_t TmpAnswer = 0;
-	
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
@@ -1065,8 +1055,7 @@ void APP_CmdLcdCtrlHandler(void)
 		25：校验
 		26：包尾0x21
 	*/
-	uint8_t i, TmpNum;
-	static bool Flg = false;
+	uint8_t i;
 	
 	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
 	{
