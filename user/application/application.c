@@ -947,12 +947,14 @@ void APP_CmdQuestionHandler(void)
 	
 	
 	// 显示题目内容
-	LCD_ClearSceneArea();
-	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
-	for(i = 0;i < TmpHanziNum;i++)
-	{
-		LCD_DRV_DisplayOne(32+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));
-	}
+//	LCD_ClearSceneArea();
+//	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
+//	for(i = 0;i < TmpHanziNum && i < 8;i++)
+//	{
+//		LCD_DRV_DisplayOne(32+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));
+//	}
+	
+	LCD_DRV_DisplayN(32, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);
 }
 
 void APP_CmdSysOffHandler(void)

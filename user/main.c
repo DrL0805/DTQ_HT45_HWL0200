@@ -44,7 +44,7 @@ int main (void)
 	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 	
 	POWER.SysInitializedFlg = true;	
-
+	
 	while(true)
 	{
 		switch(POWER.SysState)
