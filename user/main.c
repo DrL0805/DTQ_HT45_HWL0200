@@ -47,13 +47,13 @@ int main (void)
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
-				RADIO_RxDataHandler();
+				RADIO_RxDataHandler();	
 				APP_KeyHandler();
-				LCD_Update();
-				ADC_Update();
+				LCD_Update();	
+				ADC_Update();	
 				break;
 			case SYS_SLEEP:
-//				RADIO_RxDataHandler();
+				RADIO_RxDataHandler();
 				APP_KeyHandler();
 				break;
 			case SYS_OFF:

@@ -97,7 +97,12 @@ void APP_KeyHandler(void)
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;
 							
-							APP_KeySingleChoiceHandler();
+							// 不允许重复提交答案
+							if(!APP.QUE.AnsweredFlg)
+							{								
+								APP_KeySingleChoiceHandler();
+							}						
+							
 							break;
 						case QUE_JUDGE:						// 判断
 							
@@ -105,24 +110,39 @@ void APP_KeyHandler(void)
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;
 							
-							APP_KeyJudgeHandler();
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyJudgeHandler();
+							}							
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;							
 						
-							APP_KeyMultiChoiceHandler();
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyMultiChoiceHandler();
+							}
+							
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
 							if(false == APP.QUE.KeySendAllowFlg)
 								return;									
 						
-							APP_KeyActivityHandler();
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyActivityHandler();
+							}
+							
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:
-							APP_KeyMultiSingleChoiceHandler();
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyMultiSingleChoiceHandler();
+							}
+							
 							break;
 						case QUE_FREE:
 							APP_KeyFreeHandler();
@@ -261,6 +281,7 @@ void APP_KeySendHandler(void)
 	// 没有作答，发送键无效
 	if((0x00 == APP.QUE.Answer) && (QUE_ACTIVITY != APP.QUE.Type))
 		return;
+	
 	
 	/*
 		答题器2.4G链路层数据格式
@@ -627,37 +648,37 @@ void APP_KeyFreeHandler(void)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.Answer = 0x01;
-			LCD_DisplayLetter(APP.QUE.Answer);
+//			LCD_DisplayLetter(APP.QUE.Answer);
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.Answer = 0x02;
-			LCD_DisplayLetter(APP.QUE.Answer);	
+//			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.Answer = 0x04;
-			LCD_DisplayLetter(APP.QUE.Answer);	
+//			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.Answer = 0x08;
-			LCD_DisplayLetter(APP.QUE.Answer);	
+//			LCD_DisplayLetter(APP.QUE.Answer);	
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_RINGHT:
 			APP.QUE.Answer = 0x10;
-			LCD_DisplayJudge(JUDGE_TRUE);
+//			LCD_DisplayJudge(JUDGE_TRUE);
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_WRONG:	
 			APP.QUE.Answer = 0x20;
-			LCD_DisplayJudge(JUDGE_FALSE);
+//			LCD_DisplayJudge(JUDGE_FALSE);
 			APP_KeySendHandler();
 			break;
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x40;
-			LCD_DisplayHongbao(HONGBAO_DISPLAY);
+//			LCD_DisplayHongbao(HONGBAO_DISPLAY);
 			APP_KeySendHandler();
 			break;
 		default:
@@ -687,7 +708,7 @@ void APP_KeyActivityHandler(void)
 		case KEY_APP_FN:
 			APP.QUE.Answer = 0x01;
 
-			LCD_DisplayHongbao(HONGBAO_DISPLAY);
+//			LCD_DisplayHongbao(HONGBAO_DISPLAY);
 			
 			APP_KeySendHandler();
 			break;
@@ -936,6 +957,8 @@ void APP_CmdQuestionHandler(void)
 		}
 	}
 	
+	APP.QUE.AnsweredFlg = false;
+	
 	// 解析题目信息
 	APP.QUE.Type = APP.CMD.CmdData[4];
 	
@@ -945,15 +968,6 @@ void APP_CmdQuestionHandler(void)
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
-	
-	
-	// 显示题目内容
-//	LCD_ClearSceneArea();
-//	TmpHanziNum = (APP.CMD.CmdLen - 5) / 2;
-//	for(i = 0;i < TmpHanziNum && i < 8;i++)
-//	{
-//		LCD_DRV_DisplayOne(32+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((APP.CMD.CmdData[5+2*i] << 8) | APP.CMD.CmdData[5+2*i+1]));
-//	}
 	
 	LCD_DRV_DisplayN(32, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);
 }

@@ -79,7 +79,7 @@ void LCD_Init(void)
 //关闭LCD显示，进入睡眠（低功耗）状态
 void LCD_Sleep(void)
 {
-	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
+//	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
 	LCD_DRV_WriteCmd(LCD_DISPLAY_OFF);	
 	
 	TIMER_LCDStop();
@@ -88,7 +88,7 @@ void LCD_Sleep(void)
 //LCD唤醒，重新显示LCD_RAM内容
 void LCD_WakeUp(void)
 {
-	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
+//	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 
 	TIMER_LCDStart();
@@ -96,27 +96,19 @@ void LCD_WakeUp(void)
 
 void LCD_Update(void)
 {
-//	if(LCD.UpdateFlg)
-//	{
-//		LCD.UpdateFlg = false;
-//		
-//		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
-//		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
-//		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
-//		LCD_DRV_WriteCmd(0x1e);							// Set EV L	0x20	 
-//		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
-//		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
-//		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)	
-//		
-//		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
-
-
-////		LCD_DisplayBattery(BATTERY_LEVEL_3);		
-//		
-//	}
-	
 	if(LCD.DATA.RefreshFlg)
 	{
+		
+		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
+		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
+		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
+		LCD_DRV_WriteCmd(0x1e);							// Set EV L	0x20	 
+		LCD_DRV_WriteCmd(LCD_BIAS_SELECT_1_9);
+		LCD_DRV_WriteCmd(LCD_REGULATION_RATIO_50);
+		LCD_DRV_WriteCmd(0x2F);         				//power control(VB,VR,VF=1,1,1)			
+		LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
+		LCD_DRV_WriteCmd(0x40);   						// 从第一行开始显示
+		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SIGNAL)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SIGNAL;
@@ -149,7 +141,7 @@ void LCD_Update(void)
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_RESULT)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_RESULT;
-			LCD_DisplaySendResult(LCD.DATA.SendResultState);
+//			LCD_DisplaySendResult(LCD.DATA.SendResultState);
 		}		
 	}
 }
@@ -290,11 +282,11 @@ void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value)					//显示信号强度
 			memset(SignalDot, 0x00, 64);
 			break;		
 		default:
-			memset(SignalDot, 0x00, 64);
+//			memset(SignalDot, 0x00, 64);
 			break;
 	}
 	
-	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示	
+//	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示	
 	
 	LCD_DRV_WriteCmd(0+0xb0);			// page
 	LCD_DRV_WriteCmd(0x10 + 0);
@@ -332,11 +324,11 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 			memcpy(BatteryDot, Battery_3, 64);
 			break;
 		default:
-			memset(BatteryDot, 0x00, 64);
+//			memset(BatteryDot, 0x00, 64);
 			break;
 	}	
 
-	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示		
+//	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示		
 	
 	LCD_DRV_WriteCmd(0+0xb0);			// page
 	LCD_DRV_WriteCmd(0x10 + 6);

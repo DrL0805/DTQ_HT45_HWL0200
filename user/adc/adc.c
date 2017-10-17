@@ -67,7 +67,7 @@ static void adc_event_handler(nrf_drv_adc_evt_t const * p_event)
 		ADC.LatestADCVal = 3600 *  adc_value / (ADC_BUFFER_SIZE -10) / 1024;
 
 		LCD.DATA.RefreshFlg |= LCD_REFRESH_BATTERY;
-		ADC.FirstSampleFlg = false;
+		
     }
 }
 
@@ -142,6 +142,8 @@ void ADC_LcdDisValue(void)
 		else if(ADC.LatestADCVal < 2680)
 			LCD_DisplayBattery(BATTERY_LEVEL_0);			
 	}	
+	
+	ADC.FirstSampleFlg = false;
 }
 
 

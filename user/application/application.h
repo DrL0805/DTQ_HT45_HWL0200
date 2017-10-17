@@ -63,6 +63,7 @@ typedef struct
 
 typedef struct
 {
+	bool				AnsweredFlg;						// 已作答标志，根据好未来要求，收到题目后只允许作答一次
 	bool				ReceiveQueFlg;						// 收到题目标志
 	bool				KeySendAllowFlg;					// 发送键允许标志
 	
@@ -72,7 +73,7 @@ typedef struct
 	uint8_t 			LastPackNum[4];						// 上次接收的题目包号，占4bit，用于区分是否是新的题目包
 	
 	APP_QUE_TYPE 		Type;
-	uint8_t				Answer;			// 作答结果
+	uint8_t				Answer;								// 作答结果
 	
 	// 多题单选作答相关
 	uint8_t 			MultiAnswer[16];	
