@@ -146,7 +146,7 @@ void RADIO_RxDataHandler(void)
 					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
 					
 					// 新的包号，或者包号为0，则接收
-					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == RADIO.RX.PackNum))		
+					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == RADIO.RX.PackNum) | (RADIO.RX.ExtendLen != 0))		
 					{
 //						RADIO.IM.LastRxSeqNum  = RADIO.RX.SeqNum;
 //						RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	

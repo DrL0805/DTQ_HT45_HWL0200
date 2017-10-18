@@ -23,6 +23,7 @@ void APP_Init(void)
 		memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
 		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
 		memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
+		RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
 		RADIO.MATCH.Student.Score = 0;
 		RADIO.MATCH.TxChannal = NFC.DataRead[8];			
 		RADIO.MATCH.RxChannal = NFC.DataRead[9];	
@@ -1000,18 +1001,42 @@ void APP_CmdSysOffHandler(void)
 
 void APP_CmdPreHandler(void)
 {
-	if(false ==RADIO.IM.RxWindowWaitFlg)
+	uint8_t point_bit;
+	
+	if(RADIO.RX.ExtendLen)
 	{
-		RADIO.IM.RxWindowWaitFlg = true;
-		if(110 > (APP.CMD.CmdData[0] + 5))
+		point_bit = (RADIO.RX.ExtendData[RADIO.MATCH.DtqNum / 8] >> (RADIO.MATCH.DtqNum % 8)) & 0x01;
+		if(point_bit)
 		{
-			TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
+			if(false ==RADIO.IM.RxWindowWaitFlg)
+			{
+				RADIO.IM.RxWindowWaitFlg = true;
+				if(110 > (APP.CMD.CmdData[0] + 5))
+				{
+					TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
+				}
+				else
+				{
+					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);	
+				}
+			}			
 		}
-		else
+	}
+	else
+	{
+		if(false ==RADIO.IM.RxWindowWaitFlg)
 		{
-			TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);	
-		}
-	}	
+			RADIO.IM.RxWindowWaitFlg = true;
+			if(110 > (APP.CMD.CmdData[0] + 5))
+			{
+				TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
+			}
+			else
+			{
+				TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);	
+			}
+		}	
+	}
 }
 
 void APP_CmdAckHandler(void)

@@ -69,7 +69,7 @@ typedef struct
 	uint8_t SeqNum;					//帧号
 	uint8_t PackNum;				//包号
 	uint8_t ExtendLen;				//扩展字节长度
-	uint8_t ExtendData[5];			//扩展字节内容
+	uint8_t ExtendData[15];			//扩展字节内容
 	uint8_t	PackLen;				//包长
 	uint8_t PackData[240];			//包内容，存储应用层的命令
 	uint8_t Xor;					//不包括包头包尾和自身的异或校验结果
