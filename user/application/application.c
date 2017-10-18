@@ -81,7 +81,7 @@ void APP_KeyHandler(void)
 	{
 		KEY.ScanDownFlg = false;
 		
-
+		APP.KeyCnt++;
 		
 		switch(POWER.SysState)
 		{
@@ -296,19 +296,21 @@ void APP_KeySendHandler(void)
 		11：帧号+1
 		12：包号+1
 		13：扩展字节长度 = 0
-		14：包长，广播包长 = 8
+		14：包长，广播包长 = 16
 		----------包内容--------------
 			15：命令类型 = 0x10
-			16：命令长度 = 6
+			16：命令长度 = 14
 			---------命令内容---------
 				17~20：题目包号
-				21：题目类型
-				22：作答结果
+				21~24：按键次数
+				25~28：回显次数
+				29：题目类型
+				30：作答结果
 		------------------------------
-		23：校验
-		24：包尾0x21
+		31：校验
+		32：包尾0x21
 	*/	
-	RADIO.TX.DataLen = 25;
+	RADIO.TX.DataLen = 33;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
 	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
@@ -318,14 +320,25 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
-	RADIO.TX.Data[14] = 8;					// PackLen
+	RADIO.TX.Data[14] = 16;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
-	RADIO.TX.Data[16] = 6;					// 命令长度，
+	RADIO.TX.Data[16] = 14;					// 命令长度，
 	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
-	RADIO.TX.Data[21] = APP.QUE.Type;
-	RADIO.TX.Data[22] = APP.QUE.Answer;
-	RADIO.TX.Data[23] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[24] = NRF_DATA_END;
+
+	RADIO.TX.Data[21] = APP.KeyCnt >> 0;
+	RADIO.TX.Data[22] = APP.KeyCnt >> 8;
+	RADIO.TX.Data[23] = APP.KeyCnt >> 16;
+	RADIO.TX.Data[24] = APP.KeyCnt >> 24;
+	
+	RADIO.TX.Data[25] = APP.EchoCnt >> 0;
+	RADIO.TX.Data[26] = APP.EchoCnt >> 8;
+	RADIO.TX.Data[27] = APP.EchoCnt >> 16;
+	RADIO.TX.Data[28] = APP.EchoCnt >> 24;
+	
+	RADIO.TX.Data[29] = APP.QUE.Type;
+	RADIO.TX.Data[30] = APP.QUE.Answer;
+	RADIO.TX.Data[31] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[32] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
 	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
@@ -943,7 +956,6 @@ void APP_CmdQuestionHandler(void)
 	*/
 	if(false == APP.QUE.ReceiveQueFlg)
 	{
-		APP.QUE.ReceiveQueFlg = true;
 		APP.QUE.KeySendAllowFlg = true;
 		APP.QUE.AnsweredFlg = false;
 		memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
@@ -954,9 +966,8 @@ void APP_CmdQuestionHandler(void)
 		{
 			return;	//相同题目，直接退出函数
 		}
-		else
-		{
-			APP.QUE.ReceiveQueFlg = true;
+		else	
+		{	
 			APP.QUE.KeySendAllowFlg = true;
 			APP.QUE.AnsweredFlg = false;			
 			memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
@@ -966,12 +977,20 @@ void APP_CmdQuestionHandler(void)
 	// 解析题目信息
 	APP.QUE.Type = APP.CMD.CmdData[4];
 	
-	// 清空之前的作答和LCD显示
+	if(APP.QUE.Type == QUE_FREE_STOP)	
+	{
+		APP.QUE.ReceiveQueFlg = false;		
+	}	
+	else
+	{
+		APP.QUE.ReceiveQueFlg = true;	
+	}
+	
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
-	
-	LCD_DRV_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);
+
+	LCD_DRV_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);			
 }
 
 void APP_CmdSysOffHandler(void)
@@ -1045,7 +1064,6 @@ void APP_CmdSetScoreHandler(void)
 		if(ArrayCmp(RADIO.MATCH.DtqUid, APP.CMD.CmdData+5*i, 4))
 		{
 			RADIO.MATCH.Student.Score = APP.CMD.CmdData[5*i + 4];
-
 		}
 	}
 
@@ -1075,40 +1093,47 @@ void APP_CmdLcdCtrlHandler(void)
 		26：包尾0x21
 	*/
 	uint8_t i;
+	static uint8_t  EchoSeq[4];				// 回显序号
 	
 	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
 	{
+		// 查看名单里是否有此答题器
 		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6 + i*56, 4))
 		{			
-			TEST.HuiXianNum++;
-			
-			// 根据指令更新LCD显示
-			LCD.DATA.Scene[0] = 48;		
-			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
-			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-			
-			
-			// 返回回显确认信息
-			RADIO.TX.DataLen = 27;	
-			
-			RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
-			memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
-			memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
-			RADIO.TX.Data[9] = 0x11;							// 设备ID
-			RADIO.TX.Data[10] = 0x20;
-			RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-			RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
-			RADIO.TX.Data[13] = 0;						// 扩展字节长度
-			RADIO.TX.Data[14] = 10;					// PackLen
-			RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
-			RADIO.TX.Data[16] = 8;					// 命令长度，
-			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
-			memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
-			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-			RADIO.TX.Data[26] = NRF_DATA_END;	
-			
-			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
-			break;
+			// 查看是否是新的回显信息
+			if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+2 + i*56, 4))
+			{
+				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);
+				
+				APP.EchoCnt++;
+				
+				// 根据指令更新LCD显示
+				LCD.DATA.Scene[0] = 48;		
+				memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+							
+				// 返回回显确认信息
+				RADIO.TX.DataLen = 27;	
+				
+				RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
+				memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+				memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+				RADIO.TX.Data[9] = 0x11;							// 设备ID
+				RADIO.TX.Data[10] = 0x20;
+				RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
+				RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+				RADIO.TX.Data[13] = 0;						// 扩展字节长度
+				RADIO.TX.Data[14] = 10;					// PackLen
+				RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
+				RADIO.TX.Data[16] = 8;					// 命令长度，
+				memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
+				memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
+				RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+				RADIO.TX.Data[26] = NRF_DATA_END;	
+				
+				RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
+				break;				
+			}
 		}
 	}
 }

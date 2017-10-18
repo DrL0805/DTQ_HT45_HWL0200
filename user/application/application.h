@@ -51,7 +51,8 @@ typedef enum
 	QUE_MULTI_CHOICE = 0x03,				// 单题多选
 	QUE_ACTIVITY    = 0x04,				// 抢红包
 	QUE_MULTI_SINGLE_CHOICE = 0x05,		// 多题单选
-	QUE_FREE = 0x06						// 通用题
+	QUE_FREE = 0x06,						// 通用题
+	QUE_FREE_STOP = 0x80					// 通用题停止作答
 }APP_QUE_TYPE;
 
 typedef struct
@@ -86,6 +87,9 @@ typedef struct
 	QUE_PARAMETERS_T	QUE;
 	
 	PROJECT_DEVELOP_STATE_TYPE		ProjState;
+	
+	uint32_t 			KeyCnt;
+	uint32_t			EchoCnt;
 	
 	//当没收到题目时，按键结果仅作为显示（演示）用，无实际意义
 	uint8_t 			LcdDisType;				//显示类型，字母、判断、数字
