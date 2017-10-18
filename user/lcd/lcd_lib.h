@@ -102,7 +102,7 @@ typedef struct
 //	uint8_t		Signal[64];
 //	uint8_t 	Battery[64];
 	uint8_t 	StudentId[8];		// 学生姓名/学号
-	uint8_t		Scene[49];			// 第一个字节表示长度，最大48
+	uint8_t		Scene[49];			// 第一个字节表示需要跟新显示的长度，最大48
 	uint8_t 	Input[16];			// 按键输入内容
 	
 	uint8_t 	SendResultState;
@@ -137,17 +137,11 @@ extern void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value);
 extern void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value);
 
 extern void LCD_DisplayDeviceId(void);
-extern void LCD_DisplayStudentName(void);
-extern void LCD_DisplayQuestionNum(uint16_t question_num);
-extern void LCD_DisplayScoreValue(uint16_t grade_value);
 
 extern void LCD_ClearInputArea(void);
+
+extern void LCD_DisplaySceneArea(void);
 extern void LCD_ClearSceneArea(void);
-extern void LCD_ClearNameArea(void);
-extern void LCD_ClearScoreArea(void);
-
-
-extern void  LCD_DisplaySceneArea(void);
 
 #endif 
 

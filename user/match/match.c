@@ -140,7 +140,7 @@ void MATCH_KeyHandler(void)
 				POWER_SysMatchToOn();
 				if(MATCH.NewMatchFlg)
 				{
-					APP_ClearQuestionInfo();		// 若重新绑定接收器，清空题目信息和LCD显示
+						// 若重新绑定接收器，清空题目信息和LCD显示
 				}				
 			}
 			break;
@@ -230,9 +230,7 @@ void MATCH_KeyNextHandler(void)
 
 void MATCH_LCDDisplayPIN(uint8_t Index)
 {
-//	LCD_DisplayStudentName(Index + 1);			// 配对序号 == 索引号+1
-//	LCD_DisplayQuestionNum((MATCH.UID[Index].PIN[0] & 0x0F) + (MATCH.UID[Index].PIN[0] >> 4)*10);
-//	LCD_DisplayScoreValue((MATCH.UID[Index].PIN[1] & 0x0F) + (MATCH.UID[Index].PIN[1] >> 4)*10);
+
 }
 
 

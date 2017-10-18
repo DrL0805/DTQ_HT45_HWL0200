@@ -63,10 +63,13 @@ void APP_ParUpdate(void)
 		RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
 		RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
 	}
-	
-//	LCD_DisplayStudentName();
-//	LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
 
+	LCD_ClearSceneArea();
+	APP.QUE.ReceiveQueFlg = false;
+	APP.QUE.Answer = 0;		
+	
+	RADIO.IM.LastRxPackNum = 0;			
+	RADIO.IM.LastRxSeqNum = 0;	
 	RADIO.IM.LastRxPackNum = 0;
 }
 
@@ -78,7 +81,7 @@ void APP_KeyHandler(void)
 	{
 		KEY.ScanDownFlg = false;
 		
-//		LCD_DisplayScoreValue(KEY.ScanValue);		//显示按键值，FOR DEBUG
+
 		
 		switch(POWER.SysState)
 		{
@@ -153,7 +156,7 @@ void APP_KeyHandler(void)
 				}
 				else										//没收到题目
 				{
-					APP_KeyEmptyHandler();
+//					APP_KeyEmptyHandler();					
 				}	
 				break;
 			case SYS_SLEEP:
@@ -476,9 +479,8 @@ void APP_KeyFnAdd7Handler(void)
 //				APP.AutoAnswerSwitchFlg = true;
 //				APP.AutoAnswerTxCnt = 0;
 //				APP.AutoAnswerTxSucCnt = 0;
-//				LCD_DisplayStudentName(APP.AutoAnswerTxCnt);						// 发送次数
-//				LCD_DisplayQuestionNum(APP.AutoAnswerTxSucCnt / 100);			
-//				LCD_DisplayScoreValue(APP.AutoAnswerTxSucCnt % 100);			// 发送成功次数
+	
+
 //				TIMER_AutoAnswerStart();		
 //			}
 //		}	
@@ -615,19 +617,19 @@ void APP_KeyMultiSingleChoiceHandler(void)
 	{
 		case KEY_APP_A_1:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x01;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
+			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
 			break;
 		case KEY_APP_B_2:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x02;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);	
+			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);	
 			break;
 		case KEY_APP_C_3:
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x04;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);	
+			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);	
 			break;
 		case KEY_APP_D_4: 
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x08;
-			LCD_DRV_DisplayOne(47+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);	
+			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);	
 			break;
 		case KEY_APP_RINGHT:
 			APP_KeyMultiSendHandler();			
@@ -943,6 +945,7 @@ void APP_CmdQuestionHandler(void)
 	{
 		APP.QUE.ReceiveQueFlg = true;
 		APP.QUE.KeySendAllowFlg = true;
+		APP.QUE.AnsweredFlg = false;
 		memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 	}
 	else
@@ -953,23 +956,22 @@ void APP_CmdQuestionHandler(void)
 		}
 		else
 		{
+			APP.QUE.ReceiveQueFlg = true;
+			APP.QUE.KeySendAllowFlg = true;
+			APP.QUE.AnsweredFlg = false;			
 			memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 		}
 	}
-	
-	APP.QUE.AnsweredFlg = false;
-	
+
 	// 解析题目信息
 	APP.QUE.Type = APP.CMD.CmdData[4];
 	
 	// 清空之前的作答和LCD显示
-
-	LCD_ClearInputArea();
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
 	
-	LCD_DRV_DisplayN(32, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);
+	LCD_DRV_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);
 }
 
 void APP_CmdSysOffHandler(void)
@@ -1016,7 +1018,7 @@ void APP_CmdGetStateHandler(void)
 
 void APP_CmdClearScreenHandler(void)
 {
-	APP_ClearQuestionInfo();
+	
 }
 
 void APP_CmdStartManualMatchHandler(void)
@@ -1043,7 +1045,7 @@ void APP_CmdSetScoreHandler(void)
 		if(ArrayCmp(RADIO.MATCH.DtqUid, APP.CMD.CmdData+5*i, 4))
 		{
 			RADIO.MATCH.Student.Score = APP.CMD.CmdData[5*i + 4];
-//			LCD_DisplayScoreValue(RADIO.MATCH.Student.Score);
+
 		}
 	}
 
@@ -1082,7 +1084,7 @@ void APP_CmdLcdCtrlHandler(void)
 			
 			// 根据指令更新LCD显示
 			LCD.DATA.Scene[0] = 48;		
-			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10, LCD.DATA.Scene[0]);
+			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 			
 			
@@ -1124,21 +1126,6 @@ void APP_PackQuestionInfo(void)
 {
 
 }
-
-//清空所有题目信息以及LCD显示
-void APP_ClearQuestionInfo(void)
-{
-	APP.QUE.ReceiveQueFlg = false;
-	
-	APP.QUE.Answer = 0;
-	
-	LCD_ClearSceneArea();
-
-	LCD_ClearInputArea();
-}
-
-
-
 
 
 

@@ -143,7 +143,7 @@ void APP_CmdLcdCtrlHandler(void);
 
 void APP_FetchQuesInfo(void);
 void APP_PackQuestionInfo(void);
-void APP_ClearQuestionInfo(void);
+
 
 
 extern APP_PARAMETERS_T		APP;

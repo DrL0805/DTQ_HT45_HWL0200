@@ -16,6 +16,7 @@
 #include "app_timer.h"
 #include "app_error.h"
 #include "app_fifo.h"
+#include "nrf_drv_wdt.h"
 
 #include "simple_uart.h"
 #include "uart.h"
@@ -34,6 +35,7 @@
 #include "match.h"
 #include "w25qxx.h"
 #include "lib_TagType4.h"
+#include "watchdog.h"
 
 // 软件版本 -----------------------------------------------------------
 #define 	VERSION_PROTOCOL	(1)			//版本支持的协议,1表示自有协议

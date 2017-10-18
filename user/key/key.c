@@ -41,9 +41,6 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 		LED_TOG(LED_0);
 		nrf_delay_ms(600);				//延时等待13.56M读头处理完，再通过I2C读取更新的数据
 		APP_ParUpdate();				
-		APP_ClearQuestionInfo();		//更新参数后，清空上次的题目信息
-		RADIO.IM.LastRxPackNum = 0;			
-		RADIO.IM.LastRxSeqNum = 0;	
 	}
 	else
 	{

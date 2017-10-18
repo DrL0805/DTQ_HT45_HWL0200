@@ -332,7 +332,7 @@
               <MiscControls>--c99</MiscControls>
               <Define>NRF51 SWI_DISABLE0</Define>
               <Undefine></Undefine>
-              <IncludePath>..\components\drivers_nrf\hal;..\components\drivers_nrf\delay;..\components\drivers_nrf\nrf_soc_nosd;..\components\drivers_nrf\common;..\components\drivers_nrf\config;..\components\drivers_nrf\gpiote;..\components\drivers_nrf\adc;..\components\drivers_nrf\clock;..\components\libraries\timer;..\components\libraries\scheduler;..\components\libraries\util;..\components\libraries\fifo;..\components\toolchain\CMSIS\Include;..\components\toolchain;..\components\properitary_rf\esb;..\user;..\user\clock;..\user\timers;..\user\uart;..\user\led;..\user\lcd;..\user\key;..\user\application;..\user\power;..\user\radio;..\user\adc;..\user\attend;..\user\flash;..\user\test;..\user\match;..\user\w25qxx;..\user\M24SR</IncludePath>
+              <IncludePath>..\components\drivers_nrf\hal;..\components\drivers_nrf\delay;..\components\drivers_nrf\nrf_soc_nosd;..\components\drivers_nrf\common;..\components\drivers_nrf\config;..\components\drivers_nrf\gpiote;..\components\drivers_nrf\adc;..\components\drivers_nrf\wdt;..\components\drivers_nrf\clock;..\components\libraries\timer;..\components\libraries\scheduler;..\components\libraries\util;..\components\libraries\fifo;..\components\toolchain\CMSIS\Include;..\components\toolchain;..\components\properitary_rf\esb;..\user;..\user\clock;..\user\timers;..\user\uart;..\user\led;..\user\lcd;..\user\key;..\user\application;..\user\power;..\user\radio;..\user\adc;..\user\attend;..\user\flash;..\user\test;..\user\match;..\user\w25qxx;..\user\M24SR;..\user\watchdog</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -495,6 +495,11 @@
               <FileType>1</FileType>
               <FilePath>..\user\M24SR\lib_TagType4.c</FilePath>
             </File>
+            <File>
+              <FileName>watchdog.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\watchdog\watchdog.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -559,6 +564,11 @@
               <FileName>app_fifo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\components\libraries\fifo\app_fifo.c</FilePath>
+            </File>
+            <File>
+              <FileName>nrf_drv_wdt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\components\drivers_nrf\wdt\nrf_drv_wdt.c</FilePath>
             </File>
           </Files>
         </Group>

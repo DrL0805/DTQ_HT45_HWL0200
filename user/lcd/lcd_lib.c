@@ -97,8 +97,7 @@ void LCD_WakeUp(void)
 void LCD_Update(void)
 {
 	if(LCD.DATA.RefreshFlg)
-	{
-		
+	{		
 		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_H);			// Set Booster
 		LCD_DRV_WriteCmd(LCD_SET_BOOSTER_L_X5);   		// Set Booster	
 		LCD_DRV_WriteCmd(LCD_SET_EV_H);          		// set reference voltage   LCD_SET_EV_H
@@ -141,7 +140,7 @@ void LCD_Update(void)
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_RESULT)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_RESULT;
-//			LCD_DisplaySendResult(LCD.DATA.SendResultState);
+			LCD_DisplaySendResult(LCD.DATA.SendResultState);
 		}		
 	}
 }
@@ -172,25 +171,25 @@ void LCD_DisplayLetter(uint8_t Letter)
 	
 	if((Letter & LCD_A) == LCD_A)
 	{
-		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_A);
+		LCD_DRV_DisplayOne(35 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_A);
 		pLcdLetter++;
 	}
 	
 	if((Letter & LCD_B) == LCD_B)
 	{
-		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_B);
+		LCD_DRV_DisplayOne(35 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_B);
 		pLcdLetter++;
 	}
 
 	if((Letter & LCD_C) == LCD_C)
 	{
-		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_C);
+		LCD_DRV_DisplayOne(35 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_C);
 		pLcdLetter++;
 	}
 
 	if((Letter & LCD_D) == LCD_D)
 	{
-		LCD_DRV_DisplayOne(50 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_D);
+		LCD_DRV_DisplayOne(35 + pLcdLetter, LCD_DRV_DOT_ASCII, ASCII_D);
 		pLcdLetter++;
 	}	
 }
@@ -206,10 +205,10 @@ void LCD_DisplayJudge(uint8_t Value)
 			
 			break;
 		case JUDGE_TRUE:
-			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1CC);
+			LCD_DRV_DisplayOne(35, LCD_DRV_DOT_HANZI, 0xA1CC);
 			break;
 		case JUDGE_FALSE:
-			LCD_DRV_DisplayOne(50, LCD_DRV_DOT_HANZI, 0xA1C1);
+			LCD_DRV_DisplayOne(35, LCD_DRV_DOT_HANZI, 0xA1C1);
 			break;
 		default:
 			break;
@@ -349,56 +348,9 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 }
 
 
-void LCD_DisplayStudentName(void)
-{
-	uint8_t i, TmpNameLen = 0;
 
-	LCD_ClearNameArea();
-	
-	// 计算名字长度
-	for(i = 0;i < 12;i++)
-	{
-		// 中文GBK码不可能有0x00
-		if(0x00 == RADIO.MATCH.Student.Name[i])	
-		{
-			TmpNameLen = i / 2;
-			break;
-		}
-	}
-	
-	if(TmpNameLen)
-	{
-		for(i = 0;i < TmpNameLen;i++)
-		{
-			LCD_DRV_DisplayOne(18+i*2, LCD_DRV_DOT_HANZI, (uint16_t)((RADIO.MATCH.Student.Name[2*i] << 8) | RADIO.MATCH.Student.Name[2*i+1]));
-		}	
-	}
-	else
-	{
-		LCD_DRV_DisplayOne(18, LCD_DRV_DOT_HANZI, 0xCEDE);// 无
-		LCD_DRV_DisplayOne(20, LCD_DRV_DOT_HANZI, 0xD0D5);// 姓
-		LCD_DRV_DisplayOne(22, LCD_DRV_DOT_HANZI, 0xC3FB);// 名
-	}
-}
 
-void LCD_DisplayQuestionNum(uint16_t question_num)
-{
 
-}
-
-void LCD_DisplayScoreValue(uint16_t grade_value)
-{
-	uint8_t Tmp;
-	
-	LCD_ClearScoreArea();	
-	
-	Tmp = grade_value % 10;
-	LCD_DRV_DisplayDigit(28, Tmp);
-	Tmp = (grade_value % 100) / 10;	
-	LCD_DRV_DisplayDigit(29, Tmp);
-	Tmp = (grade_value % 1000) / 100;	
-	LCD_DRV_DisplayDigit(30, Tmp);
-}
 
 
 void LCD_DisplayDeviceId(void)
@@ -432,30 +384,7 @@ void LCD_ClearInputArea(void)
 	uint8_t TmpBuf[64];
 	
 	memset(TmpBuf, ASCII_CLEAR, 64);
-	LCD_DRV_DisplayN(48, 16, TmpBuf);	
-}
-
-void LCD_ClearSceneArea(void)
-{
-	uint8_t TmpBuf[64];
-	
-	memset(TmpBuf, ASCII_CLEAR, 64);
-	LCD_DRV_DisplayN(32, 16, TmpBuf);		
-}
-void LCD_ClearNameArea(void)
-{
-	uint8_t TmpBuf[64];
-	
-	memset(TmpBuf, ASCII_CLEAR, 64);
-	LCD_DRV_DisplayN(16, 12, TmpBuf);	
-}
-
-void LCD_ClearScoreArea(void)
-{
-	uint8_t TmpBuf[64];
-	
-	memset(TmpBuf, ASCII_CLEAR, 64);
-	LCD_DRV_DisplayN(28, 6, TmpBuf);	
+	LCD_DRV_DisplayN(32, 16, TmpBuf);	
 }
 
 void  LCD_DisplaySceneArea(void)
@@ -463,6 +392,13 @@ void  LCD_DisplaySceneArea(void)
 	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);
 }
 
+void LCD_ClearSceneArea(void)
+{
+	LCD.DATA.Scene[0] = 48;
+	memset(LCD.DATA.Scene+1, 0x00, 48);
+	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+}
 
 
 

@@ -5,7 +5,6 @@ static void MAIN_DebugFun(void);
 
 app_fifo_t my_fifo;
 
-
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
@@ -31,7 +30,7 @@ int main (void)
 	ADC_Init();
 	TEST_Init();
 	
-	TIMER_RxWindowStart();
+	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
 	TIMER_LCDStart();
 	TIMER_ADCStart();
@@ -42,13 +41,15 @@ int main (void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
 	
+//	WDT_Init();
+	
 	while(true)
 	{
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
 				RADIO_RxDataHandler();	
-				APP_KeyHandler();
+				APP_KeyHandler();	
 				LCD_Update();	
 				ADC_Update();	
 				break;
@@ -66,7 +67,8 @@ int main (void)
 			default:
 				NVIC_SystemReset();
 				break;
-		}			
+		}	
+//		WDT_FeedDog();
 		MAIN_DebugFun();
 //		__WFE();							
 //		__WFI();		

@@ -10,7 +10,7 @@
 
 //定时器宏定义
 #define APP_TIMER_PRESCALER     0
-#define APP_TIMER_OP_QUEUE_SIZE 15
+#define APP_TIMER_OP_QUEUE_SIZE 17
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(3000, 	APP_TIMER_PRESCALER)
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(2998, 	APP_TIMER_PRESCALER)
@@ -26,6 +26,7 @@
 #define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
 #define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
 #define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
+#define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
 
 
 APP_TIMER_DEF(temp_timer_id);
@@ -44,7 +45,7 @@ APP_TIMER_DEF(tx_result_display_timer_id);		/* LCD显示按键发送结果（成功/失败） 
 APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
 APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
-
+//APP_TIMER_DEF(watch_dog_timer_id);
 
 void TIMERS_Init(void)
 {
@@ -77,6 +78,9 @@ void TIMERS_Init(void)
 	
 	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_REPEATED,TIMER_RetransmitHandler);
 	APP_ERROR_CHECK(err_code);	
+	
+//	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_REPEATED,TIMER_WatchDogHandler);
+//	APP_ERROR_CHECK(err_code);		
 
 	//-------------------------- 单次定时器 ------------------------------
 	err_code = app_timer_create(&sys_state_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SysStateHandler);
@@ -248,21 +252,21 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-	uint32_t err_code;
-	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
-	APP_ERROR_CHECK(err_code);
+//	uint32_t err_code;
+//	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
+//	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateStop(void)
 {
-	uint32_t err_code;
-	err_code = app_timer_stop(sys_state_timer_id);
-	APP_ERROR_CHECK(err_code);
+//	uint32_t err_code;
+//	err_code = app_timer_stop(sys_state_timer_id);
+//	APP_ERROR_CHECK(err_code);
 }
 
 void TIMER_SysStateHandler(void * p_context)
 {
-	POWER_SysOnToSleep();
+//	POWER_SysOnToSleep();
 }
 
 void TIMER_KeyPowerStart(void)
@@ -518,3 +522,22 @@ void TIMER_TxRandomDelayHandler(void * p_context)
 {
 	RADIO_StartLinkTx();
 }
+
+//void TIMER_WatchDogStart(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_start(watch_dog_timer_id,WATCH_DOG_TIMEOUT_INTERVAL,NULL);
+//	APP_ERROR_CHECK(err_code);
+//}
+
+//void TIMER_WatchDogStop(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_stop(watch_dog_timer_id);
+//	APP_ERROR_CHECK(err_code);
+//}
+
+//void TIMER_WatchDogHandler(void * p_context)
+//{
+//	WDT.FeedFlg = true;
+//}

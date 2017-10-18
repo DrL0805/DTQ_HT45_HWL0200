@@ -22,7 +22,6 @@ void POWER_SysOnToOff(void)
 	
 	CLOCK_HFCLKStop();					//停止外部时钟
 	
-	APP_ClearQuestionInfo();			//清空所有题目信息
 }
 
 //系统休眠函数

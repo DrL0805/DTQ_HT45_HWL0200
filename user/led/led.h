@@ -6,7 +6,7 @@
 #include "main.h"
 
 // Defines ------------------------------------------------------------
-#define LED_SUPORT		(1)
+#define LED_SUPORT		(0)
 #define LED_0 			(30)
 
 #if LED_SUPORT
