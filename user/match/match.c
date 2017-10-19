@@ -153,57 +153,7 @@ void MATCH_KeyHandler(void)
 
 void MATCH_KeySendHandler(void)
 {
-	/*
-		答题器2.4G链路层数据格式
-		0：包头0x61
-		1：源ID，因为还没有绑定成功，所以全为0
-		5：目标ID，接收器UID
-		9：设备类型，答题器 = 0x11
-		10：协议版本 = 0x21
-		11：帧号+1
-		12：包号+1
-		13：扩展字节长度 = 0
-		14：包长，广播包长 = 12
-		----------包内容--------------
-			15：命令类型 = 0x40
-			16：命令长度 = 10
-			---------命令内容---------
-				17：接收器UID，4Byte
-				21：PIN码，2Byte
-				23：答题器UID，4Byte
-		------------------------------
-		27：校验
-		28：包尾0x21
-	*/	
-	
-	// 当前索引的接收器UID全为0，直接退出
-	if(ArrayCmp(MATCH.UID[MATCH.SelectIndex].UID, RADIO.MATCH.PublicUid, 4))
-	{
-		return;
-	}
-	
-	LED_TOG(LED_0);
-	
-	RADIO.TX.DataLen = 29;
-	
-	RADIO.TX.Data[0] = NRF_DATA_HEAD;
-	memset(RADIO.TX.Data+1, 0x00, 4);
-	memcpy(RADIO.TX.Data+5, MATCH.UID[MATCH.SelectIndex].UID, 4);	// 当前索引的接收器UID
-	RADIO.TX.Data[9] = 0x11;
-	RADIO.TX.Data[10] = 0x21;
-	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
-	RADIO.TX.Data[13] = 0x00;
-	RADIO.TX.Data[14] = 12;
-	RADIO.TX.Data[15] = 0x40;
-	RADIO.TX.Data[16] = 10;
-	memcpy(RADIO.TX.Data+17, MATCH.UID[MATCH.SelectIndex].UID, 4);
-	memcpy(RADIO.TX.Data+21, MATCH.UID[MATCH.SelectIndex].PIN, 2);
-	memcpy(RADIO.TX.Data+23, RADIO.MATCH.DtqUid, 4);
-	RADIO.TX.Data[27] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[28] = NRF_DATA_END;
-	
-	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
+
 }
 
 void MATCH_KeyLastHandler(void)

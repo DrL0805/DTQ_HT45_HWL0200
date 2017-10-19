@@ -17,6 +17,9 @@ typedef struct
 	
 	
 	uint16_t	HuiXianNum;
+	
+	uint16_t 	TxSucCnt;
+	uint16_t	TxFaiCnt;
 }TEST_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------

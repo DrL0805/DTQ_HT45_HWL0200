@@ -99,7 +99,7 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&display_version_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_DisVerHandler);
 	APP_ERROR_CHECK(err_code);	
 	
-	err_code = app_timer_create(&send_allow_timer_id,APP_TIMER_MODE_REPEATED,TIMER_SendAllowHandler);
+	err_code = app_timer_create(&send_allow_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SendAllowHandler);
 	APP_ERROR_CHECK(err_code);		
 
 	err_code = app_timer_create(&tx_random_delay_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxRandomDelayHandler);
@@ -433,7 +433,7 @@ void TIMER_RetransmitHandler(void * p_context)
 	}
 	else							//否则重发
 	{
-		RADIO_StartLinkTx();			//启动硬件发送，发送APP.TX结构体里的数据	
+		RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);			//启动硬件发送，发送APP.TX结构体里的数据	
 	}
 }
 
@@ -455,7 +455,6 @@ void TIMER_TxResultDisplayHandler(void * p_context)
 {
 	LCD.DATA.SendResultState = SEND_RESULT_CLEAR;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;
-	APP.QUE.KeySendAllowFlg = true;					// 允许按键发送
 }
 
 void TIMER_DisVerStart(void)
@@ -495,7 +494,7 @@ void TIMER_SendAllowStop(void)
 
 void TIMER_SendAllowHandler(void * p_context)
 {
-	APP.QUE.KeySendAllowFlg = true;
+//	APP.QUE.KeySendAllowFlg = true;
 }
 
 void TIMER_TxRandomDelayStart(void)
@@ -520,7 +519,7 @@ void TIMER_TxRandomDelayStop(void)
 
 void TIMER_TxRandomDelayHandler(void * p_context)
 {
-	RADIO_StartLinkTx();
+	RADIO_StartLinkTx(TX_DATA_TYPE_ECHO);
 }
 
 //void TIMER_WatchDogStart(void)

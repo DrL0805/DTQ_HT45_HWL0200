@@ -46,7 +46,7 @@ void APP_ParUpdate(void)
 
 	TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
 	M24SR_Deselect();
-
+	
 	NFC.MatchSucceedFlg = true;
 	
 	if(NFC.MatchSucceedFlg)
@@ -54,6 +54,7 @@ void APP_ParUpdate(void)
 		memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
 		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
 		memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
+		RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
 		RADIO.MATCH.Student.Score = 0;
 		RADIO.MATCH.TxChannal = NFC.DataRead[8];			
 		RADIO.MATCH.RxChannal = NFC.DataRead[9];	
@@ -72,6 +73,8 @@ void APP_ParUpdate(void)
 	RADIO.IM.LastRxPackNum = 0;			
 	RADIO.IM.LastRxSeqNum = 0;	
 	RADIO.IM.LastRxPackNum = 0;
+	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 }
 
 void APP_KeyHandler(void)
@@ -81,8 +84,6 @@ void APP_KeyHandler(void)
 	if(KEY.ScanDownFlg)				
 	{
 		KEY.ScanDownFlg = false;
-		
-//		APP.KeyCnt++;
 		
 		switch(POWER.SysState)
 		{
@@ -98,11 +99,11 @@ void APP_KeyHandler(void)
 						case QUE_SINGLE_CHOICE:					// 单选
 							
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;
 							
 							// 不允许重复提交答案
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{								
 								APP_KeySingleChoiceHandler();
 							}						
@@ -111,20 +112,20 @@ void APP_KeyHandler(void)
 						case QUE_JUDGE:						// 判断
 							
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;
 							
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyJudgeHandler();
 							}							
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;							
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;							
 						
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyMultiChoiceHandler();
 							}
@@ -132,24 +133,25 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;									
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;									
 						
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyActivityHandler();
 							}
 							
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
 							}
 							
 							break;
 						case QUE_FREE:
-							APP_KeyFreeHandler();
+							if(!RADIO.IM.TxIngFlg)
+								APP_KeyFreeHandler();
 							break;
 						default:
 							break;
@@ -165,11 +167,11 @@ void APP_KeyHandler(void)
 						case QUE_SINGLE_CHOICE:					// 单选
 							
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;
 							
 							// 不允许重复提交答案
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{								
 								APP_KeySingleChoiceHandler();
 							}						
@@ -178,20 +180,20 @@ void APP_KeyHandler(void)
 						case QUE_JUDGE:						// 判断
 							
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;
 							
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyJudgeHandler();
 							}							
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;							
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;							
 						
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyMultiChoiceHandler();
 							}
@@ -199,24 +201,25 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
-							if(false == APP.QUE.KeySendAllowFlg)
-								return;									
+//							if(false == APP.QUE.KeySendAllowFlg)
+//								return;									
 						
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyActivityHandler();
 							}
 							
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
 							}
 							
 							break;
 						case QUE_FREE:
-							APP_KeyFreeHandler();
+							if(!RADIO.IM.TxIngFlg)
+								APP_KeyFreeHandler();
 							break;
 						default:
 							break;
@@ -339,13 +342,12 @@ void APP_KeySendHandler(void)
 		return;
 	
 	//发送允许标志，用于控制按发送键的频率
-	if(false == APP.QUE.KeySendAllowFlg)
-		return;
+//	if(false == APP.QUE.KeySendAllowFlg)
+//		return;
 	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
 		return;
-	
 	
 	/*
 		答题器2.4G链路层数据格式
@@ -371,7 +373,8 @@ void APP_KeySendHandler(void)
 		31：校验
 		32：包尾0x21
 	*/	
-	APP.KeyCnt++;
+	
+	APP.KeyCnt++;								// 按键计数
 	
 	RADIO.TX.DataLen = 33;
 	
@@ -380,8 +383,19 @@ void APP_KeySendHandler(void)
 	memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
 	RADIO.TX.Data[9] = 0x11;							// 设备ID
 	RADIO.TX.Data[10] = 0x20;
-	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+	
+	if(RADIO.TX.SeqNum == 255)
+		RADIO.TX.SeqNum = 1;
+	else
+		RADIO.TX.SeqNum++;
+	
+	if(RADIO.TX.PackNum == 255)
+		RADIO.TX.PackNum = 1;
+	else
+		RADIO.TX.PackNum++;		
+	
+	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
+	RADIO.TX.Data[12] = RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
 	RADIO.TX.Data[14] = 16;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
@@ -414,8 +428,8 @@ void APP_KeyMultiSendHandler(void)
 		return;
 	
 	//发送允许标志，用于控制按发送键的频率
-	if(false == APP.QUE.KeySendAllowFlg)
-		return;
+//	if(false == APP.QUE.KeySendAllowFlg)
+//		return;
 	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.MultiAnswer[0])
@@ -443,7 +457,8 @@ void APP_KeyMultiSendHandler(void)
 		38：校验
 		39：包尾0x21
 	*/	
-	APP.KeyCnt++;
+		
+	APP.KeyCnt++;								// 按键计数		
 	
 	RADIO.TX.DataLen = 40;
 	
@@ -452,8 +467,19 @@ void APP_KeyMultiSendHandler(void)
 	memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
 	RADIO.TX.Data[9] = 0x11;							// 设备ID
 	RADIO.TX.Data[10] = 0x20;
-	RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-	RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+	
+	if(RADIO.TX.SeqNum == 255)
+		RADIO.TX.SeqNum = 1;
+	else
+		RADIO.TX.SeqNum++;
+	
+	if(RADIO.TX.PackNum == 255)
+		RADIO.TX.PackNum = 1;
+	else
+		RADIO.TX.PackNum++;		
+	
+	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
+	RADIO.TX.Data[12] = RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
 	RADIO.TX.Data[14] = 23;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
@@ -1021,7 +1047,7 @@ void APP_CmdQuestionHandler(void)
 	*/
 	if(false == APP.QUE.ReceiveQueFlg)
 	{
-		APP.QUE.KeySendAllowFlg = true;
+//		APP.QUE.KeySendAllowFlg = true;
 		APP.QUE.AnsweredFlg = false;
 		memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 	}
@@ -1033,7 +1059,7 @@ void APP_CmdQuestionHandler(void)
 		}
 		else	
 		{	
-			APP.QUE.KeySendAllowFlg = true;
+//			APP.QUE.KeySendAllowFlg = true;
 			APP.QUE.AnsweredFlg = false;			
 			memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 		}
@@ -1196,29 +1222,29 @@ void APP_CmdLcdCtrlHandler(void)
 				APP.EchoCnt++;
 			}
 			
-			// 根据指令更新LCD显示
+			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		
 			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 						
 			// 返回回显确认信息
-			RADIO.TX.DataLen = 27;	
+			RADIO.TX.EchoLen = 27;	
 			
-			RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
-			memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
-			memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
-			RADIO.TX.Data[9] = 0x11;							// 设备ID
-			RADIO.TX.Data[10] = 0x20;
-			RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-			RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
-			RADIO.TX.Data[13] = 0;						// 扩展字节长度
-			RADIO.TX.Data[14] = 10;					// PackLen
-			RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
-			RADIO.TX.Data[16] = 8;					// 命令长度，
-			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
-			memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
-			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-			RADIO.TX.Data[26] = NRF_DATA_END;
+			RADIO.TX.EchoData[0] = NRF_DATA_HEAD;					// 头
+			memcpy(RADIO.TX.EchoData+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+			memcpy(RADIO.TX.EchoData+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+			RADIO.TX.EchoData[9] = 0x11;							// 设备ID
+			RADIO.TX.EchoData[10] = 0x20;
+			RADIO.TX.EchoData[11] = 0;								// 回显指令的帧号/包号都为0
+			RADIO.TX.EchoData[12] = 0;
+			RADIO.TX.EchoData[13] = 0;								// 扩展字节长度
+			RADIO.TX.EchoData[14] = 10;					// PackLen
+			RADIO.TX.EchoData[15] = CMD_LCD_CTRL;		// 命令类型
+			RADIO.TX.EchoData[16] = 8;					// 命令长度，
+			memcpy(RADIO.TX.EchoData+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
+			memcpy(RADIO.TX.EchoData+21, RADIO.MATCH.DtqUid, 4);
+			RADIO.TX.EchoData[25] = XOR_Cal(RADIO.TX.EchoData+1, RADIO.TX.EchoLen - 3);
+			RADIO.TX.EchoData[26] = NRF_DATA_END;
 			
 			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
 			break;				

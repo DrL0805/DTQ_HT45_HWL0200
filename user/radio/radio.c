@@ -177,6 +177,8 @@ void RADIO_RxSuccess(void)
 
 void RADIO_TxSuccess(void)
 {
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+	TEST.TxSucCnt++;
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
@@ -202,6 +204,8 @@ void RADIO_TxSuccess(void)
 
 void RADIO_TxFailed(void)
 {
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+	TEST.TxFaiCnt++;
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
@@ -234,17 +238,17 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			RADIO.IM.TxIngFlg = true;
 			RADIO.IM.ReTxCount = 0;
 		
-			APP.QUE.KeySendAllowFlg = false;			//处于发送过程时，不允许再次按键发送数据
-			TIMER_SendAllowStart();
+//			APP.QUE.KeySendAllowFlg = false;			// 处于发送过程时，不允许再次按键发送数据
+//			TIMER_SendAllowStart();
 		
 			// 发送一次数据
-			RADIO_StartLinkTx();
+			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);
 			
 			// 开启重发定时器，定时器到后检测是否发送成功
 			TIMER_RetransmitStart();				
     		break;
 		case RADIO_TX_NO_RETRY:
-			RADIO_StartLinkTx();
+			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);
 			break;
 		case RADIO_TX_NO_RETRY_RANDOM_DELAY:
 			TIMER_TxRandomDelayStart();
@@ -259,9 +263,19 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 }
 
 //启动硬件RADIO，发送APP.TX结构体内容
-void RADIO_StartLinkTx(void)
+void RADIO_StartLinkTx(uint8_t TxDataType)
 {
-	RADIO_StartHardTx(RADIO.IM.TxChannal, RADIO.TX.Data, RADIO.TX.DataLen);		
+	switch (TxDataType)
+    {
+    	case TX_DATA_TYPE_ANSWER:
+			RADIO_StartHardTx(RADIO.IM.TxChannal, RADIO.TX.Data, RADIO.TX.DataLen);		
+    		break;
+    	case TX_DATA_TYPE_ECHO:
+			RADIO_StartHardTx(RADIO.IM.TxChannal, RADIO.TX.EchoData, RADIO.TX.EchoLen);		
+    		break;
+    	default:
+    		break;
+    }
 }
 
 

@@ -11,7 +11,7 @@
 
 
 //底层通信相关宏定义
-#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(7)					//重发次数,不包括第一次
+#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(10)					//重发次数,不包括第一次
 #define 	NRF_ENHANCE_NUMBER					(2)					//每次发送次数，至少为1，多的为加强帧
 #define		NRF_RETRANSMIT_DELAY				(280)				//0~255ms随机值
 #define 	NRF_PIPE						(0)						
@@ -35,6 +35,10 @@
 #define RX_WINDOW_ON					(3)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间
 #define RETURN_ACK_DELAY				(300)	//随机回复ACK的最大时间
+
+
+#define	TX_DATA_TYPE_ANSWER		0
+#define TX_DATA_TYPE_ECHO		1
 
 // 无线参数配置类型
 typedef enum
@@ -78,9 +82,12 @@ typedef struct
 
 typedef struct
 {	
-	uint8_t 		DataLen;					//Head~End的所有有效数据长度
+	uint8_t 		DataLen;					// 保存发送按键的数据
 	uint8_t 		Data[252];
 
+	uint8_t			EchoLen;					// 保存回显发送的数据
+	uint8_t			EchoData[252];							
+	
 	uint8_t 		SeqNum;
 	uint8_t			PackNum;
 }NRF_TX_LINK_LAYER_T;
@@ -151,7 +158,7 @@ void RADIO_RxSuccess(void);
 void RADIO_TxSuccess(void);
 void RADIO_TxFailed(void);
 void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType);
-void RADIO_StartLinkTx(void);
+void RADIO_StartLinkTx(uint8_t TxDataType);
 void RADIO_ReturnAck(void);
 void RADIO_StartHardTx(uint32_t TxChannal, uint8_t *PayloadBuf, uint8_t PayloadLen);
 
