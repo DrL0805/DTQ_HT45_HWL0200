@@ -26,8 +26,17 @@ void W25_Init(void)
 	}
 	
 	W25_SpiFlashBufferRead(FlashReadBuffer, 0, 32);
+}
+
+
+void W25_SpiWriteByte(uint8_t ByteData)
+{
+	uint8_t tx_buf[5];
+	uint8_t rx_buf[5];
+
+	tx_buf[0] = ByteData;
 	
-	memcpy(LCD.DotMatrix, FlashReadBuffer, 32);
+	spi_master_tx_rx(spi_base_address,5,tx_buf, rx_buf);
 }
 
 
@@ -41,13 +50,11 @@ uint8_t W25_SpiIdRead(void)
 	return rx_buf[4];
 }
 
-
-
 void W25_SpiFlashBufferRead(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead)
 {
 	uint8_t tx_buf[255];
 	uint8_t rx_buf[255];
-
+	
 	tx_buf[0] = W25X_ReadData;
 	tx_buf[1] = (ReadAddr & 0xFF0000) >> 16;
 	tx_buf[2] = (ReadAddr & 0xFF00) >> 8;

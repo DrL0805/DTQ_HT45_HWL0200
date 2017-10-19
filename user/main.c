@@ -12,8 +12,6 @@ int main (void)
 	GPIO_Default();
 	CLOCK_Init();
 //	DEBUG_Init();
-//	nrf_gpio_cfg_output(TX_PIN_NUMBER_2);
-//	nrf_gpio_cfg_output(RX_PIN_NUMBER_2);
 	
 	TIMERS_Init();
 	KEY_Init();
@@ -21,27 +19,23 @@ int main (void)
 	FLASH_Init();
 	POWER_Init();	
 	APP_Init();
-	
+
 	RADIO_Init();
 	LED_Init();
-//	TIMER_TempStart();
 	W25_Init();
 	LCD_Init();
 	ADC_Init();
-	TEST_Init();
 	
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
 	TIMER_LCDStart();
 	TIMER_ADCStart();
-	
+	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
 	
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
-	
-//	WDT_Init();
 	
 	while(true)
 	{
@@ -68,10 +62,8 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}	
-//		WDT_FeedDog();
-		MAIN_DebugFun();
-//		__WFE();							
-//		__WFI();		
+		__WFE();							
+		__WFI();		
 	}
 }
 

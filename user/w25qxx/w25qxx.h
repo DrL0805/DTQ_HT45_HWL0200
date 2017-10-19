@@ -39,6 +39,7 @@ typedef struct
 
 // Functions ----------------------------------------------------------
 extern void W25_Init(void);
+extern void W25_SpiWriteByte(uint8_t ByteData);
 extern uint8_t W25_SpiIdRead(void);
 extern void W25_SpiFlashBufferRead(uint8_t* pBuffer, uint32_t ReadAddr, uint16_t NumByteToRead);
 extern void W25_SpiReadHanziDot(uint8_t *DotBuf, uint16_t GBKCode);
