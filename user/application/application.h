@@ -66,7 +66,7 @@ typedef struct
 {
 	bool				AnsweredFlg;						// 已作答标志，根据好未来要求，收到题目后只允许作答一次
 	bool				ReceiveQueFlg;						// 收到题目标志
-	bool				KeySendAllowFlg;					// 发送键允许标志
+	bool				KeySendLimitFlg;					// 按键发送限制标志
 	
 	bool				KeyQueryAllowFlg;					// 按键举手允许标志
 	bool				KeyAttendAllowFlg;					// 按键考勤允许标志

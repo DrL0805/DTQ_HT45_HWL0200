@@ -99,8 +99,8 @@ void APP_KeyHandler(void)
 						case QUE_SINGLE_CHOICE:					// 单选
 							
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;
+							if(APP.QUE.KeySendLimitFlg)
+								return;
 							
 							// 不允许重复提交答案
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
@@ -112,8 +112,8 @@ void APP_KeyHandler(void)
 						case QUE_JUDGE:						// 判断
 							
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;
+							if(APP.QUE.KeySendLimitFlg)
+								return;
 							
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -122,8 +122,8 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;							
+							if(APP.QUE.KeySendLimitFlg)
+								return;							
 						
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -133,8 +133,8 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;									
+							if(APP.QUE.KeySendLimitFlg)
+								return;									
 						
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -150,6 +150,9 @@ void APP_KeyHandler(void)
 							
 							break;
 						case QUE_FREE:
+							if(APP.QUE.KeySendLimitFlg)
+								return;								
+						
 							if(!RADIO.IM.TxIngFlg)
 								APP_KeyFreeHandler();
 							break;
@@ -167,8 +170,8 @@ void APP_KeyHandler(void)
 						case QUE_SINGLE_CHOICE:					// 单选
 							
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;
+							if(APP.QUE.KeySendLimitFlg)
+								return;
 							
 							// 不允许重复提交答案
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
@@ -180,8 +183,8 @@ void APP_KeyHandler(void)
 						case QUE_JUDGE:						// 判断
 							
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;
+							if(APP.QUE.KeySendLimitFlg)
+								return;
 							
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -190,8 +193,8 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;							
+							if(APP.QUE.KeySendLimitFlg)
+								return;							
 						
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -201,8 +204,8 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
 							//发送允许标志，用于控制按发送键的频率
-//							if(false == APP.QUE.KeySendAllowFlg)
-//								return;									
+							if(APP.QUE.KeySendLimitFlg)
+								return;									
 						
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
@@ -218,6 +221,9 @@ void APP_KeyHandler(void)
 							
 							break;
 						case QUE_FREE:
+							if(APP.QUE.KeySendLimitFlg)
+								return;								
+						
 							if(!RADIO.IM.TxIngFlg)
 								APP_KeyFreeHandler();
 							break;
@@ -341,10 +347,6 @@ void APP_KeySendHandler(void)
 	if(false == APP.QUE.ReceiveQueFlg)
 		return;
 	
-	//发送允许标志，用于控制按发送键的频率
-//	if(false == APP.QUE.KeySendAllowFlg)
-//		return;
-	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
 		return;
@@ -426,10 +428,6 @@ void APP_KeyMultiSendHandler(void)
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
 		return;
-	
-	//发送允许标志，用于控制按发送键的频率
-//	if(false == APP.QUE.KeySendAllowFlg)
-//		return;
 	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.MultiAnswer[0])
@@ -1047,7 +1045,6 @@ void APP_CmdQuestionHandler(void)
 	*/
 	if(false == APP.QUE.ReceiveQueFlg)
 	{
-//		APP.QUE.KeySendAllowFlg = true;
 		APP.QUE.AnsweredFlg = false;
 		memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 	}
@@ -1059,7 +1056,6 @@ void APP_CmdQuestionHandler(void)
 		}
 		else	
 		{	
-//			APP.QUE.KeySendAllowFlg = true;
 			APP.QUE.AnsweredFlg = false;			
 			memcpy(APP.QUE.LastPackNum, APP.CMD.CmdData, 4);
 		}

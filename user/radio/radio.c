@@ -238,8 +238,8 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			RADIO.IM.TxIngFlg = true;
 			RADIO.IM.ReTxCount = 0;
 		
-//			APP.QUE.KeySendAllowFlg = false;			// 处于发送过程时，不允许再次按键发送数据
-//			TIMER_SendAllowStart();
+			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
+			TIMER_SendAllowStart();
 		
 			// 发送一次数据
 			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);

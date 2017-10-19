@@ -494,7 +494,7 @@ void TIMER_SendAllowStop(void)
 
 void TIMER_SendAllowHandler(void * p_context)
 {
-//	APP.QUE.KeySendAllowFlg = true;
+	APP.QUE.KeySendLimitFlg = false;
 }
 
 void TIMER_TxRandomDelayStart(void)
