@@ -82,7 +82,7 @@ void APP_KeyHandler(void)
 	{
 		KEY.ScanDownFlg = false;
 		
-		APP.KeyCnt++;
+//		APP.KeyCnt++;
 		
 		switch(POWER.SysState)
 		{
@@ -154,14 +154,74 @@ void APP_KeyHandler(void)
 						default:
 							break;
 					}					
-				}
-				else										//没收到题目
-				{
-//					APP_KeyEmptyHandler();					
 				}	
 				break;
 			case SYS_SLEEP:
 				POWER_SysSleepToOn();
+				if(APP.QUE.ReceiveQueFlg)					//收到题目
+				{
+					switch(APP.QUE.Type)
+					{
+						case QUE_SINGLE_CHOICE:					// 单选
+							
+							//发送允许标志，用于控制按发送键的频率
+							if(false == APP.QUE.KeySendAllowFlg)
+								return;
+							
+							// 不允许重复提交答案
+							if(!APP.QUE.AnsweredFlg)
+							{								
+								APP_KeySingleChoiceHandler();
+							}						
+							
+							break;
+						case QUE_JUDGE:						// 判断
+							
+							//发送允许标志，用于控制按发送键的频率
+							if(false == APP.QUE.KeySendAllowFlg)
+								return;
+							
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyJudgeHandler();
+							}							
+							break;
+						case QUE_MULTI_CHOICE:						// 多选
+							//发送允许标志，用于控制按发送键的频率
+							if(false == APP.QUE.KeySendAllowFlg)
+								return;							
+						
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyMultiChoiceHandler();
+							}
+							
+							break;
+						case QUE_ACTIVITY:					// 活动题（抢红包）
+							//发送允许标志，用于控制按发送键的频率
+							if(false == APP.QUE.KeySendAllowFlg)
+								return;									
+						
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyActivityHandler();
+							}
+							
+							break;
+						case QUE_MULTI_SINGLE_CHOICE:
+							if(!APP.QUE.AnsweredFlg)
+							{
+								APP_KeyMultiSingleChoiceHandler();
+							}
+							
+							break;
+						case QUE_FREE:
+							APP_KeyFreeHandler();
+							break;
+						default:
+							break;
+					}					
+				}			
 				break;
 			case SYS_TEST:	
 				break;
@@ -178,10 +238,10 @@ void APP_CmdHandler(void)
 {
 	
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-//	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
-//	{
-//		TIMER_RxWindowReset();
-//	}
+	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
+	{
+		TIMER_RxWindowReset();
+	}
 	
 	// 如果命令类型不是CMD_PRE，则更新包号信息
 	if((CMD_PRE != APP.CMD.CmdType) && (CMD_LCD_CTRL != APP.CMD.CmdType))
@@ -283,7 +343,7 @@ void APP_KeySendHandler(void)
 		return;
 	
 	// 没有作答，发送键无效
-	if((0x00 == APP.QUE.Answer) && (QUE_ACTIVITY != APP.QUE.Type))
+	if(0x00 == APP.QUE.Answer)
 		return;
 	
 	
@@ -311,6 +371,8 @@ void APP_KeySendHandler(void)
 		31：校验
 		32：包尾0x21
 	*/	
+	APP.KeyCnt++;
+	
 	RADIO.TX.DataLen = 33;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
@@ -381,6 +443,8 @@ void APP_KeyMultiSendHandler(void)
 		38：校验
 		39：包尾0x21
 	*/	
+	APP.KeyCnt++;
+	
 	RADIO.TX.DataLen = 40;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
@@ -1008,12 +1072,12 @@ void APP_CmdPreHandler(void)
 		point_bit = (RADIO.RX.ExtendData[RADIO.MATCH.DtqNum / 8] >> (RADIO.MATCH.DtqNum % 8)) & 0x01;
 		if(point_bit)
 		{
-			if(false ==RADIO.IM.RxWindowWaitFlg)
+			if(false == RADIO.IM.RxWindowWaitFlg)
 			{
 				RADIO.IM.RxWindowWaitFlg = true;
-				if(110 > (APP.CMD.CmdData[0] + 5))
+				if(110 > (APP.CMD.CmdData[0] + 3))
 				{
-					TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
+					TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 3);	//留3个前导帧的余量
 				}
 				else
 				{
@@ -1027,9 +1091,9 @@ void APP_CmdPreHandler(void)
 		if(false ==RADIO.IM.RxWindowWaitFlg)
 		{
 			RADIO.IM.RxWindowWaitFlg = true;
-			if(110 > (APP.CMD.CmdData[0] + 5))
+			if(110 > (APP.CMD.CmdData[0] + 3))
 			{
-				TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
+				TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 3);	//留3个前导帧的余量
 			}
 			else
 			{
@@ -1128,37 +1192,36 @@ void APP_CmdLcdCtrlHandler(void)
 			// 查看是否是新的回显信息
 			if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+2 + i*56, 4))
 			{
-				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);
-				
+				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
 				APP.EchoCnt++;
-				
-				// 根据指令更新LCD显示
-				LCD.DATA.Scene[0] = 48;		
-				memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
-				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-							
-				// 返回回显确认信息
-				RADIO.TX.DataLen = 27;	
-				
-				RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
-				memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
-				memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
-				RADIO.TX.Data[9] = 0x11;							// 设备ID
-				RADIO.TX.Data[10] = 0x20;
-				RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
-				RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
-				RADIO.TX.Data[13] = 0;						// 扩展字节长度
-				RADIO.TX.Data[14] = 10;					// PackLen
-				RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
-				RADIO.TX.Data[16] = 8;					// 命令长度，
-				memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
-				memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
-				RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-				RADIO.TX.Data[26] = NRF_DATA_END;	
-				
-				RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
-				break;				
 			}
+			
+			// 根据指令更新LCD显示
+			LCD.DATA.Scene[0] = 48;		
+			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
+			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+						
+			// 返回回显确认信息
+			RADIO.TX.DataLen = 27;	
+			
+			RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
+			memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+			memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+			RADIO.TX.Data[9] = 0x11;							// 设备ID
+			RADIO.TX.Data[10] = 0x20;
+			RADIO.TX.Data[11] = ++RADIO.TX.SeqNum;
+			RADIO.TX.Data[12] = ++RADIO.TX.PackNum;
+			RADIO.TX.Data[13] = 0;						// 扩展字节长度
+			RADIO.TX.Data[14] = 10;					// PackLen
+			RADIO.TX.Data[15] = CMD_LCD_CTRL;		// 命令类型
+			RADIO.TX.Data[16] = 8;					// 命令长度，
+			memcpy(RADIO.TX.Data+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
+			memcpy(RADIO.TX.Data+21, RADIO.MATCH.DtqUid, 4);
+			RADIO.TX.Data[25] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+			RADIO.TX.Data[26] = NRF_DATA_END;
+			
+			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
+			break;				
 		}
 	}
 }

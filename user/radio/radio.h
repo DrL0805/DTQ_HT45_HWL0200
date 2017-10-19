@@ -30,9 +30,9 @@
 #define		NRF_LINK_DATA_LEN				(17)		// 链路层定义数据长度
 
 
-#define RX_WINDOW_ADD_WAIT_ACK			(60)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
-#define RX_WINDOW_ADD_WAIT_DATA			(60)	//接收到前导帧后，增加RX窗等待有效数据的时间
-#define RX_WINDOW_ON					(2)		//RX窗打开时间
+#define RX_WINDOW_ADD_WAIT_ACK			(40)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
+#define RX_WINDOW_ADD_WAIT_DATA			(40)	//接收到前导帧后，增加RX窗等待有效数据的时间
+#define RX_WINDOW_ON					(3)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间
 #define RETURN_ACK_DELAY				(300)	//随机回复ACK的最大时间
 

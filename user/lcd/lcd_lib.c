@@ -140,7 +140,7 @@ void LCD_Update(void)
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_RESULT)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_RESULT;
-			LCD_DisplaySendResult(LCD.DATA.SendResultState);
+//			LCD_DisplaySendResult(LCD.DATA.SendResultState);
 		}		
 	}
 }
@@ -347,12 +347,6 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 	
 }
 
-
-
-
-
-
-
 void LCD_DisplayDeviceId(void)
 {
 	uint32_t TmpUid, i;
@@ -372,10 +366,13 @@ void LCD_DisplayDeviceId(void)
 	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
 	
 	// 显示测试内容
-//	LCD_DRV_DisplayDigit(6,(TEST.HuiXianNum%1000)/100);
-//	LCD_DRV_DisplayDigit(7,(TEST.HuiXianNum%100)/10);
-//	LCD_DRV_DisplayDigit(8,TEST.HuiXianNum%10);
+//	LCD_DRV_DisplayDigit(6,(APP.EchoCnt%1000)/100);
+//	LCD_DRV_DisplayDigit(7,(APP.EchoCnt%100)/10);
+//	LCD_DRV_DisplayDigit(8,APP.EchoCnt%10);
 	
+//	LCD_DRV_DisplayDigit(6,(RADIO.IM.LatestRssi%1000)/100);
+//	LCD_DRV_DisplayDigit(7,(RADIO.IM.LatestRssi%100)/10);
+//	LCD_DRV_DisplayDigit(8,RADIO.IM.LatestRssi%10);	
 }
 
 

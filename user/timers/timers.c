@@ -25,7 +25,7 @@
 #define RETRANSMIT_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(70, 	APP_TIMER_PRESCALER)
 #define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
 #define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
-#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
+#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(500,APP_TIMER_PRESCALER)
 #define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
 
 
@@ -503,7 +503,7 @@ void TIMER_TxRandomDelayStart(void)
 	uint32_t err_code;
 	uint32_t random_delay;
 	
-	random_delay = 5 + GetRandomNumber() / 5;		
+	random_delay = 5 + (GetRandomNumber() >> 2);	// Г§вд4
 	
 	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);

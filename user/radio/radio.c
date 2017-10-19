@@ -112,6 +112,8 @@ void RADIO_RxDataHandler(void)
 	
 	if(nrf_esb_read_rx_payload(&rx_payload) == NRF_SUCCESS)
 	{		
+//		RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
+//		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 		/* 包头、包尾、异或校验 */
 		if(rx_payload.data[0]					== NRF_DATA_HEAD &&
 		   rx_payload.data[rx_payload.length-1] == NRF_DATA_END  &&
@@ -143,7 +145,7 @@ void RADIO_RxDataHandler(void)
 				if(ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.PublicUid, 4) || ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.DtqUid,4))
 				{
 					// 只有发给"我"的2.4G数据才更新RSSI值
-					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
+//					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
 					
 					// 新的包号，或者包号为0，则接收
 					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == RADIO.RX.PackNum) | (RADIO.RX.ExtendLen != 0))		

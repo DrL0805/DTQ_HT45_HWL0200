@@ -12,8 +12,8 @@ int main (void)
 	GPIO_Default();
 	CLOCK_Init();
 //	DEBUG_Init();
-	nrf_gpio_cfg_output(TX_PIN_NUMBER_2);
-	nrf_gpio_cfg_output(RX_PIN_NUMBER_2);
+//	nrf_gpio_cfg_output(TX_PIN_NUMBER_2);
+//	nrf_gpio_cfg_output(RX_PIN_NUMBER_2);
 	
 	TIMERS_Init();
 	KEY_Init();
