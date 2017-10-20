@@ -76,9 +76,6 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&sys_off_timer_id,APP_TIMER_MODE_REPEATED,TIMER_SysOffHandler);
 	APP_ERROR_CHECK(err_code);
 	
-	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_REPEATED,TIMER_RetransmitHandler);
-	APP_ERROR_CHECK(err_code);	
-	
 //	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_REPEATED,TIMER_WatchDogHandler);
 //	APP_ERROR_CHECK(err_code);		
 
@@ -104,6 +101,9 @@ void TIMERS_Init(void)
 
 	err_code = app_timer_create(&tx_random_delay_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxRandomDelayHandler);
 	APP_ERROR_CHECK(err_code);	
+	
+	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_RetransmitHandler);	// 重发定时器，每次重新开始一个随机值
+	APP_ERROR_CHECK(err_code);		
 }
 
 void TIMER_EventHandler(void)
@@ -400,8 +400,12 @@ void TIMER_WaitDataHandler(void * p_context)
 void TIMER_RetransmitStart(void)
 {
 	uint32_t err_code;
-	err_code = app_timer_start(retransmit_timer_id,RETRANSMIT_TIMEOUT_INTERVAL,NULL);
-	APP_ERROR_CHECK(err_code);
+	uint32_t random_delay;	
+
+	random_delay = 40 + (GetRandomNumber() >> 3);	// 除以8
+	
+	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
+	APP_ERROR_CHECK(err_code);	
 }
 
 void TIMER_RetransmitStop(void)
@@ -434,6 +438,7 @@ void TIMER_RetransmitHandler(void * p_context)
 	else							//否则重发
 	{
 		RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);			//启动硬件发送，发送APP.TX结构体里的数据	
+		TIMER_RetransmitStart();
 	}
 }
 
