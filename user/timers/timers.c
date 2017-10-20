@@ -108,6 +108,9 @@ void TIMERS_Init(void)
 	
 	err_code = app_timer_create(&retransmit_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_RetransmitHandler);	// 重发定时器，每次重新开始一个随机值
 	APP_ERROR_CHECK(err_code);		
+	
+	err_code = app_timer_create(&tx_overtime_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxOvertimeHandler);	// 重发定时器，每次重新开始一个随机值
+	APP_ERROR_CHECK(err_code);		
 }
 
 void TIMER_EventHandler(void)
@@ -278,7 +281,8 @@ void TIMER_TxOvertimeStop(void)
 
 void TIMER_TxOvertimeHandler(void * p_context)
 {
-	
+	nrf_esb_flush_tx();
+	TIMER_RxWindowReset();
 }
 
 void TIMER_SysStateStart(void)

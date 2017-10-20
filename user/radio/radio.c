@@ -51,22 +51,23 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
     switch (p_event->evt_id)
     {
         case NRF_ESB_EVENT_TX_SUCCESS:
-			if(RADIO.IM.TxIngFlg)
+			if(0 == get_tx_fifo_count())
 			{
-				TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
-			}
-			else
-			{
-				if(0 == get_tx_fifo_count())
+				TIMER_TxOvertimeStop();
+				
+				if(RADIO.IM.TxIngFlg)
 				{
-					TIMER_RxWindowStart();
-				}			
-			}			
+					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
+				}
+				else
+				{
+					TIMER_RxWindowReset();		
+				}
+			}
             break;
         case NRF_ESB_EVENT_TX_FAILED:
             break;
         case NRF_ESB_EVENT_RX_RECEIVED:
-			
             break;
     }
 }
@@ -296,8 +297,8 @@ void RADIO_StartHardTx(uint32_t TxChannal, uint8_t *PayloadBuf, uint8_t PayloadL
 	memcpy(tx_payload.data, PayloadBuf, PayloadLen);
 	
 	nrf_esb_write_payload(&tx_payload);
-//	TIMER_TxOvertimeStop();
-//	TIMER_TxOvertimeStart();
+	TIMER_TxOvertimeStop();
+	TIMER_TxOvertimeStart();
 }
 
 
