@@ -42,6 +42,7 @@ int main (void)
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
+				TIMER_EventHandler();
 				RADIO_RxDataHandler();	
 				APP_KeyHandler();	
 				LCD_Update();	

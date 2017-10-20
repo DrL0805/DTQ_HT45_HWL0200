@@ -247,7 +247,7 @@ void APP_CmdHandler(void)
 {
 	
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
+	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && (RADIO.IM.TxIngFlg == false))
 	{
 		TIMER_RxWindowReset();
 	}

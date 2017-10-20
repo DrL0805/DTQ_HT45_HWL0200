@@ -47,9 +47,13 @@ APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 //APP_TIMER_DEF(watch_dog_timer_id);
 
+TIMER_PARAMETERS_T	TIMER;
+
 void TIMERS_Init(void)
 {
 	uint32_t err_code;
+	
+	TIMER.RetransmitEventFlg = false;
 	
 	//创建定时器
 	APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, false);
@@ -108,7 +112,34 @@ void TIMERS_Init(void)
 
 void TIMER_EventHandler(void)
 {
-	
+	if(TIMER.RetransmitEventFlg)
+	{
+		TIMER.RetransmitEventFlg = false;
+		
+		RADIO.IM.ReTxCount++;
+		
+		if(true == RADIO.IM.TxSucFlg)		//发送成功（收到ACK）
+		{
+			RADIO.IM.TxSucFlg = false;		//清标志
+			RADIO.IM.TxIngFlg = false;
+			RADIO.IM.ReTxCount = 0;		
+			TIMER_RetransmitStop();
+			RADIO_TxSuccess();			//发送成功处理函数
+		}
+		else if(RADIO.IM.ReTxCount > NRF_MAX_NUMBER_OF_RETRANSMITS)	//达到最大重发次数
+		{
+			RADIO.IM.TxSucFlg = false;		//清标志
+			RADIO.IM.TxIngFlg = false;
+			RADIO.IM.ReTxCount = 0;		
+			TIMER_RetransmitStop();
+			RADIO_TxFailed();			//发送失败处理函数
+		}
+		else							//否则重发
+		{
+			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);			//启动硬件发送，发送APP.TX结构体里的数据	
+			TIMER_RetransmitStart();
+		}			
+	}
 }
 
 void TIMER_TempStart(void)
@@ -417,29 +448,9 @@ void TIMER_RetransmitStop(void)
 
 void TIMER_RetransmitHandler(void * p_context)
 {
-	RADIO.IM.ReTxCount++;
+	TIMER.RetransmitEventFlg = true;
 	
-	if(true == RADIO.IM.TxSucFlg)		//发送成功（收到ACK）
-	{
-		RADIO.IM.TxSucFlg = false;		//清标志
-		RADIO.IM.TxIngFlg = false;
-		RADIO.IM.ReTxCount = 0;		
-		TIMER_RetransmitStop();
-		RADIO_TxSuccess();			//发送成功处理函数
-	}
-	else if(RADIO.IM.ReTxCount > NRF_MAX_NUMBER_OF_RETRANSMITS)	//达到最大重发次数
-	{
-		RADIO.IM.TxSucFlg = false;		//清标志
-		RADIO.IM.TxIngFlg = false;
-		RADIO.IM.ReTxCount = 0;		
-		TIMER_RetransmitStop();
-		RADIO_TxFailed();			//发送失败处理函数
-	}
-	else							//否则重发
-	{
-		RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);			//启动硬件发送，发送APP.TX结构体里的数据	
-		TIMER_RetransmitStart();
-	}
+
 }
 
 void TIMER_TxResultDisplayStart(void)

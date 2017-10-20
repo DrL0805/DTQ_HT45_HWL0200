@@ -4,6 +4,14 @@
 
 #include "main.h"
 
+typedef struct
+{
+	bool	RetransmitEventFlg;			// 
+}TIMER_PARAMETERS_T;
+
+
+extern TIMER_PARAMETERS_T	TIMER;
+
 void TIMERS_Init(void);
 void TIMER_EventHandler(void);
 
