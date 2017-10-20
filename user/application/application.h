@@ -87,6 +87,8 @@ typedef struct
 	QUE_PARAMETERS_T	QUE;
 	
 	PROJECT_DEVELOP_STATE_TYPE		ProjState;
+
+	bool				NFCIrqFlg;	// 13.56MÀ¢ø®÷–∂œ±Í÷æ
 	
 	uint32_t 			KeyCnt;
 	uint32_t			EchoCnt;

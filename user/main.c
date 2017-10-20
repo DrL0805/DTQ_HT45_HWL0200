@@ -39,6 +39,7 @@ int main (void)
 	
 	while(true)
 	{
+		APP_ParUpdate();			
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
@@ -62,7 +63,7 @@ int main (void)
 			default:
 				NVIC_SystemReset();
 				break;
-		}	
+		}
 		__WFE();							
 		__WFI();		
 	}

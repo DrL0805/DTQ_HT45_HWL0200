@@ -38,9 +38,8 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 	/* 系统正在开机时，对中断不做处理 */
 	if((I2C_INT == pin) && POWER.SysInitializedFlg) 	
 	{		
-		LED_TOG(LED_0);
-		nrf_delay_ms(600);				//延时等待13.56M读头处理完，再通过I2C读取更新的数据
-		APP_ParUpdate();				
+		APP.NFCIrqFlg = true;
+		LED_TOG(LED_0);			
 	}
 	else
 	{

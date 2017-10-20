@@ -43,38 +43,44 @@ void APP_Init(void)
 //应用参数更新
 void APP_ParUpdate(void)
 {	
-
-	TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
-	M24SR_Deselect();
-	
-	NFC.MatchSucceedFlg = true;
-	
-	if(NFC.MatchSucceedFlg)
-	{
-		memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
-		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
-		memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
-		RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
-		RADIO.MATCH.Student.Score = 0;
-		RADIO.MATCH.TxChannal = NFC.DataRead[8];			
-		RADIO.MATCH.RxChannal = NFC.DataRead[9];	
-		RADIO.MATCH.TxPower = NFC.DataRead[10];	
+	if(APP.NFCIrqFlg)
+	{		
+		APP.NFCIrqFlg = false;
 		
-		// 更新当前收发频点
-		RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
-		RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
-		RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
-	}
+		nrf_delay_ms(600);				//延时确保13.56M读头处理完，再通过I2C读取更新的数据
 
-	LCD_ClearSceneArea();
-	APP.QUE.ReceiveQueFlg = false;
-	APP.QUE.Answer = 0;		
-	
-	RADIO.IM.LastRxPackNum = 0;			
-	RADIO.IM.LastRxSeqNum = 0;	
-	RADIO.IM.LastRxPackNum = 0;
-	
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+		TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
+		M24SR_Deselect();
+		
+		NFC.MatchSucceedFlg = true;
+		
+		if(NFC.MatchSucceedFlg)
+		{
+			memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
+			memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
+			memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
+			RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
+			RADIO.MATCH.Student.Score = 0;
+			RADIO.MATCH.TxChannal = NFC.DataRead[8];			
+			RADIO.MATCH.RxChannal = NFC.DataRead[9];	
+			RADIO.MATCH.TxPower = NFC.DataRead[10];	
+			
+			// 更新当前收发频点
+			RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
+			RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
+			RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
+		}
+
+		LCD_ClearSceneArea();
+		APP.QUE.ReceiveQueFlg = false;
+		APP.QUE.Answer = 0;		
+		
+		RADIO.IM.LastRxPackNum = 0;			
+		RADIO.IM.LastRxSeqNum = 0;	
+		RADIO.IM.LastRxPackNum = 0;
+		
+		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+	}
 }
 
 void APP_KeyHandler(void)
