@@ -43,7 +43,7 @@ void RADIO_WakeUp(void)
 void RADIO_Sleep(void)
 {
 	TIMER_RxWindowStop();
-	nrf_esb_stop_rx();			//Õ£÷πΩ” ’
+	my_esb_mode_change(NRF_ESB_MODE_PRX_STOP, 0);
 }
 
 void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
@@ -289,7 +289,7 @@ void RADIO_ReturnAck(void)
 void RADIO_StartHardTx(uint32_t TxChannal, uint8_t *PayloadBuf, uint8_t PayloadLen)
 {
 	TIMER_RxWindowStop();	 					 
-	my_esb_mode_change(NRF_ESB_MODE_PTX, TxChannal);
+	my_esb_mode_change(NRF_ESB_MODE_PTX_START, TxChannal);
 	
 	tx_payload.length  = PayloadLen;
 	tx_payload.pipe    = NRF_PIPE;

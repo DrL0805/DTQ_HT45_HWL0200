@@ -163,6 +163,14 @@ typedef enum {
     NRF_ESB_MODE_PRX           /*< Primary receiver mode.    */
 } nrf_esb_mode_t;
 
+typedef enum {
+    NRF_ESB_MODE_PTX_START,     	// 进入发送模式     
+    NRF_ESB_MODE_PRX_START,         // 进入接收模式
+	NRF_ESB_MODE_PRX_STOP			// 退出接收模式
+} drl_nrf_esb_mode_t;
+
+
+
 
 /**@brief Enhanced ShockBurst bitrate mode. */
 typedef enum {
@@ -529,7 +537,7 @@ uint32_t nrf_esb_set_tx_power(nrf_esb_tx_power_t tx_output_power);
 
 
 // 用户自定义函数
-extern void my_esb_mode_change(nrf_esb_mode_t mode, uint32_t Channal);
+extern uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal);
 extern void my_esb_tx_data(void);
 extern uint32_t get_tx_fifo_count(void);
 

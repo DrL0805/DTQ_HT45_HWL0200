@@ -211,16 +211,15 @@ void TIMER_RxWindowStart(void)
 	uint32_t err_code;
 
 	if(RADIO.IM.RxWindowOnFlg)		//当前RX打开，则关闭
-	{
-		nrf_esb_stop_rx();	
+	{	
+		my_esb_mode_change(NRF_ESB_MODE_PRX_STOP, RADIO.IM.RxChannal);
 		err_code = app_timer_start(rx_window_timer_id,APP_TIMER_TICKS(RX_WINDOW_OFF,APP_TIMER_PRESCALER),NULL);
 		RADIO.IM.RxWindowOnFlg = false;	
 		RADIO.IM.RxWindowAddFlg = false;			
 	}
 	else
 	{
-		my_esb_mode_change(NRF_ESB_MODE_PRX, RADIO.IM.RxChannal);
-		nrf_esb_start_rx();	
+		my_esb_mode_change(NRF_ESB_MODE_PRX_START, RADIO.IM.RxChannal);	
 		err_code = app_timer_start(rx_window_timer_id,APP_TIMER_TICKS(RX_WINDOW_ON,APP_TIMER_PRESCALER),NULL);
 		RADIO.IM.RxWindowOnFlg = true;
 		RADIO.IM.RxWindowAddFlg = false;
@@ -240,8 +239,7 @@ void TIMER_RxWindowReset(void)
 
 void TIMER_RxWindowAdd(uint8_t time_ms)
 {
-	my_esb_mode_change(NRF_ESB_MODE_PRX, RADIO.IM.RxChannal);
-	nrf_esb_start_rx();	
+	my_esb_mode_change(NRF_ESB_MODE_PRX_START, RADIO.IM.RxChannal);
 	
 	TIMER_RxWindowStop();
 	app_timer_start(rx_window_timer_id,APP_TIMER_TICKS(time_ms,APP_TIMER_PRESCALER),NULL);
