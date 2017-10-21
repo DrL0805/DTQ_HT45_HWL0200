@@ -30,8 +30,8 @@
 #define		NRF_LINK_DATA_LEN				(17)		// 链路层定义数据长度
 
 
-#define RX_WINDOW_ADD_WAIT_ACK			(40)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
-#define RX_WINDOW_ADD_WAIT_DATA			(40)	//接收到前导帧后，增加RX窗等待有效数据的时间
+#define RX_WINDOW_ADD_WAIT_ACK			(50)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
+#define RX_WINDOW_ADD_WAIT_DATA			(50)	//接收到前导帧后，增加RX窗等待有效数据的时间
 #define RX_WINDOW_ON					(3)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间
 #define RETURN_ACK_DELAY				(300)	//随机回复ACK的最大时间
@@ -123,7 +123,7 @@ typedef struct
 	bool 						RxWindowOnFlg;				//接收窗正常打开
 	bool 						RxWindowAddFlg;			//接收窗临时增加用于等待ACK
 	bool 						RxWindowWaitFlg;			//收到前导帧后，接收窗临时增加用于等待有效数据'	
-
+	
 	uint8_t 					LatestRssi;				//保存最新收到2.4G的信号强度值
 	uint8_t 					ReTxCount;				//重发计数
 	uint8_t 					SequenceReTxCount;		//加强帧重发计数	

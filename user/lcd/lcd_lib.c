@@ -365,18 +365,29 @@ void LCD_DisplayDeviceId(void)
 //	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
 //	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
 	
+//----------------------------------------------------------	
+	
 	// œ‘ æ≤‚ ‘ƒ⁄»›
-	LCD_DRV_DisplayDigit(13,(APP.KeyCnt%1000)/100);
-	LCD_DRV_DisplayDigit(14,(APP.KeyCnt%100)/10);
-	LCD_DRV_DisplayDigit(15,APP.KeyCnt%10);	
+//	LCD_DRV_DisplayDigit(13,(APP.KeyCnt%1000)/100);
+//	LCD_DRV_DisplayDigit(14,(APP.KeyCnt%100)/10);
+//	LCD_DRV_DisplayDigit(15,APP.KeyCnt%10);	
 
-	LCD_DRV_DisplayDigit(0,(TEST.TxFaiCnt%1000)/100);
-	LCD_DRV_DisplayDigit(1,(TEST.TxFaiCnt%100)/10);
-	LCD_DRV_DisplayDigit(2,TEST.TxFaiCnt%10);	
+//	LCD_DRV_DisplayDigit(0,(TEST.TxFaiCnt%1000)/100);
+//	LCD_DRV_DisplayDigit(1,(TEST.TxFaiCnt%100)/10);
+//	LCD_DRV_DisplayDigit(2,TEST.TxFaiCnt%10);	
 
-	LCD_DRV_DisplayDigit(6,(TEST.TxSucCnt%1000)/100);
-	LCD_DRV_DisplayDigit(7,(TEST.TxSucCnt%100)/10);
-	LCD_DRV_DisplayDigit(8,TEST.TxSucCnt%10);	
+//	LCD_DRV_DisplayDigit(6,(TEST.TxSucCnt%1000)/100);
+//	LCD_DRV_DisplayDigit(7,(TEST.TxSucCnt%100)/10);
+//	LCD_DRV_DisplayDigit(8,TEST.TxSucCnt%10);	
+	
+	LCD_DRV_DisplayDigit(0,(RADIO.MATCH.DtqNum%1000)/100);
+	LCD_DRV_DisplayDigit(1,(RADIO.MATCH.DtqNum%100)/10);
+	LCD_DRV_DisplayDigit(2,RADIO.MATCH.DtqNum%10);		
+	
+	LCD_DRV_DisplayDigit(5,(APP.EchoCnt%10000)/1000);
+	LCD_DRV_DisplayDigit(6,(APP.EchoCnt%1000)/100);
+	LCD_DRV_DisplayDigit(7,(APP.EchoCnt%100)/10);
+	LCD_DRV_DisplayDigit(8,APP.EchoCnt%10);	
 }
 
 

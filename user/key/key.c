@@ -36,9 +36,9 @@ void KEY_Init(void)
 void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
 	/* 系统正在开机时，对中断不做处理 */
-	if((I2C_INT == pin) && POWER.SysInitializedFlg) 	
+	if((I2C_INT == pin) && POWER.SysInitializedFlg && !APP.NFCIrqFlg) 	
 	{		
-		APP.NFCIrqFlg = true;
+		APP.NFCIrqFlg = true;			
 		LED_TOG(LED_0);			
 	}
 	else

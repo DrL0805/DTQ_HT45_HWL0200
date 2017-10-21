@@ -1259,7 +1259,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			break;
 		case NRF_ESB_MODE_PRX_START:
 			// 切换模式前，尽量保证RADIO不正在发送数据
-			i = 2048;	// 约1ms
+			i = 2048;	// 最大约1ms
 			do
 			{
 				i--;
@@ -1271,7 +1271,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			break;
 		case NRF_ESB_MODE_PRX_STOP:
 			// 切换模式前，尽量保证RADIO不正在发送数据
-			i = 2048;	// 约1ms
+			i = 2048;	// 最大约1ms
 			do
 			{
 				i--;

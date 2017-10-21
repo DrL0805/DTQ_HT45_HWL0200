@@ -38,8 +38,8 @@ int main (void)
 	POWER.SysInitializedFlg = true;	
 	
 	while(true)
-	{
-		APP_ParUpdate();			
+	{		
+		APP_ParUpdate();		
 		switch(POWER.SysState)
 		{
 			case SYS_ON:

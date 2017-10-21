@@ -45,8 +45,6 @@ void APP_ParUpdate(void)
 {	
 	if(APP.NFCIrqFlg)
 	{		
-		APP.NFCIrqFlg = false;
-		
 		nrf_delay_ms(600);				//延时确保13.56M读头处理完，再通过I2C读取更新的数据
 
 		TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
@@ -64,22 +62,25 @@ void APP_ParUpdate(void)
 			RADIO.MATCH.TxChannal = NFC.DataRead[8];			
 			RADIO.MATCH.RxChannal = NFC.DataRead[9];	
 			RADIO.MATCH.TxPower = NFC.DataRead[10];	
-			
-			// 更新当前收发频点
-			RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
-			RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
-			RADIO.IM.TxPower = RADIO.MATCH.TxPower;		
 		}
 
 		LCD_ClearSceneArea();
 		APP.QUE.ReceiveQueFlg = false;
 		APP.QUE.Answer = 0;		
 		
+		// 更新当前收发频点
+		RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
+		RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
+		RADIO.IM.TxPower = RADIO.MATCH.TxPower;			
 		RADIO.IM.LastRxPackNum = 0;			
 		RADIO.IM.LastRxSeqNum = 0;	
 		RADIO.IM.LastRxPackNum = 0;
 		
+		APP.EchoCnt = 0;
 		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+	
+		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
+		APP.NFCIrqFlg = false;				
 	}
 }
 
@@ -1222,6 +1223,7 @@ void APP_CmdLcdCtrlHandler(void)
 			{
 				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
 				APP.EchoCnt++;
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 			}
 			
 			// 根据指令更新LCD显示	
