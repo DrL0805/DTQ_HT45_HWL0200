@@ -130,6 +130,7 @@ void LCD_Update(void)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SCENE;
 			LCD_DisplaySceneArea();
+//			nrf_delay_ms(100);
 		}
 		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_INPUT)
@@ -401,7 +402,23 @@ void LCD_ClearInputArea(void)
 
 void  LCD_DisplaySceneArea(void)
 {
-	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);
+	static uint8_t TmpState = 0;
+	
+	// 一次整屏刷新
+	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
+	
+	// 分6次刷新
+//	LCD_DRV_DisplayN(16+8*TmpState, 8, LCD.DATA.Scene + 1 + 8*TmpState);	
+//	if(TmpState < 8)
+//	{
+//		TmpState++;
+//		LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+//	}
+//	else
+//	{
+//		TmpState = 0;
+//	}
+
 }
 
 void LCD_ClearSceneArea(void)

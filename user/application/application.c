@@ -254,10 +254,10 @@ void APP_CmdHandler(void)
 {
 	
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && !RADIO.IM.TxIngFlg)
-	{
-		TIMER_RxWindowReset();
-	}
+//	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && !RADIO.IM.TxIngFlg)
+//	{
+//		TIMER_RxWindowReset();
+//	}
 	
 	// 如果命令类型不是CMD_PRE，则更新包号信息
 	if((CMD_PRE != APP.CMD.CmdType) && (CMD_LCD_CTRL != APP.CMD.CmdType))
@@ -1104,9 +1104,9 @@ void APP_CmdPreHandler(void)
 			if(false == RADIO.IM.RxWindowWaitFlg)
 			{
 				RADIO.IM.RxWindowWaitFlg = true;
-				if(110 > (APP.CMD.CmdData[0] + 3))
+				if(110 > (APP.CMD.CmdData[0] + 5))
 				{
-					TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 3);	//留3个前导帧的余量
+					TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
 				}
 				else
 				{
@@ -1120,9 +1120,9 @@ void APP_CmdPreHandler(void)
 		if(false ==RADIO.IM.RxWindowWaitFlg)
 		{
 			RADIO.IM.RxWindowWaitFlg = true;
-			if(110 > (APP.CMD.CmdData[0] + 3))
+			if(110 > (APP.CMD.CmdData[0] + 5))
 			{
-				TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 3);	//留3个前导帧的余量
+				TIMER_WaitDataStart(110 - APP.CMD.CmdData[0] - 5);	//留5个前导帧的余量
 			}
 			else
 			{
@@ -1213,7 +1213,7 @@ void APP_CmdLcdCtrlHandler(void)
 	uint8_t i;
 	static uint8_t  EchoSeq[4];				// 回显序号
 	
-	for(i = 0;i < (RADIO.RX.PackLen / 56);i++) 
+	for(i = 0;i < ((RADIO.RX.PackLen-2) / 56);i++) 
 	{
 		// 查看名单里是否有此答题器
 		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6 + i*56, 4))
@@ -1224,12 +1224,12 @@ void APP_CmdLcdCtrlHandler(void)
 				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
 				APP.EchoCnt++;
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 			}
-			
+//			APP.EchoCnt++;
 			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		
 			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
-			LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 						
 			// 返回回显确认信息
 			RADIO.TX.EchoLen = 27;	
@@ -1251,7 +1251,7 @@ void APP_CmdLcdCtrlHandler(void)
 			RADIO.TX.EchoData[26] = NRF_DATA_END;
 			
 			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
-			break;				
+//			break;				
 		}
 	}
 }

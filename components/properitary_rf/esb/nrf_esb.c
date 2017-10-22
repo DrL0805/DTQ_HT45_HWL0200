@@ -690,7 +690,7 @@ static void on_radio_disabled_rx(void)
     bool            retransmit_payload = false;
     bool            send_rx_event      = true;
     pipe_info_t *   p_pipe_info;
-
+	
     if (NRF_RADIO->CRCSTATUS == 0)
     {
         clear_events_restart_rx();
@@ -1313,6 +1313,11 @@ void my_esb_tx_data(void)
 uint32_t get_tx_fifo_count(void)
 {
 	return m_tx_fifo.count;
+}
+
+uint32_t get_rx_fifo_count(void)
+{
+	return m_rx_fifo.count;
 }
 
 

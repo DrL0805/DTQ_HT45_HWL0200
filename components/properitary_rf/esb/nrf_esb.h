@@ -48,7 +48,7 @@
 #endif
 
 #define     NRF_ESB_TX_FIFO_SIZE                4                   /**< The size of the transmission first in first out buffer. */
-#define     NRF_ESB_RX_FIFO_SIZE                20                   /**< The size of the reception first in first out buffer. */
+#define     NRF_ESB_RX_FIFO_SIZE                15                   /**< The size of the reception first in first out buffer. */
 
 // 252 is the largest possible payload size according to the nRF5x architecture.
 STATIC_ASSERT(NRF_ESB_MAX_PAYLOAD_LENGTH <= 252);
@@ -540,6 +540,7 @@ uint32_t nrf_esb_set_tx_power(nrf_esb_tx_power_t tx_output_power);
 extern uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal);
 extern void my_esb_tx_data(void);
 extern uint32_t get_tx_fifo_count(void);
+extern uint32_t get_rx_fifo_count(void);
 
 extern nrf_esb_config_t             m_config_local;
 

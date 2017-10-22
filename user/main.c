@@ -64,8 +64,13 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
-		__WFE();							
-		__WFI();		
+		
+		// 若接收缓存数据全部处理完成，休眠
+		if(!get_rx_fifo_count())
+		{
+			__WFE();							
+			__WFI();			
+		}		
 	}
 }
 
