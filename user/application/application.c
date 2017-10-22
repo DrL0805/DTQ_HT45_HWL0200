@@ -64,7 +64,7 @@ void APP_ParUpdate(void)
 			RADIO.MATCH.TxPower = NFC.DataRead[10];	
 		}
 
-		LCD_ClearSceneArea();
+//		LCD_ClearSceneArea();
 		APP.QUE.ReceiveQueFlg = false;
 		APP.QUE.Answer = 0;		
 		
@@ -1225,8 +1225,9 @@ void APP_CmdLcdCtrlHandler(void)
 				APP.EchoCnt++;
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+				LCD.DATA.ScenePos = 0;
 			}
-//			APP.EchoCnt++;
+			
 			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		
 			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);

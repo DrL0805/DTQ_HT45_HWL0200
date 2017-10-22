@@ -130,7 +130,6 @@ void LCD_Update(void)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SCENE;
 			LCD_DisplaySceneArea();
-//			nrf_delay_ms(100);
 		}
 		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_INPUT)
@@ -401,24 +400,25 @@ void LCD_ClearInputArea(void)
 }
 
 void  LCD_DisplaySceneArea(void)
-{
-	static uint8_t TmpState = 0;
-	
+{	
 	// 一次整屏刷新
 	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
-	
-	// 分6次刷新
-//	LCD_DRV_DisplayN(16+8*TmpState, 8, LCD.DATA.Scene + 1 + 8*TmpState);	
-//	if(TmpState < 8)
+
+	// 分N次刷新
+//	LCD_DRV_DisplayN(16+LCD.DATA.ScenePos, 1, LCD.DATA.Scene + 1 + LCD.DATA.ScenePos);	
+//	if(*(LCD.DATA.Scene + 1 + LCD.DATA.ScenePos) >= 0x81)	// 汉字显示
 //	{
-//		TmpState++;
+//		LCD.DATA.ScenePos += 2;
+//	}
+//	else													// ASCII显示
+//	{
+//		LCD.DATA.ScenePos++;
+//	}	
+//	
+//	if(LCD.DATA.ScenePos < 48)
+//	{
 //		LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 //	}
-//	else
-//	{
-//		TmpState = 0;
-//	}
-
 }
 
 void LCD_ClearSceneArea(void)
@@ -427,6 +427,7 @@ void LCD_ClearSceneArea(void)
 	memset(LCD.DATA.Scene+1, 0x00, 48);
 	
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+	LCD.DATA.ScenePos = 0;
 }
 
 

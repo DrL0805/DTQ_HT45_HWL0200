@@ -76,7 +76,7 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 			{
 				memset(DotBuf, 0x00, 16);
 			}
-
+			
 			LCD_DRV_WriteCmd((Location/16)*2 + 0xb0);						// 设置在第几行显示
 			LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
 			LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));			
@@ -94,17 +94,45 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 			{
 				W25_SpiReadHanziDot(DotBuf, DotCode);
 				
-				LCD_DRV_WriteCmd((Location/16)*2+0xb0);			
-				LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
-				LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
-				for(i=0;i<16 ;i++)
-					LCD_DRV_WriteData(DotBuf[i]);
-				
-				LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);		
-				LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
-				LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
-				for(i=16;i<32 ;i++)
-					LCD_DRV_WriteData(DotBuf[i]);					
+				// 在LCD屏幕边缘显示中文，字体分开
+				if((Location == 15) || (Location == 31) || (Location == 47) || (Location == 63))
+				{
+					LCD_DRV_WriteCmd((Location/16)*2+0xb0);							// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
+					for(i=0;i<8 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);
+					LCD_DRV_WriteCmd(((Location+1)/16)*2+0xb0);							// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + (((Location+1)%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + (((Location+1)%16)*8 &  0x0f));	
+					for(i=8;i<16 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);					
+									
+					LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);					// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
+					for(i=16;i<24 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);	
+					LCD_DRV_WriteCmd(((Location+1)/16)*2 + 1 + 0xb0);					// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + (((Location+1)%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + (((Location+1)%16)*8 &  0x0f));		
+					for(i=24;i<32 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);					
+				}
+				else					
+				{
+					LCD_DRV_WriteCmd((Location/16)*2+0xb0);							// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));	
+					for(i=0;i<16 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);
+					
+					LCD_DRV_WriteCmd((Location/16)*2 + 1 + 0xb0);					// 设置在第几行显示
+					LCD_DRV_WriteCmd(0x10 + ((Location%16)*8 >> 4));				// 设置在第几列显示
+					LCD_DRV_WriteCmd(0x00 + ((Location%16)*8 &  0x0f));		
+					for(i=16;i<32 ;i++)
+						LCD_DRV_WriteData(DotBuf[i]);				
+				}		
 			}
 			break;
 		default:
@@ -118,7 +146,6 @@ void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf)
 	
 	if(0 == CodeLen)
 		return;
-	
 	do
 	{
 		if(CodeBuf[pLocation] >= 0x81)	// 汉字显示

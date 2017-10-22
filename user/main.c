@@ -66,7 +66,7 @@ int main (void)
 		}
 		
 		// 若接收缓存数据全部处理完成，休眠
-		if(!get_rx_fifo_count())
+		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
 		{
 			__WFE();							
 			__WFI();			

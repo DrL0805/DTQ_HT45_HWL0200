@@ -48,7 +48,7 @@
 #endif
 
 #define     NRF_ESB_TX_FIFO_SIZE                4                   /**< The size of the transmission first in first out buffer. */
-#define     NRF_ESB_RX_FIFO_SIZE                15                   /**< The size of the reception first in first out buffer. */
+#define     NRF_ESB_RX_FIFO_SIZE                20                   /**< The size of the reception first in first out buffer. */
 
 // 252 is the largest possible payload size according to the nRF5x architecture.
 STATIC_ASSERT(NRF_ESB_MAX_PAYLOAD_LENGTH <= 252);

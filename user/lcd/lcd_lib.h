@@ -102,8 +102,10 @@ typedef struct
 //	uint8_t		Signal[64];
 //	uint8_t 	Battery[64];
 	uint8_t 	StudentId[8];		// 学生姓名/学号
-	uint8_t		Scene[49];			// 第一个字节表示需要跟新显示的长度，最大48
 	uint8_t 	Input[16];			// 按键输入内容
+	
+	uint8_t     ScenePos;			// 回显刷新位置，为了防止LCD刷新一直占用CPU，每次只刷新一个字符
+	uint8_t		Scene[49];			// 第一个字节表示需要跟新显示的长度，最大48	
 	
 	uint8_t 	SendResultState;
 }LCD_REFRESH_DATA_T;
