@@ -39,7 +39,8 @@ int main (void)
 	
 	while(true)
 	{		
-		APP_ParUpdate();		
+		APP_ParUpdate();
+		MAIN_DebugFun();
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
@@ -75,38 +76,16 @@ int main (void)
 }
 
 
-
 static void MAIN_DebugFun(void)
 {
-//	LCD_POWER_ON();
-//	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);	
-//	LCD_DRV_WriteCmd(0x40); 
+	uint32_t addr = 0x100000;
+	uint8_t WriteBuf[5] = {0x11,0x22,0x33,0x44,0x55};
+	uint8_t ReadBuf[5];
+
+	W25_FlashSectorErase(addr);
+	W25_FlashPageWrite(WriteBuf, addr, 5);
 	
-//	uint32_t err_code;
-//	uint32_t i,j=38,k;
-//	uint8_t m=4,n=98,p;
-//	uint32_t data_len = 1024;
-//	uint8_t write_data[1024] = {1, 2, 3, 4, 5};
-//	uint8_t  read_data[1024];  	
-//	uint8_t TmpBuf[] = {0xB9, 0xA7, 0xCF, 0xB2, 0xC4, 0xE3, 0xA3, 0xA1, 0xB4, 0xF0, 0xB6, 0xD4, 0xC1, 0xCB};
-//	
-//	LCD_DRV_DisplayN(40, 14, TmpBuf);
-//	LCD_DRV_DisplayOne(43, 0, ASCII_2);
-	
-//	LED_TOG(LED_0);
-//	nrf_delay_ms(100);
-	
-//	while(1)
-//	{
-//		nrf_gpio_pin_set(TX_PIN_NUMBER_2);
-//		nrf_gpio_pin_set(RX_PIN_NUMBER_2);
-//		LCD_Refresh(0xFF);
-////		nrf_delay_ms(500);
-//		nrf_gpio_pin_clear(TX_PIN_NUMBER_2);
-//		nrf_gpio_pin_clear(RX_PIN_NUMBER_2);
-//		LCD_Refresh(0x00);
-////		nrf_delay_ms(500);
-//	}
+	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
 }
 
 
