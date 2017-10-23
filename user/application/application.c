@@ -64,7 +64,7 @@ void APP_ParUpdate(void)
 			RADIO.MATCH.TxPower = NFC.DataRead[10];	
 		}
 
-//		LCD_ClearSceneArea();
+		LCD_ClearSceneArea();
 		APP.QUE.ReceiveQueFlg = false;
 		APP.QUE.Answer = 0;		
 		
@@ -77,6 +77,9 @@ void APP_ParUpdate(void)
 		RADIO.IM.LastRxPackNum = 0;
 		
 		APP.EchoCnt = 0;
+		APP.KeyCnt = 0;
+		TEST.TxSucCnt = 0;
+		
 		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 	
 		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
@@ -254,15 +257,15 @@ void APP_CmdHandler(void)
 {
 	
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-//	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && !RADIO.IM.TxIngFlg)
-//	{
-//		TIMER_RxWindowReset();
-//	}
+	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && !RADIO.IM.TxIngFlg)
+	{
+		TIMER_RxWindowReset();
+	}
 	
 	// 如果命令类型不是CMD_PRE，则更新包号信息
 	if((CMD_PRE != APP.CMD.CmdType) && (CMD_LCD_CTRL != APP.CMD.CmdType))
 	{
-		RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
+		RADIO.IM.LastRxPackNum = RADIO.RX.PackNum&0x7F;	
 	}	
 	else
 	{
@@ -383,7 +386,7 @@ void APP_KeySendHandler(void)
 		32：包尾0x21
 	*/	
 	
-	APP.KeyCnt++;								// 按键计数
+	APP.KeyCnt++;								// 按键计数				
 	
 	RADIO.TX.DataLen = 33;
 	
@@ -463,7 +466,7 @@ void APP_KeyMultiSendHandler(void)
 		39：包尾0x21
 	*/	
 		
-	APP.KeyCnt++;								// 按键计数		
+	APP.KeyCnt++;								// 按键计数				
 	
 	RADIO.TX.DataLen = 40;
 	
@@ -1134,18 +1137,32 @@ void APP_CmdPreHandler(void)
 
 void APP_CmdAckHandler(void)
 {
-	uint8_t i, pUid = 1;
+	uint32_t uSerial;
 	
-	for(i = 0;i < APP.CMD.CmdData[0];i++)
-	{
-		// 检测此答题器是否收到ACK
-		if(ArrayCmp(APP.CMD.CmdData+pUid, RADIO.MATCH.DtqUid, 4))
+		if(ArrayCmp(APP.CMD.CmdData+1, RADIO.MATCH.DtqUid, 4))
 		{
-			RADIO.IM.TxSucFlg = true;
-			break;
+			uSerial = APP.CMD.CmdData[5] << 0 | 
+						APP.CMD.CmdData[6] << 8 |
+						APP.CMD.CmdData[7] << 16 |
+						APP.CMD.CmdData[8] << 24 ;
+			if(uSerial == APP.KeyCnt)
+			{
+				RADIO.IM.TxSucFlg = true;
+			}
 		}
-		pUid += 4;
-	}
+	
+	
+//	uint8_t i, pUid = 1;
+//	
+//	for(i = 0;i < APP.CMD.CmdData[0];i++)
+//	{
+//		// 检测此答题器是否收到ACK
+//		if(ArrayCmp(APP.CMD.CmdData+pUid, RADIO.MATCH.DtqUid, 4))
+//		{
+//			RADIO.IM.TxSucFlg = true;
+//		}
+//		pUid += 4;
+//	}
 }
 
 void APP_CmdGetStateHandler(void)
@@ -1223,7 +1240,7 @@ void APP_CmdLcdCtrlHandler(void)
 			{
 				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
 				APP.EchoCnt++;
-				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+//				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 				LCD.DATA.ScenePos = 0;
 			}

@@ -19,7 +19,7 @@ int main (void)
 	FLASH_Init();
 	POWER_Init();	
 	APP_Init();
-
+	
 	RADIO_Init();
 	LED_Init();
 	W25_Init();

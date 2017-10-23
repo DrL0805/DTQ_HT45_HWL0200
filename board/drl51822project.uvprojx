@@ -503,7 +503,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lib</GroupName>
+          <GroupName>nrf_lib</GroupName>
           <Files>
             <File>
               <FileName>nrf_delay.c</FileName>

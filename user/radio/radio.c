@@ -114,7 +114,7 @@ void RADIO_RxDataHandler(void)
 	if(nrf_esb_read_rx_payload(&rx_payload) == NRF_SUCCESS)
 	{		
 //		RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
-//		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+
 		/* 包头、包尾、异或校验 */
 		if(rx_payload.data[0]					== NRF_DATA_HEAD &&
 		   rx_payload.data[rx_payload.length-1] == NRF_DATA_END  &&
@@ -149,11 +149,8 @@ void RADIO_RxDataHandler(void)
 //					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
 					
 					// 新的包号，或者包号为0，则接收
-//					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == RADIO.RX.PackNum) | (RADIO.RX.ExtendLen != 0))
-//					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == RADIO.RX.PackNum) | (RADIO.RX.ExtendLen != 0))	
+					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == (RADIO.RX.PackNum&0x7F)) | (RADIO.RX.ExtendLen != 0))	
 					{
-//						RADIO.IM.LastRxSeqNum  = RADIO.RX.SeqNum;	
-//						RADIO.IM.LastRxPackNum = RADIO.RX.PackNum;	
 						// 一一解析命令，并处理
 						do
 						{
@@ -179,7 +176,7 @@ void RADIO_RxSuccess(void)
 
 void RADIO_TxSuccess(void)
 {
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	TEST.TxSucCnt++;
 	switch(POWER.SysState)
 	{
@@ -206,7 +203,7 @@ void RADIO_TxSuccess(void)
 
 void RADIO_TxFailed(void)
 {
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	TEST.TxFaiCnt++;
 	switch(POWER.SysState)
 	{
@@ -238,11 +235,11 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
     {
     	case RADIO_TX_KEY_ANSWER:
 			RADIO.IM.TxIngFlg = true;
-			RADIO.IM.ReTxCount = 0;
-		
+			RADIO.IM.ReTxCount = 0;	
+			
 			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
 			TIMER_SendAllowStart();
-		
+			
 			// 发送一次数据
 			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);
 			
