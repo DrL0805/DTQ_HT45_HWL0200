@@ -88,7 +88,8 @@ typedef struct
 	
 	PROJECT_DEVELOP_STATE_TYPE		ProjState;
 
-	bool				NFCIrqFlg;	// 13.56M刷卡中断标志
+	bool				NFCIrqFlg;		// 13.56M刷卡中断标志
+	bool				KeyCntLimitFlg;	// 按键300ms限制定时器
 	
 	uint32_t			PassCnt;	// 物理按键次数
 	uint32_t 			KeyCnt;		// 有效按键次数（300ms间隔）

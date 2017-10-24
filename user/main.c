@@ -29,7 +29,7 @@ int main (void)
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
 	TIMER_LCDStart();
-	TIMER_ADCStart();
+//	TIMER_ADCStart();
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
 	
@@ -78,14 +78,14 @@ int main (void)
 
 static void MAIN_DebugFun(void)
 {
-	uint32_t addr = 0x100000;
-	uint8_t WriteBuf[5] = {0x11,0x22,0x33,0x44,0x55};
-	uint8_t ReadBuf[5];
+//	uint32_t addr = 0x100000;
+//	uint8_t WriteBuf[5] = {0x11,0x22,0x33,0x44,0x55};
+//	uint8_t ReadBuf[5];
 
-	W25_FlashSectorErase(addr);
-	W25_FlashPageWrite(WriteBuf, addr, 5);
-	
-	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
+//	W25_FlashSectorErase(addr);
+//	W25_FlashPageWrite(WriteBuf, addr, 5);
+//	
+//	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
 }
 
 

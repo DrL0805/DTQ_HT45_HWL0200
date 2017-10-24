@@ -175,7 +175,6 @@ void RADIO_RxSuccess(void)
 
 void RADIO_TxSuccess(void)
 {
-//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	TEST.TxSucCnt++;
 	switch(POWER.SysState)
 	{
@@ -202,7 +201,7 @@ void RADIO_TxSuccess(void)
 
 void RADIO_TxFailed(void)
 {
-//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
+
 	TEST.TxFaiCnt++;
 	switch(POWER.SysState)
 	{
@@ -239,6 +238,8 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
 			TIMER_SendAllowStart();
 			
+			APP.SendCnt++;								// 按键计数						
+		
 			// 发送一次数据
 			RADIO_StartLinkTx(TX_DATA_TYPE_ANSWER);
 			

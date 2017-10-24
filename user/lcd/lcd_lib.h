@@ -139,11 +139,12 @@ extern void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value);
 extern void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value);
 
 extern void LCD_DisplayDeviceId(void);
-
 extern void LCD_ClearInputArea(void);
 
 extern void LCD_DisplaySceneArea(void);
 extern void LCD_ClearSceneArea(void);
+
+extern void LCD_DisDigit(uint8_t Pos, uint32_t Digit);
 
 #endif 
 

@@ -76,10 +76,6 @@ void APP_ParUpdate(void)
 		RADIO.IM.LastRxSeqNum = 0;	
 		RADIO.IM.LastRxPackNum = 0;
 		
-		APP.EchoCnt = 0;
-		APP.KeyCnt = 0;
-		TEST.TxSucCnt = 0;
-		
 		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 	
 		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
@@ -93,11 +89,16 @@ void APP_KeyHandler(void)
 	
 	if(KEY.ScanDownFlg)				
 	{
-		KEY.ScanDownFlg = false;
+		KEY.ScanDownFlg = false;	
+		APP.PassCnt++;
 		
-//		LCD_DRV_DisplayDigit(7,(KEY.ScanValue%100)/10);
-//		LCD_DRV_DisplayDigit(8,KEY.ScanValue%10);			
-		
+		if(!APP.KeyCntLimitFlg)
+		{
+			APP.KeyCnt++;
+			APP.KeyCntLimitFlg = true;
+			TIMER_KeyFreqCtrlStart();
+		}
+
 		switch(POWER.SysState)
 		{
 			case SYS_OFF:
@@ -389,9 +390,9 @@ void APP_KeySendHandler(void)
 		32：包尾0x21
 	*/	
 	
-	APP.KeyCnt++;								// 按键计数				
+			
 	
-	RADIO.TX.DataLen = 33;
+	RADIO.TX.DataLen = 41;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
 	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
@@ -412,16 +413,11 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
-	RADIO.TX.Data[14] = 16;					// PackLen
+	RADIO.TX.Data[14] = 24;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
 	RADIO.TX.Data[16] = 22;					// 命令长度，
 	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
 
-	APP.PassCnt = 0X11;
-	APP.KeyCnt = 0x22;
-	APP.SendCnt = 0X33;	
-	APP.EchoCnt = 0X44;	
-	
 	RADIO.TX.Data[21] = APP.PassCnt >> 0;			// 物理按键		
 	RADIO.TX.Data[22] = APP.PassCnt >> 8;
 	RADIO.TX.Data[23] = APP.PassCnt >> 16;
@@ -484,7 +480,7 @@ void APP_KeyMultiSendHandler(void)
 		39：包尾0x21
 	*/	
 		
-	APP.KeyCnt++;								// 按键计数				
+	
 	
 	RADIO.TX.DataLen = 40;
 	
@@ -1163,7 +1159,7 @@ void APP_CmdAckHandler(void)
 						APP.CMD.CmdData[6] << 8 |
 						APP.CMD.CmdData[7] << 16 |
 						APP.CMD.CmdData[8] << 24 ;
-			if(uSerial == APP.KeyCnt)
+			if(uSerial == APP.SendCnt)
 			{
 				RADIO.IM.TxSucFlg = true;
 			}
@@ -1258,7 +1254,6 @@ void APP_CmdLcdCtrlHandler(void)
 			{
 				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
 				APP.EchoCnt++;
-//				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 				LCD.DATA.ScenePos = 0;
 			}

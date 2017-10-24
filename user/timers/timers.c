@@ -10,10 +10,10 @@
 
 //定时器宏定义
 #define APP_TIMER_PRESCALER     0
-#define APP_TIMER_OP_QUEUE_SIZE 17
+#define APP_TIMER_OP_QUEUE_SIZE 20
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(3000, 	APP_TIMER_PRESCALER)
-#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(2998, 	APP_TIMER_PRESCALER)
+#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(100, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
 #define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
@@ -27,6 +27,7 @@
 #define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
 #define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
 #define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
+#define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
 
 
 APP_TIMER_DEF(temp_timer_id);
@@ -46,6 +47,7 @@ APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
 APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 //APP_TIMER_DEF(watch_dog_timer_id);
+APP_TIMER_DEF(key_freq_ctrl_timer_id);			/*  按键频率控制定时器 */
 
 TIMER_PARAMETERS_T	TIMER;
 
@@ -110,7 +112,10 @@ void TIMERS_Init(void)
 	APP_ERROR_CHECK(err_code);		
 	
 	err_code = app_timer_create(&tx_overtime_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxOvertimeHandler);	// 重发定时器，每次重新开始一个随机值
-	APP_ERROR_CHECK(err_code);		
+	APP_ERROR_CHECK(err_code);	
+	
+	err_code = app_timer_create(&key_freq_ctrl_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_KeyFreqCtrlHandler);	// 重发定时器，每次重新开始一个随机值
+	APP_ERROR_CHECK(err_code);	
 }
 
 void TIMER_EventHandler(void)
@@ -162,7 +167,6 @@ void TIMER_TempStop(void)
 void TIMER_TempHandler(void * p_context)
 {
 	
-
 }
 
 
@@ -183,6 +187,8 @@ void TIMER_LCDStop(void)
 void TIMER_LCDHandler(void * p_context)
 {	
 	LCD.UpdateFlg = true;
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+	W25_WriteTestData();	
 }
 
 void TIMER_ButtonStart(void)
@@ -558,3 +564,23 @@ void TIMER_TxRandomDelayHandler(void * p_context)
 //{
 //	WDT.FeedFlg = true;
 //}
+
+void TIMER_KeyFreqCtrlStart(void)
+{
+	uint32_t err_code;
+	
+	err_code = app_timer_start(key_freq_ctrl_timer_id,KEY_FREQ_CTRL_TIMEOUT_INTERVAL,NULL);
+	APP_ERROR_CHECK(err_code);
+}
+
+void TIMER_KeyFreqCtrlStop(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_stop(key_freq_ctrl_timer_id);
+	APP_ERROR_CHECK(err_code);
+}
+
+void TIMER_KeyFreqCtrlHandler(void * p_context)
+{
+	APP.KeyCntLimitFlg = false;
+}

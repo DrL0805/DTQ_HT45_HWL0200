@@ -46,6 +46,10 @@ extern void W25_FlashSectorErase(uint32_t SectorAddr);
 extern void W25_FlashPageWrite(uint8_t* pBuffer, uint32_t WtiteAddr, uint16_t NumByteToWrite);
 extern void W25_SpiReadHanziDot(uint8_t *DotBuf, uint16_t GBKCode);
 
+extern void W25_WriteTestData(void);
+extern void W25_ReadTestData(void);
+
+
 // Globals ------------------------------------------------------------
  				    
 #endif

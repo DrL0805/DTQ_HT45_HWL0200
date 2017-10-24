@@ -368,27 +368,11 @@ void LCD_DisplayDeviceId(void)
 //----------------------------------------------------------	
 	
 	// œ‘ æ≤‚ ‘ƒ⁄»›
-//	LCD_DRV_DisplayDigit(13,(APP.KeyCnt%1000)/100);
-//	LCD_DRV_DisplayDigit(14,(APP.KeyCnt%100)/10);
-//	LCD_DRV_DisplayDigit(15,APP.KeyCnt%10);	
+	LCD_DisDigit(0, APP.PassCnt);
+	LCD_DisDigit(4, APP.KeyCnt);
+	LCD_DisDigit(8, APP.SendCnt);
+	LCD_DisDigit(12, APP.EchoCnt);
 
-//	LCD_DRV_DisplayDigit(0,(RADIO.IM.LatestRssi%1000)/100);
-//	LCD_DRV_DisplayDigit(1,(RADIO.IM.LatestRssi%100)/10);
-//	LCD_DRV_DisplayDigit(2,RADIO.IM.LatestRssi%10);	
-	
-//	LCD_DRV_DisplayDigit(12,(TEST.TxSucCnt%10000)/1000);
-//	LCD_DRV_DisplayDigit(13,(TEST.TxSucCnt%1000)/100);
-//	LCD_DRV_DisplayDigit(14,(TEST.TxSucCnt%100)/10);
-//	LCD_DRV_DisplayDigit(15,TEST.TxSucCnt%10);	
-//	
-//	LCD_DRV_DisplayDigit(0,(RADIO.MATCH.DtqNum%1000)/100);
-//	LCD_DRV_DisplayDigit(1,(RADIO.MATCH.DtqNum%100)/10);
-//	LCD_DRV_DisplayDigit(2,RADIO.MATCH.DtqNum%10);		
-//	
-//	LCD_DRV_DisplayDigit(5,(APP.EchoCnt%10000)/1000);
-//	LCD_DRV_DisplayDigit(6,(APP.EchoCnt%1000)/100);
-//	LCD_DRV_DisplayDigit(7,(APP.EchoCnt%100)/10);
-//	LCD_DRV_DisplayDigit(8,APP.EchoCnt%10);	
 }
 
 
@@ -438,6 +422,21 @@ void LCD_ClearSceneArea(void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 	LCD.DATA.ScenePos = 0;
 }
+
+void LCD_DisDigit(uint8_t Pos, uint32_t Digit)
+{
+//	LCD_DRV_DisplayDigit(Pos,(Digit%10000)/1000);
+	LCD_DRV_DisplayDigit(Pos+0,(Digit%1000)/100);
+	LCD_DRV_DisplayDigit(Pos+1,(Digit%100)/10);
+	LCD_DRV_DisplayDigit(Pos+2,Digit%10);			
+}
+
+
+
+
+
+
+
 
 
 

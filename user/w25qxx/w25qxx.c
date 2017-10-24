@@ -12,8 +12,6 @@
 // Locals -------------------------------------------------------------
 static uint32_t* spi_base_address;
 
-
-
 void W25_Init(void)
 {
 	uint8_t FlashReadBuffer[255];	
@@ -26,6 +24,8 @@ void W25_Init(void)
 	}
 	
 	W25_SpiFlashBufferRead(FlashReadBuffer, 0, 32);
+	
+	W25_ReadTestData();
 }
 
 
@@ -165,7 +165,62 @@ void W25_SpiReadHanziDot(uint8_t *DotBuf, uint16_t GBKCode)
 	W25_SpiFlashBufferRead(DotBuf, Addr, 32);
 }
 
+// 把测试数据写入Flash中
+void W25_WriteTestData(void)
+{
+	uint32_t addr = 0x100000;
+	uint8_t WriteBuf[16];
+	uint8_t ReadBuf[16];
+	
+	WriteBuf[0] = APP.PassCnt >> 0;			// 物理按键		
+	WriteBuf[1] = APP.PassCnt >> 8;
+	WriteBuf[2] = APP.PassCnt >> 16;
+	WriteBuf[3] = APP.PassCnt >> 24;
+	WriteBuf[4] = APP.KeyCnt >> 0;			// 有效按键
+	WriteBuf[5] = APP.KeyCnt >> 8;
+	WriteBuf[6] = APP.KeyCnt >> 16;
+	WriteBuf[7] = APP.KeyCnt >> 24;
+	WriteBuf[8] = APP.SendCnt >> 0;			// 发送按键
+	WriteBuf[9] = APP.SendCnt >> 8;
+	WriteBuf[10] = APP.SendCnt >> 16;
+	WriteBuf[11] = APP.SendCnt >> 24;
+	WriteBuf[12] = APP.EchoCnt >> 0;			// 回显次数
+	WriteBuf[13] = APP.EchoCnt >> 8;
+	WriteBuf[14] = APP.EchoCnt >> 16;
+	WriteBuf[15] = APP.EchoCnt >> 24;	
 
+	W25_FlashSectorErase(addr);
+	W25_FlashPageWrite(WriteBuf, addr, 16);	
+}
+
+void W25_ReadTestData(void)
+{
+	uint32_t addr = 0x100000;
+	uint8_t ReadBuf[16];
+	
+	W25_SpiFlashBufferRead(ReadBuf, addr, 16);
+	
+	APP.PassCnt = ReadBuf[0] 
+				| ReadBuf[1] << 8 
+				| ReadBuf[2] << 16 
+				| ReadBuf[3] << 24; 
+	
+	APP.KeyCnt = ReadBuf[4] 
+				| ReadBuf[5] << 8 
+				| ReadBuf[6] << 16 
+				| ReadBuf[7] << 24; 
+	
+	APP.SendCnt = ReadBuf[8] 
+				| ReadBuf[9] << 8 
+				| ReadBuf[10] << 16 
+				| ReadBuf[11] << 24; 
+	
+	APP.EchoCnt = ReadBuf[12] 
+				| ReadBuf[13] << 8 
+				| ReadBuf[14] << 16 
+				| ReadBuf[15] << 24; 	
+	
+}
 
 
 

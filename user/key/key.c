@@ -206,7 +206,7 @@ void KEY_Scan(void)
 							default:
 								break;
 						}
-						KEY.ScanDownFlg = true;							
+						KEY.ScanDownFlg = true;	
 					}
 					TIMER_ButtonStop();
 					KEY.ScanState = KEY_ONE;
