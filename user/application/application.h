@@ -90,8 +90,10 @@ typedef struct
 
 	bool				NFCIrqFlg;	// 13.56M刷卡中断标志
 	
-	uint32_t 			KeyCnt;
-	uint32_t			EchoCnt;
+	uint32_t			PassCnt;	// 物理按键次数
+	uint32_t 			KeyCnt;		// 有效按键次数（300ms间隔）
+	uint32_t 			SendCnt;	// 按键发送次数
+	uint32_t			EchoCnt;	// 回显次数
 	
 	//当没收到题目时，按键结果仅作为显示（演示）用，无实际意义
 	uint8_t 			LcdDisType;				//显示类型，字母、判断、数字

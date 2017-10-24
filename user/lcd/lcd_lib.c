@@ -349,21 +349,21 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 
 void LCD_DisplayDeviceId(void)
 {
-	uint32_t TmpUid, i;
-	
-	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
-			   RADIO.MATCH.DtqUid[1] << 8  |
-			   RADIO.MATCH.DtqUid[2] << 16 |
-			   RADIO.MATCH.DtqUid[3] << 24 ;
+//	uint32_t TmpUid, i;
+//	
+//	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
+//			   RADIO.MATCH.DtqUid[1] << 8  |
+//			   RADIO.MATCH.DtqUid[2] << 16 |
+//			   RADIO.MATCH.DtqUid[3] << 24 ;
 
-	for(i = 0;i < 6;i++)
-	{
-		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
-		TmpUid = TmpUid/10;
-	}
+//	for(i = 0;i < 6;i++)
+//	{
+//		LCD_DRV_DisplayDigit(10-i,TmpUid%10);
+//		TmpUid = TmpUid/10;
+//	}
 
-	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
-	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
+//	LCD_DRV_DisplayOne(4, LCD_DRV_DOT_ASCII, ASCII_CLEAR);
+//	LCD_DRV_DisplayOne(11, LCD_DRV_DOT_ASCII, ASCII_CLEAR);	
 	
 //----------------------------------------------------------	
 	
@@ -372,9 +372,9 @@ void LCD_DisplayDeviceId(void)
 //	LCD_DRV_DisplayDigit(14,(APP.KeyCnt%100)/10);
 //	LCD_DRV_DisplayDigit(15,APP.KeyCnt%10);	
 
-//	LCD_DRV_DisplayDigit(0,(TEST.TxFaiCnt%1000)/100);
-//	LCD_DRV_DisplayDigit(1,(TEST.TxFaiCnt%100)/10);
-//	LCD_DRV_DisplayDigit(2,TEST.TxFaiCnt%10);	
+//	LCD_DRV_DisplayDigit(0,(RADIO.IM.LatestRssi%1000)/100);
+//	LCD_DRV_DisplayDigit(1,(RADIO.IM.LatestRssi%100)/10);
+//	LCD_DRV_DisplayDigit(2,RADIO.IM.LatestRssi%10);	
 	
 //	LCD_DRV_DisplayDigit(12,(TEST.TxSucCnt%10000)/1000);
 //	LCD_DRV_DisplayDigit(13,(TEST.TxSucCnt%1000)/100);

@@ -114,7 +114,6 @@ void RADIO_RxDataHandler(void)
 	if(nrf_esb_read_rx_payload(&rx_payload) == NRF_SUCCESS)
 	{		
 //		RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
-
 		/* 包头、包尾、异或校验 */
 		if(rx_payload.data[0]					== NRF_DATA_HEAD &&
 		   rx_payload.data[rx_payload.length-1] == NRF_DATA_END  &&

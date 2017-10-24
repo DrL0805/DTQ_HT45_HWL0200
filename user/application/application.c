@@ -95,6 +95,9 @@ void APP_KeyHandler(void)
 	{
 		KEY.ScanDownFlg = false;
 		
+//		LCD_DRV_DisplayDigit(7,(KEY.ScanValue%100)/10);
+//		LCD_DRV_DisplayDigit(8,KEY.ScanValue%10);			
+		
 		switch(POWER.SysState)
 		{
 			case SYS_OFF:
@@ -134,7 +137,7 @@ void APP_KeyHandler(void)
 							//发送允许标志，用于控制按发送键的频率
 							if(APP.QUE.KeySendLimitFlg)
 								return;							
-						
+							
 							if(!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg)
 							{
 								APP_KeyMultiChoiceHandler();
@@ -411,23 +414,38 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
 	RADIO.TX.Data[14] = 16;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
-	RADIO.TX.Data[16] = 14;					// 命令长度，
+	RADIO.TX.Data[16] = 22;					// 命令长度，
 	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
 
-	RADIO.TX.Data[21] = APP.KeyCnt >> 0;
-	RADIO.TX.Data[22] = APP.KeyCnt >> 8;
-	RADIO.TX.Data[23] = APP.KeyCnt >> 16;
-	RADIO.TX.Data[24] = APP.KeyCnt >> 24;
+	APP.PassCnt = 0X11;
+	APP.KeyCnt = 0x22;
+	APP.SendCnt = 0X33;	
+	APP.EchoCnt = 0X44;	
 	
-	RADIO.TX.Data[25] = APP.EchoCnt >> 0;
-	RADIO.TX.Data[26] = APP.EchoCnt >> 8;
-	RADIO.TX.Data[27] = APP.EchoCnt >> 16;
-	RADIO.TX.Data[28] = APP.EchoCnt >> 24;
+	RADIO.TX.Data[21] = APP.PassCnt >> 0;			// 物理按键		
+	RADIO.TX.Data[22] = APP.PassCnt >> 8;
+	RADIO.TX.Data[23] = APP.PassCnt >> 16;
+	RADIO.TX.Data[24] = APP.PassCnt >> 24;
 	
-	RADIO.TX.Data[29] = APP.QUE.Type;
-	RADIO.TX.Data[30] = APP.QUE.Answer;
-	RADIO.TX.Data[31] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[32] = NRF_DATA_END;
+	RADIO.TX.Data[25] = APP.KeyCnt >> 0;			// 有效按键
+	RADIO.TX.Data[26] = APP.KeyCnt >> 8;
+	RADIO.TX.Data[27] = APP.KeyCnt >> 16;
+	RADIO.TX.Data[28] = APP.KeyCnt >> 24;
+	
+	RADIO.TX.Data[29] = APP.SendCnt >> 0;			// 发送按键
+	RADIO.TX.Data[30] = APP.SendCnt >> 8;
+	RADIO.TX.Data[31] = APP.SendCnt >> 16;
+	RADIO.TX.Data[32] = APP.SendCnt >> 24;
+
+	RADIO.TX.Data[33] = APP.EchoCnt >> 0;			// 回显次数
+	RADIO.TX.Data[34] = APP.EchoCnt >> 8;
+	RADIO.TX.Data[35] = APP.EchoCnt >> 16;
+	RADIO.TX.Data[36] = APP.EchoCnt >> 24;
+	
+	RADIO.TX.Data[37] = APP.QUE.Type;
+	RADIO.TX.Data[38] = APP.QUE.Answer;
+	RADIO.TX.Data[39] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[40] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
 	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
