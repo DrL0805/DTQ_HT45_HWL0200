@@ -293,6 +293,7 @@ void RADIO_StartHardTx(uint32_t TxChannal, uint8_t *PayloadBuf, uint8_t PayloadL
 	memcpy(tx_payload.data, PayloadBuf, PayloadLen);
 	
 	nrf_esb_write_payload(&tx_payload);
+	nrf_esb_write_payload(&tx_payload);
 	TIMER_TxOvertimeStop();
 	TIMER_TxOvertimeStart();
 }

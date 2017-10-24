@@ -187,7 +187,7 @@ void TIMER_LCDStop(void)
 void TIMER_LCDHandler(void * p_context)
 {	
 //	LCD.UpdateFlg = true;
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 	W25_WriteTestData();	
 }
 
