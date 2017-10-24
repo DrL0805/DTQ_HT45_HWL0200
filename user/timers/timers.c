@@ -13,7 +13,7 @@
 #define APP_TIMER_OP_QUEUE_SIZE 20
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(3000, 	APP_TIMER_PRESCALER)
-#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(100, 	APP_TIMER_PRESCALER)
+#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(5000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
 #define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
@@ -186,7 +186,7 @@ void TIMER_LCDStop(void)
 
 void TIMER_LCDHandler(void * p_context)
 {	
-	LCD.UpdateFlg = true;
+//	LCD.UpdateFlg = true;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 	W25_WriteTestData();	
 }
@@ -440,8 +440,8 @@ void TIMER_RetransmitStart(void)
 {
 	uint32_t err_code;
 	uint32_t random_delay;	
-
-	random_delay = 40 + (GetRandomNumber() >> 3);	// 除以8
+	
+	random_delay = 25 + (GetRandomNumber() >> 3);	// 除以8
 	
 	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);	
@@ -523,10 +523,10 @@ void TIMER_SendAllowHandler(void * p_context)
 
 void TIMER_TxRandomDelayStart(void)
 {
-	uint32_t err_code;
-	uint32_t random_delay;
-	
-	random_delay = 5 + (GetRandomNumber() >> 2);	// 除以4
+	uint32_t err_code;								
+	uint32_t random_delay;							
+													
+	random_delay = 5 + (GetRandomNumber() >> 2);	// 除以4	
 	
 	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);

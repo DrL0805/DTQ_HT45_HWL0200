@@ -80,6 +80,9 @@ void APP_ParUpdate(void)
 	
 		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
 		APP.NFCIrqFlg = false;				
+	
+		TEST.TxFaiCnt = 0;
+		TEST.TxSucCnt = 0;
 	}
 }
 
@@ -390,8 +393,8 @@ void APP_KeySendHandler(void)
 		32：包尾0x21
 	*/	
 	
+	APP.SendCnt++;								// 按键计数			
 			
-	
 	RADIO.TX.DataLen = 41;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
@@ -417,7 +420,7 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
 	RADIO.TX.Data[16] = 22;					// 命令长度，
 	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
-
+	
 	RADIO.TX.Data[21] = APP.PassCnt >> 0;			// 物理按键		
 	RADIO.TX.Data[22] = APP.PassCnt >> 8;
 	RADIO.TX.Data[23] = APP.PassCnt >> 16;
@@ -480,9 +483,9 @@ void APP_KeyMultiSendHandler(void)
 		39：包尾0x21
 	*/	
 		
+	APP.SendCnt++;								// 按键计数				
 	
-	
-	RADIO.TX.DataLen = 40;
+	RADIO.TX.DataLen = 56;
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
 	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
@@ -503,14 +506,35 @@ void APP_KeyMultiSendHandler(void)
 	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
-	RADIO.TX.Data[14] = 23;					// PackLen
+	RADIO.TX.Data[14] = 39;					// PackLen
 	RADIO.TX.Data[15] = 0x10;				// 命令类型
-	RADIO.TX.Data[16] = 21;					// 命令长度，
+	RADIO.TX.Data[16] = 37;					// 命令长度，
 	memcpy(RADIO.TX.Data+17, APP.QUE.LastPackNum, 4);	// 题目包号
-	RADIO.TX.Data[21] = APP.QUE.Type;
-	memcpy(RADIO.TX.Data+22, APP.QUE.MultiAnswer, 16);	
-	RADIO.TX.Data[38] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[39] = NRF_DATA_END;
+	
+	RADIO.TX.Data[21] = APP.PassCnt >> 0;			// 物理按键		
+	RADIO.TX.Data[22] = APP.PassCnt >> 8;
+	RADIO.TX.Data[23] = APP.PassCnt >> 16;
+	RADIO.TX.Data[24] = APP.PassCnt >> 24;
+	
+	RADIO.TX.Data[25] = APP.KeyCnt >> 0;			// 有效按键
+	RADIO.TX.Data[26] = APP.KeyCnt >> 8;
+	RADIO.TX.Data[27] = APP.KeyCnt >> 16;
+	RADIO.TX.Data[28] = APP.KeyCnt >> 24;
+	
+	RADIO.TX.Data[29] = APP.SendCnt >> 0;			// 发送按键
+	RADIO.TX.Data[30] = APP.SendCnt >> 8;
+	RADIO.TX.Data[31] = APP.SendCnt >> 16;
+	RADIO.TX.Data[32] = APP.SendCnt >> 24;
+
+	RADIO.TX.Data[33] = APP.EchoCnt >> 0;			// 回显次数
+	RADIO.TX.Data[34] = APP.EchoCnt >> 8;
+	RADIO.TX.Data[35] = APP.EchoCnt >> 16;
+	RADIO.TX.Data[36] = APP.EchoCnt >> 24;	
+	
+	RADIO.TX.Data[37] = APP.QUE.Type;
+	memcpy(RADIO.TX.Data+38, APP.QUE.MultiAnswer, 16);	
+	RADIO.TX.Data[54] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[55] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
 	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);	

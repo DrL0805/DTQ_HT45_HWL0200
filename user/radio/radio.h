@@ -11,7 +11,7 @@
 
 
 //底层通信相关宏定义
-#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(10)					//重发次数,不包括第一次
+#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(6)					//重发次数,不包括第一次
 #define 	NRF_ENHANCE_NUMBER					(2)					//每次发送次数，至少为1，多的为加强帧
 #define		NRF_RETRANSMIT_DELAY				(280)				//0~255ms随机值
 #define 	NRF_PIPE						(0)						
@@ -30,7 +30,7 @@
 #define		NRF_LINK_DATA_LEN				(17)		// 链路层定义数据长度
 
 
-#define RX_WINDOW_ADD_WAIT_ACK			(30)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
+#define RX_WINDOW_ADD_WAIT_ACK			(20)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
 #define RX_WINDOW_ADD_WAIT_DATA			(60)	//接收到前导帧后，增加RX窗等待有效数据的时间
 #define RX_WINDOW_ON					(3)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间

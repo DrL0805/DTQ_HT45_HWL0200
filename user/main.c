@@ -3,8 +3,6 @@
 
 static void MAIN_DebugFun(void);
 
-app_fifo_t my_fifo;
-
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
@@ -26,6 +24,8 @@ int main (void)
 	LCD_Init();
 	ADC_Init();
 	
+	W25_ReadTestData();
+	
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
 	TIMER_LCDStart();
@@ -38,7 +38,7 @@ int main (void)
 	POWER.SysInitializedFlg = true;	
 	
 	while(true)
-	{		
+	{
 		APP_ParUpdate();
 		MAIN_DebugFun();
 		switch(POWER.SysState)

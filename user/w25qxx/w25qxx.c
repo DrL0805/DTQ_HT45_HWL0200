@@ -24,8 +24,6 @@ void W25_Init(void)
 	}
 	
 	W25_SpiFlashBufferRead(FlashReadBuffer, 0, 32);
-	
-	W25_ReadTestData();
 }
 
 
@@ -184,7 +182,7 @@ void W25_WriteTestData(void)
 	WriteBuf[9] = APP.SendCnt >> 8;
 	WriteBuf[10] = APP.SendCnt >> 16;
 	WriteBuf[11] = APP.SendCnt >> 24;
-	WriteBuf[12] = APP.EchoCnt >> 0;			// 回显次数
+	WriteBuf[12] = APP.EchoCnt >> 0;		// 回显次数
 	WriteBuf[13] = APP.EchoCnt >> 8;
 	WriteBuf[14] = APP.EchoCnt >> 16;
 	WriteBuf[15] = APP.EchoCnt >> 24;	

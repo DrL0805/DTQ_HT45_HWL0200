@@ -368,11 +368,16 @@ void LCD_DisplayDeviceId(void)
 //----------------------------------------------------------	
 	
 	// œ‘ æ≤‚ ‘ƒ⁄»›
-	LCD_DisDigit(0, APP.PassCnt);
-	LCD_DisDigit(4, APP.KeyCnt);
-	LCD_DisDigit(8, APP.SendCnt);
-	LCD_DisDigit(12, APP.EchoCnt);
-
+//	LCD_DisDigit(0, APP.PassCnt);
+//	LCD_DisDigit(4, APP.KeyCnt);
+//	LCD_DisDigit(8, APP.SendCnt);
+//	LCD_DisDigit(12, APP.EchoCnt);
+	
+	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+	LCD_DisDigit(4, TEST.TxSucCnt);
+	LCD_DisDigit(8, TEST.TxFaiCnt);
+	
+	
 }
 
 
