@@ -55,14 +55,23 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
 			{
 				TIMER_TxOvertimeStop();
 				
-				if(RADIO.IM.TxIngFlg)
+				if(RADIO.IM.RxWindowAddFlg)
 				{
-					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
+					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);
 				}
 				else
 				{
 					TIMER_RxWindowReset();		
-				}
+				}				
+				
+//				if(RADIO.IM.TxIngFlg)
+//				{
+//					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
+//				}
+//				else
+//				{
+//					TIMER_RxWindowReset();		
+//				}
 			}
             break;
         case NRF_ESB_EVENT_TX_FAILED:
@@ -145,7 +154,7 @@ void RADIO_RxDataHandler(void)
 				if(ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.PublicUid, 4) || ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.DtqUid,4))
 				{
 					// 只有发给"我"的2.4G数据才更新RSSI值
-//					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
+					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
 					
 					// 新的包号，或者包号为0，则接收
 					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == (RADIO.RX.PackNum&0x7F)) | (RADIO.RX.ExtendLen != 0))	

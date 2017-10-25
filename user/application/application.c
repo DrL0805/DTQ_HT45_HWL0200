@@ -103,8 +103,8 @@ void APP_KeyHandler(void)
 		}
 
 		switch(POWER.SysState)
-		{
-			case SYS_OFF:
+		{					
+			case SYS_OFF:	
 				break;				
 			case SYS_ON:
 				TIMER_SysStateStop();

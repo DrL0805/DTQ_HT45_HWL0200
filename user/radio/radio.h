@@ -11,7 +11,7 @@
 
 
 //底层通信相关宏定义
-#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(6)					//重发次数,不包括第一次
+#define 	NRF_MAX_NUMBER_OF_RETRANSMITS		(2)					//重发次数,不包括第一次
 #define 	NRF_ENHANCE_NUMBER					(2)					//每次发送次数，至少为1，多的为加强帧
 #define		NRF_RETRANSMIT_DELAY				(280)				//0~255ms随机值
 #define 	NRF_PIPE						(0)						

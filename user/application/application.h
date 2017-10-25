@@ -110,7 +110,6 @@ void APP_ParUpdate(void);
 void APP_KeyHandler(void);
 void APP_CmdHandler(void);
 
-
 void APP_KeyPowerHandler(void);
 void APP_KeyFnHandler(void);
 void APP_KeyClearHandler(void);

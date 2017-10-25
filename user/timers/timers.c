@@ -132,6 +132,7 @@ void TIMER_EventHandler(void)
 			RADIO.IM.ReTxCount = 0;		
 			TIMER_RetransmitStop();
 			RADIO_TxSuccess();			//发送成功处理函数
+//			TIMER_RxWindowReset();		
 		}
 		else if(RADIO.IM.ReTxCount > NRF_MAX_NUMBER_OF_RETRANSMITS)	//达到最大重发次数
 		{
@@ -140,6 +141,7 @@ void TIMER_EventHandler(void)
 			RADIO.IM.ReTxCount = 0;		
 			TIMER_RetransmitStop();
 			RADIO_TxFailed();			//发送失败处理函数
+//			TIMER_RxWindowReset();
 		}
 		else							//否则重发
 		{
@@ -184,9 +186,9 @@ void TIMER_LCDStop(void)
 }
 
 void TIMER_LCDHandler(void * p_context)
-{	
+{
 //	LCD.UpdateFlg = true;
-//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 	W25_WriteTestData();	
 }
 
@@ -440,7 +442,7 @@ void TIMER_RetransmitStart(void)
 	uint32_t err_code;
 	uint32_t random_delay;	
 	
-	random_delay = 25 + (GetRandomNumber() >> 3);	// 除以8
+	random_delay = 30 + (GetRandomNumber() >> 3);	// 除以8
 	
 	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);	
