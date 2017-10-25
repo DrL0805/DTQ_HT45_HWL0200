@@ -13,7 +13,9 @@ void wdt_event_handler(void)
 
 
 void WDT_Init(void)
-{
+{	
+	#ifdef USE_WATCH_DOG
+	
 	uint32_t err_code = NRF_SUCCESS;
 	
 	//参数配置，看门狗2秒超时，每1秒喂一次狗
@@ -27,6 +29,8 @@ void WDT_Init(void)
 	//启动喂狗定时器
 	TIMER_WatchDogStart();
 	WDT.FeedFlg = false;
+	
+	#endif
 }
 
 

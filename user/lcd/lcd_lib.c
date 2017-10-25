@@ -399,6 +399,13 @@ void  LCD_DisplaySceneArea(void)
 	// 一次整屏刷新
 	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
 	
+	// 分三行刷新
+//	if(LCD.DATA.Scene[1 + LCD.DATA.ScenePos*16 + 15] >= 0x81)	// 若每行最后一个字符是半个汉字
+//		LCD.DATA.Scene[1 + LCD.DATA.ScenePos*16 + 15] = 0x00;
+//	
+//	LCD_DRV_DisplayN(16+LCD.DATA.ScenePos*16, 16, LCD.DATA.Scene + 1 + LCD.DATA.ScenePos*16);	
+	
+	
 //	// 分3次刷新
 ////	if(LCD.DATA.ScenePos%16 == 0)
 ////	{

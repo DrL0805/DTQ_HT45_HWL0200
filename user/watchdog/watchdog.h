@@ -3,6 +3,8 @@
 
 #include "main.h"
 
+#define 	USE_WATCH_DOG
+
 typedef struct
 {
 	bool 	FeedFlg;

@@ -49,7 +49,7 @@ void CLOCK_LFCLKStart(void)
 	if(!nrf_drv_clock_lfclk_is_running())
 	{
 		nrf_drv_clock_lfclk_request(NULL);
-	}	
+	}
 }
 
 void CLOCK_LFCLKStop(void)
