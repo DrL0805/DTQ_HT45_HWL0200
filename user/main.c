@@ -23,6 +23,7 @@ int main (void)
 	W25_Init();
 	LCD_Init();
 	ADC_Init();
+	WDT_Init();	
 	
 	W25_ReadTestData();
 	
@@ -41,6 +42,7 @@ int main (void)
 	{
 		APP_ParUpdate();
 		MAIN_DebugFun();
+		WDT_FeedDog();	
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
