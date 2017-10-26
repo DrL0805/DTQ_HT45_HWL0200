@@ -30,7 +30,7 @@ int main (void)
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
 	TIMER_LCDStart();
-//	TIMER_ADCStart();
+	TIMER_ADCStart();
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
 	
