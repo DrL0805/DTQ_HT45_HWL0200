@@ -27,6 +27,9 @@ typedef struct
 	
 	uint32_t    StartCnt;
 	uint32_t    StopCnt;
+	
+	uint32_t    AutoSendCnt;
+	bool		AutoSendFlg;
 }TEST_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------

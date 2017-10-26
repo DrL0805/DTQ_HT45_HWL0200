@@ -12,7 +12,7 @@
 #define APP_TIMER_PRESCALER     0
 #define APP_TIMER_OP_QUEUE_SIZE 20
 
-#define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(3000, 	APP_TIMER_PRESCALER)
+#define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(400, 	APP_TIMER_PRESCALER)
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
@@ -175,7 +175,14 @@ void TIMER_TempStop(void)
 
 void TIMER_TempHandler(void * p_context)
 {
+	KEY.ScanDownFlg = true;
 	
+	if(KEY.ScanValue > 4)
+		KEY.ScanValue = 1;
+	else
+		KEY.ScanValue++;
+	
+	TEST.AutoSendCnt++;
 }
 
 

@@ -89,9 +89,22 @@ void APP_ParUpdate(void)
 void APP_KeyHandler(void)
 {
 	KEY_Scan();
-	
+
 	if(KEY.ScanDownFlg)				
 	{
+		if(!TEST.AutoSendFlg)
+		{
+			TEST.AutoSendFlg = true;
+			TEST.AutoSendCnt = 0;
+			TIMER_TempStart();
+		}	
+		
+//		if(++TEST.AutoSendCnt > 10)
+//		{
+//			TEST.AutoSendFlg = false;
+//			TIMER_TempStop();
+//		}		
+		
 		KEY.ScanDownFlg = false;	
 		APP.PassCnt++;
 		
