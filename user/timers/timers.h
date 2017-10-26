@@ -14,6 +14,7 @@ extern TIMER_PARAMETERS_T	TIMER;
 
 void TIMERS_Init(void);
 void TIMER_EventHandler(void);
+void TIMER_ErrCheck(uint32_t ErrCode);
 
 void TIMER_TempStart(void);
 void TIMER_TempStop(void);

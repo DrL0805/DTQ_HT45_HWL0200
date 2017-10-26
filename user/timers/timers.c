@@ -151,6 +151,14 @@ void TIMER_EventHandler(void)
 	}
 }
 
+void TIMER_ErrCheck(uint32_t ErrCode)
+{
+	if(ErrCode != NRF_SUCCESS)
+	{
+		LCD_DisDigit(8, ErrCode);
+	}
+}
+
 void TIMER_TempStart(void)
 {
 	uint32_t err_code;
@@ -176,6 +184,7 @@ void TIMER_LCDStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(lcd_timer_id,LCD_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_LCDStop(void)
@@ -183,6 +192,7 @@ void TIMER_LCDStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(lcd_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_LCDHandler(void * p_context)
@@ -197,6 +207,7 @@ void TIMER_ButtonStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(button_timer_id,BUTTON_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_ButtonStop(void)
@@ -204,6 +215,7 @@ void TIMER_ButtonStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(button_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_ButtonHandler(void * p_context)
@@ -232,6 +244,7 @@ void TIMER_RxWindowStart(void)
 		RADIO.IM.RxWindowAddFlg = false;
 	}
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 // 接收器重置，按约定比例循环开关
@@ -260,6 +273,7 @@ void TIMER_RxWindowStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(rx_window_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_RxWindowHandler(void * p_context)
@@ -275,6 +289,7 @@ void TIMER_TxOvertimeStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(tx_overtime_timer_id,TX_OVERTIME_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_TxOvertimeStop(void)
@@ -282,6 +297,7 @@ void TIMER_TxOvertimeStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(tx_overtime_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_TxOvertimeHandler(void * p_context)
@@ -315,6 +331,7 @@ void TIMER_KeyPowerStart(void)
 	
 	err_code = app_timer_start(key_power_timer_id,KEY_POWER_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -323,6 +340,7 @@ void TIMER_KeyPowerStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(key_power_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -359,6 +377,7 @@ void TIMER_ADCStart(void)
 		err_code = app_timer_start(adc_timer_id,ADC_TIMEOUT_INTERVAL,NULL);
 	}
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_ADCStop(void)
@@ -366,6 +385,7 @@ void TIMER_ADCStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(adc_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_ADCHandler(void * p_context)
@@ -383,6 +403,7 @@ void TIMER_TxAttendStart(void)
 //	err_code = app_timer_start(tx_attend_timer_id,TX_ATTEND_TIMEOUT_INTERVAL ,NULL);
 	err_code = app_timer_start(tx_attend_timer_id,APP_TIMER_TICKS(1075 + random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -391,6 +412,7 @@ void TIMER_TxAttendStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(tx_attend_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -404,6 +426,7 @@ void TIMER_SysOffStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(sys_off_timer_id,SYS_OFF_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_SysOffStop(void)
@@ -411,6 +434,7 @@ void TIMER_SysOffStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(sys_off_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_SysOffHandler(void * p_context)
@@ -423,6 +447,7 @@ void TIMER_WaitDataStart(uint8_t time_ms)
 	uint32_t err_code;
 	err_code = app_timer_start(wait_data_timer_id,APP_TIMER_TICKS(time_ms,APP_TIMER_PRESCALER),NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_WaitDataStop(void)
@@ -430,6 +455,7 @@ void TIMER_WaitDataStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(wait_data_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_WaitDataHandler(void * p_context)
@@ -442,10 +468,12 @@ void TIMER_RetransmitStart(void)
 	uint32_t err_code;
 	uint32_t random_delay;	
 	
-	random_delay = 30 + (GetRandomNumber() >> 3);	// 除以8
+//	random_delay = 30 + (GetRandomNumber() >> 3);	// 除以8
+	random_delay = 40 + (GetRandomNumber() >> 3);	// 除以8
 	
 	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);	
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_RetransmitStop(void)
@@ -453,6 +481,7 @@ void TIMER_RetransmitStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(retransmit_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_RetransmitHandler(void * p_context)
@@ -467,6 +496,7 @@ void TIMER_TxResultDisplayStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(tx_result_display_timer_id,TX_RESULT_DISPLAY_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_TxResultDisplayStop(void)
@@ -474,6 +504,7 @@ void TIMER_TxResultDisplayStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(tx_result_display_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_TxResultDisplayHandler(void * p_context)
@@ -487,6 +518,7 @@ void TIMER_DisVerStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(display_version_timer_id,DISPLAY_VERSION_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_DisVerStop(void)
@@ -494,6 +526,7 @@ void TIMER_DisVerStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(display_version_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_DisVerHandler(void * p_context)
@@ -508,6 +541,7 @@ void TIMER_SendAllowStart(void)
 	
 	err_code = app_timer_start(send_allow_timer_id,SEND_ALLOW_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_SendAllowStop(void)
@@ -515,11 +549,13 @@ void TIMER_SendAllowStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(send_allow_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_SendAllowHandler(void * p_context)
 {
-	APP.QUE.KeySendLimitFlg = false;
+//	APP.QUE.KeySendLimitFlg = false;
+	TEST.StopCnt++;
 }
 
 void TIMER_TxRandomDelayStart(void)
@@ -531,6 +567,7 @@ void TIMER_TxRandomDelayStart(void)
 	
 	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -539,6 +576,7 @@ void TIMER_TxRandomDelayStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(tx_random_delay_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 
@@ -552,6 +590,7 @@ void TIMER_WatchDogStart(void)
 	uint32_t err_code;
 	err_code = app_timer_start(watch_dog_timer_id,WATCH_DOG_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_WatchDogStop(void)
@@ -559,6 +598,7 @@ void TIMER_WatchDogStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(watch_dog_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_WatchDogHandler(void * p_context)
@@ -572,6 +612,7 @@ void TIMER_KeyFreqCtrlStart(void)
 	
 	err_code = app_timer_start(key_freq_ctrl_timer_id,KEY_FREQ_CTRL_TIMEOUT_INTERVAL,NULL);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_KeyFreqCtrlStop(void)
@@ -579,6 +620,7 @@ void TIMER_KeyFreqCtrlStop(void)
 	uint32_t err_code;
 	err_code = app_timer_stop(key_freq_ctrl_timer_id);
 	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
 }
 
 void TIMER_KeyFreqCtrlHandler(void * p_context)

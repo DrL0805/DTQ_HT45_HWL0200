@@ -20,6 +20,13 @@ typedef struct
 	
 	uint16_t 	TxSucCnt;
 	uint16_t	TxFaiCnt;
+	
+	uint32_t    TxIrqCnt;
+	uint32_t	SendLimitCnt;
+	uint32_t    ReturnCnt;
+	
+	uint32_t    StartCnt;
+	uint32_t    StopCnt;
 }TEST_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------

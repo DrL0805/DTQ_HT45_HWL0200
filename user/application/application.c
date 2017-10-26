@@ -168,10 +168,16 @@ void APP_KeyHandler(void)
 							break;
 						case QUE_FREE:
 							if(APP.QUE.KeySendLimitFlg)
-								return;								
-						
+							{
+								TEST.ReturnCnt++;
+								return;	
+							}
+																	
+							
 							if(!RADIO.IM.TxIngFlg)
 								APP_KeyFreeHandler();
+							
+							TEST.SendLimitCnt++;
 							break;
 						default:
 							break;
@@ -362,11 +368,19 @@ void APP_KeySendHandler(void)
 {
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
+	{
+		LCD_DisDigit(12, 888);	
 		return;
+	}
+		
 	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
+	{
+		LCD_DisDigit(12, 999);	
 		return;
+	}
+		
 	
 	/*
 		答题器2.4G链路层数据格式
