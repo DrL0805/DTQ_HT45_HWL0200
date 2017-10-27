@@ -68,6 +68,8 @@ typedef enum
 
 typedef struct
 {
+	bool			IrqFlg;
+	
 	bool 			MatchSucceedFlg;		//NFC配对并读取数据成功标志
 	uint8_t 		UID[8];
 	uint8_t  		DataRead[0x5F];		//这个值的大小，根据13.56M数据使用情况来定

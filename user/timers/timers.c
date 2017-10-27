@@ -10,21 +10,20 @@
 
 //定时器宏定义
 #define APP_TIMER_PRESCALER     0
-#define APP_TIMER_OP_QUEUE_SIZE 20
+#define APP_TIMER_OP_QUEUE_SIZE 23
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(400, 	APP_TIMER_PRESCALER)
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
 #define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
-#define KEY_POWER_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(2700,	APP_TIMER_PRESCALER) 	
 #define ADC_TIMEOUT_INTERVAL    					APP_TIMER_TICKS(997,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 #define ADC_FIRST_SAMPLE_TIMEOUT_INTERVAL    		APP_TIMER_TICKS(42,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
-#define TX_ATTEND_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1100,APP_TIMER_PRESCALER) 
+//#define TX_ATTEND_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1100,APP_TIMER_PRESCALER) 
 #define SYS_OFF_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(60000,APP_TIMER_PRESCALER)
 #define RETRANSMIT_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(70, 	APP_TIMER_PRESCALER)
 #define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
-#define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
+//#define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
 #define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
 #define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
 #define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
@@ -35,14 +34,13 @@ APP_TIMER_DEF(button_timer_id);
 APP_TIMER_DEF(rx_window_timer_id);				/* RX窗正常打开关闭 */
 APP_TIMER_DEF(tx_overtime_timer_id);			/* 发送超时 */
 APP_TIMER_DEF(sys_state_timer_id);				/* 系统状态控制，ON/OFF/SLEEP（30秒无按键系统进入休眠） */
-APP_TIMER_DEF(key_power_timer_id);			    /* POWER键定时器 */
 APP_TIMER_DEF(adc_timer_id);					/* ADC采集定时器 */
-APP_TIMER_DEF(tx_attend_timer_id);			    /* 发送2.4G考勤 */
+//APP_TIMER_DEF(tx_attend_timer_id);			    /* 发送2.4G考勤 */
 APP_TIMER_DEF(sys_off_timer_id);				/* 关机定时器（系统休眠超过45min后自动关机）*/
 APP_TIMER_DEF(wait_data_timer_id);				/* 收到前导帧后，打开RX窗等下即将到来的有效数据 */
 APP_TIMER_DEF(retransmit_timer_id);				/* 链路层的重发定时器 */
 APP_TIMER_DEF(tx_result_display_timer_id);		/* LCD显示按键发送结果（成功/失败） */
-APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
+//APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
 APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 APP_TIMER_DEF(watch_dog_timer_id);
@@ -69,14 +67,14 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
 	APP_ERROR_CHECK(err_code);	
 	
-	err_code = app_timer_create(&key_power_timer_id,APP_TIMER_MODE_REPEATED,TIMER_KeyPowerHandler);	
-	APP_ERROR_CHECK(err_code);
+//	err_code = app_timer_create(&key_power_timer_id,APP_TIMER_MODE_REPEATED,TIMER_KeyPowerHandler);	
+//	APP_ERROR_CHECK(err_code);
 	
 	err_code = app_timer_create(&rx_window_timer_id,APP_TIMER_MODE_REPEATED,TIMER_RxWindowHandler);
 	APP_ERROR_CHECK(err_code);	
 	
-	err_code = app_timer_create(&tx_attend_timer_id,APP_TIMER_MODE_REPEATED,TIMER_TxAttendHandler);
-	APP_ERROR_CHECK(err_code);	
+//	err_code = app_timer_create(&tx_attend_timer_id,APP_TIMER_MODE_REPEATED,TIMER_TxAttendHandler);
+//	APP_ERROR_CHECK(err_code);	
 
 	err_code = app_timer_create(&sys_off_timer_id,APP_TIMER_MODE_REPEATED,TIMER_SysOffHandler);
 	APP_ERROR_CHECK(err_code);
@@ -98,8 +96,8 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&tx_result_display_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxResultDisplayHandler);
 	APP_ERROR_CHECK(err_code);
 
-	err_code = app_timer_create(&display_version_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_DisVerHandler);
-	APP_ERROR_CHECK(err_code);	
+//	err_code = app_timer_create(&display_version_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_DisVerHandler);
+//	APP_ERROR_CHECK(err_code);	
 	
 	err_code = app_timer_create(&send_allow_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SendAllowHandler);
 	APP_ERROR_CHECK(err_code);		
@@ -206,7 +204,7 @@ void TIMER_LCDHandler(void * p_context)
 {
 //	LCD.UpdateFlg = true;
 //	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
-	W25_WriteTestData();	
+//	W25_WriteTestData();	
 }
 
 void TIMER_ButtonStart(void)
@@ -332,43 +330,43 @@ void TIMER_SysStateHandler(void * p_context)
 //	POWER_SysOnToSleep();
 }
 
-void TIMER_KeyPowerStart(void)
-{
-	uint32_t err_code;
-	
-	err_code = app_timer_start(key_power_timer_id,KEY_POWER_TIMEOUT_INTERVAL,NULL);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_KeyPowerStart(void)
+//{
+//	uint32_t err_code;
+//	
+//	err_code = app_timer_start(key_power_timer_id,KEY_POWER_TIMEOUT_INTERVAL,NULL);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
 
-void TIMER_KeyPowerStop(void)
-{
-	uint32_t err_code;
-	err_code = app_timer_stop(key_power_timer_id);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_KeyPowerStop(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_stop(key_power_timer_id);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
 
-void TIMER_KeyPowerHandler(void * p_context)
-{
-	if(0x00 == nrf_gpio_pin_read(KEY_PWR))
-	{	
-		switch(POWER.SysState)
-		{
-			case SYS_ON:
-			case SYS_TEST:
-				POWER_SysOnToOff();
-				break;
-			case SYS_OFF:
-				POWER_SysOffToOn();
-				break;
-			default:
-				break;
-		}
-	}
-}
+//void TIMER_KeyPowerHandler(void * p_context)
+//{
+//	if(0x00 == nrf_gpio_pin_read(KEY_PWR))
+//	{	
+//		switch(POWER.SysState)
+//		{
+//			case SYS_ON:
+//			case SYS_TEST:
+//				POWER_SysOnToOff();
+//				break;
+//			case SYS_OFF:
+//				POWER_SysOffToOn();
+//				break;
+//			default:
+//				break;
+//		}
+//	}
+//}
 
 void TIMER_ADCStart(void)
 {
@@ -401,32 +399,32 @@ void TIMER_ADCHandler(void * p_context)
 	TIMER_ADCStart();
 }
 
-void TIMER_TxAttendStart(void)
-{
-	uint32_t err_code;
-	uint32_t random_delay = 0;
-	random_delay = (uint32_t)(GetRandomNumber() / 5);		// 随机延时0~51ms
-	
-//	err_code = app_timer_start(tx_attend_timer_id,TX_ATTEND_TIMEOUT_INTERVAL ,NULL);
-	err_code = app_timer_start(tx_attend_timer_id,APP_TIMER_TICKS(1075 + random_delay,APP_TIMER_PRESCALER)  ,NULL);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_TxAttendStart(void)
+//{
+//	uint32_t err_code;
+//	uint32_t random_delay = 0;
+//	random_delay = (uint32_t)(GetRandomNumber() / 5);		// 随机延时0~51ms
+//	
+////	err_code = app_timer_start(tx_attend_timer_id,TX_ATTEND_TIMEOUT_INTERVAL ,NULL);
+//	err_code = app_timer_start(tx_attend_timer_id,APP_TIMER_TICKS(1075 + random_delay,APP_TIMER_PRESCALER)  ,NULL);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
 
-void TIMER_TxAttendStop(void)
-{
-	uint32_t err_code;
-	err_code = app_timer_stop(tx_attend_timer_id);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_TxAttendStop(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_stop(tx_attend_timer_id);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
 
-void TIMER_TxAttendHandler(void * p_context)
-{
-	ATTEND.StartTxflg = true;
-}
+//void TIMER_TxAttendHandler(void * p_context)
+//{
+//	ATTEND.StartTxflg = true;
+//}
 
 void TIMER_SysOffStart(void)
 {
@@ -520,26 +518,26 @@ void TIMER_TxResultDisplayHandler(void * p_context)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;
 }
 
-void TIMER_DisVerStart(void)
-{
-	uint32_t err_code;
-	err_code = app_timer_start(display_version_timer_id,DISPLAY_VERSION_TIMEOUT_INTERVAL,NULL);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_DisVerStart(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_start(display_version_timer_id,DISPLAY_VERSION_TIMEOUT_INTERVAL,NULL);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
-void TIMER_DisVerStop(void)
-{
-	uint32_t err_code;
-	err_code = app_timer_stop(display_version_timer_id);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
-}
+//void TIMER_DisVerStop(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_stop(display_version_timer_id);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
+//}
 
-void TIMER_DisVerHandler(void * p_context)
-{
-	LCD.DisType = LCD_DIS_UPDATE;
-}
+//void TIMER_DisVerHandler(void * p_context)
+//{
+//	LCD.DisType = LCD_DIS_UPDATE;
+//}
 
 
 void TIMER_SendAllowStart(void)

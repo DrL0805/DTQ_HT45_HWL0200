@@ -43,6 +43,8 @@ void APP_Init(void)
 //应用参数更新
 void APP_ParUpdate(void)
 {	
+	static uint32_t TmpCnt = 0;
+	
 	if(APP.NFCIrqFlg)
 	{		
 		nrf_delay_ms(600);				//延时确保13.56M读头处理完，再通过I2C读取更新的数据
@@ -80,9 +82,14 @@ void APP_ParUpdate(void)
 	
 		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
 		APP.NFCIrqFlg = false;				
-	
+		
 		TEST.TxFaiCnt = 0;
 		TEST.TxSucCnt = 0;
+		
+	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+	LCD_DisDigit(12, ++TmpCnt);		
 	}
 }
 
@@ -97,13 +104,7 @@ void APP_KeyHandler(void)
 			TEST.AutoSendFlg = true;
 			TEST.AutoSendCnt = 0;
 			TIMER_TempStart();
-		}	
-		
-//		if(++TEST.AutoSendCnt > 10)
-//		{
-//			TEST.AutoSendFlg = false;
-//			TIMER_TempStop();
-//		}		
+		}			
 		
 		KEY.ScanDownFlg = false;	
 		APP.PassCnt++;
@@ -579,62 +580,62 @@ void APP_KeyNextHandler(void)
 
 void APP_KeyFnAdd1Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_VER;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_VER;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}
 }
 
 void APP_KeyFnAdd2Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_RSSI;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}	
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_RSSI;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}	
 }
 
 void APP_KeyFnAdd3Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_VOLTAGE;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_VOLTAGE;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}
 }
 
 void APP_KeyFnAdd4Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_CHANNAL;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_CHANNAL;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}
 }
 
 void APP_KeyFnAdd5Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_ATTEND;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_ATTEND;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}
 }
 
 void APP_KeyFnAdd6Handler(void)
 {
-	if(PROJECT_DEBUG == APP.ProjState)
-	{
-		LCD.DisType = LCD_DIS_DATE;
-		TIMER_DisVerStop();
-		TIMER_DisVerStart();		
-	}
+//	if(PROJECT_DEBUG == APP.ProjState)
+//	{
+//		LCD.DisType = LCD_DIS_DATE;
+//		TIMER_DisVerStop();
+//		TIMER_DisVerStart();		
+//	}
 }
 
 void APP_KeyFnAdd7Handler(void)

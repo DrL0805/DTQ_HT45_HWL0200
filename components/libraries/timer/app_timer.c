@@ -340,7 +340,7 @@ static void timer_timeouts_check_sched(void)
 /**@brief Function for scheduling a timer list update by generating a SWI interrupt.
  */
 static void timer_list_handler_sched(void)
-{
+{	
     NVIC_SetPendingIRQ(SWI_IRQn);
 }
 
@@ -776,7 +776,7 @@ static void timer_list_handler(void)
     {
         compare_update = true;
     }
-
+	
     // Update compare register if necessary
     if (compare_update)
     {

@@ -3,6 +3,8 @@
 
 static void MAIN_DebugFun(void);
 
+
+
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
@@ -25,7 +27,7 @@ int main (void)
 	ADC_Init();
 	WDT_Init();	
 	
-	W25_ReadTestData();
+//	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
@@ -38,11 +40,13 @@ int main (void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
 	
+	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+//	LCD_DisDigit(12, ++TmpCnt);		
+	
 	while(true)
 	{
-		APP_ParUpdate();
-		MAIN_DebugFun();
-		WDT_FeedDog();	
 		switch(POWER.SysState)
 		{
 			case SYS_ON:
@@ -67,9 +71,11 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
-		
+		APP_ParUpdate();
+		MAIN_DebugFun();
+		WDT_FeedDog();			
 		// 若接收缓存数据全部处理完成，休眠
-		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
+		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg || !APP.NFCIrqFlg)
 		{
 			__WFE();							
 			__WFI();			

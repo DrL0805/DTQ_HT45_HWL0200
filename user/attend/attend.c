@@ -50,8 +50,8 @@ void ATTEND_ParInit(void)
 	ATTEND.SuportFlg = false;
 	ATTEND.TxChannal =  81;
 	
-	if(ATTEND.SuportFlg)
-		TIMER_TxAttendStart();				//开启2.4G考勤定时器
+//	if(ATTEND.SuportFlg)
+//		TIMER_TxAttendStart();				//开启2.4G考勤定时器
 
 	ATTEND.Pid = 0x00;
 	ATTEND.TxData[0] = 0x08;		//发送长度为8Byte

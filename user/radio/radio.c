@@ -247,10 +247,8 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			
 			TIMER_SendAllowStop();					// 重新计时，否则可能出问题
 			TIMER_SendAllowStart();	
-
-			__set_PRIMASK(1);
+		
 			APP.QUE.KeySendLimitFlg = false;			// 处于发送过程时，不允许再次按键发送数据
-			__set_PRIMASK(0);
 		
 			TEST.StartCnt++;
 		

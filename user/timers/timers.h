@@ -42,17 +42,17 @@ void TIMER_SysStateStart(void);
 void TIMER_SysStateStop(void);
 void TIMER_SysStateHandler(void * p_context);
 
-void TIMER_KeyPowerStart(void);
-void TIMER_KeyPowerStop(void);
-void TIMER_KeyPowerHandler(void * p_context);
+//void TIMER_KeyPowerStart(void);
+//void TIMER_KeyPowerStop(void);
+//void TIMER_KeyPowerHandler(void * p_context);
 
 void TIMER_ADCStart(void);
 void TIMER_ADCStop(void);
 void TIMER_ADCHandler(void * p_context);
 
-void TIMER_TxAttendStart(void);
-void TIMER_TxAttendStop(void);
-void TIMER_TxAttendHandler(void * p_context);
+//void TIMER_TxAttendStart(void);
+//void TIMER_TxAttendStop(void);
+//void TIMER_TxAttendHandler(void * p_context);
 
 void TIMER_SysOffStart(void);
 void TIMER_SysOffStop(void);
@@ -70,9 +70,9 @@ void TIMER_TxResultDisplayStart(void);
 void TIMER_TxResultDisplayStop(void);
 void TIMER_TxResultDisplayHandler(void * p_context);
 
-void TIMER_DisVerStart(void);
-void TIMER_DisVerStop(void);
-void TIMER_DisVerHandler(void * p_context);
+//void TIMER_DisVerStart(void);
+//void TIMER_DisVerStop(void);
+//void TIMER_DisVerHandler(void * p_context);
 
 void TIMER_SendAllowStart(void);
 void TIMER_SendAllowStop(void);
