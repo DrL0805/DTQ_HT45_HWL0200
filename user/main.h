@@ -43,6 +43,8 @@
 #define     VERSION_LEVEL_2		(0)			//¶þ¼¶°æ±¾ºÅ
 
 
+#define 	SYS_SLEEP_DEBUG		(1)
+
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);
 extern bool ArrayCmp(uint8_t *str1, uint8_t *str2, uint8_t len);

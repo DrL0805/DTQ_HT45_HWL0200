@@ -86,10 +86,10 @@ void APP_ParUpdate(void)
 		TEST.TxFaiCnt = 0;
 		TEST.TxSucCnt = 0;
 		
-	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-	LCD_DisDigit(12, ++TmpCnt);		
+//	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+//	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+//	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+//	LCD_DisDigit(12, ++TmpCnt);		
 	}
 }
 
@@ -385,7 +385,7 @@ void APP_KeySendHandler(void)
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
 	{
-		LCD_DisDigit(12, 888);	
+//		LCD_DisDigit(12, 888);	
 		return;
 	}
 	
@@ -393,7 +393,7 @@ void APP_KeySendHandler(void)
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
 	{
-		LCD_DisDigit(12, 999);	
+//		LCD_DisDigit(12, 999);	
 		return;
 	}
 		
@@ -1232,10 +1232,10 @@ void APP_CmdAckHandler(void)
 //		pUid += 4;
 //	}
 }
-
+	
 void APP_CmdGetStateHandler(void)
 {
-
+	
 }
 
 void APP_CmdClearScreenHandler(void)

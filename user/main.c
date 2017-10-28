@@ -31,7 +31,7 @@ int main (void)
 	
 	TIMER_RxWindowStart();	
 	TIMER_SysStateStart();	
-	TIMER_LCDStart();
+//	TIMER_LCDStart();
 	TIMER_ADCStart();
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
@@ -40,9 +40,9 @@ int main (void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
 	
-	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+//	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+//	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+//	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 //	LCD_DisDigit(12, ++TmpCnt);		
 	
 //	TIMER_TempStart();

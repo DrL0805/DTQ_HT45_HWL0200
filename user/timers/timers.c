@@ -201,7 +201,7 @@ void TIMER_LCDStop(void)
 void TIMER_LCDHandler(void * p_context)
 {
 //	LCD.UpdateFlg = true;
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 //	W25_WriteTestData();	
 }
 
@@ -311,21 +311,27 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
-//	APP_ERROR_CHECK(err_code);
+	#if SYS_SLEEP_DEBUG
+	uint32_t err_code;
+	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
+	APP_ERROR_CHECK(err_code);
+	#endif
 }
 
 void TIMER_SysStateStop(void)
 {
-//	uint32_t err_code;
-//	err_code = app_timer_stop(sys_state_timer_id);
-//	APP_ERROR_CHECK(err_code);
+	#if SYS_SLEEP_DEBUG
+	uint32_t err_code;
+	err_code = app_timer_stop(sys_state_timer_id);
+	APP_ERROR_CHECK(err_code);
+	#endif
 }
 
 void TIMER_SysStateHandler(void * p_context)
 {
-//	POWER_SysOnToSleep();
+	#if SYS_SLEEP_DEBUG
+	POWER_SysOnToSleep();
+	#endif
 }
 
 //void TIMER_KeyPowerStart(void)
