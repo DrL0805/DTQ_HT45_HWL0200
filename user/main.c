@@ -74,7 +74,7 @@ int main (void)
 				break;
 		}
 		APP_ParUpdate();
-		MAIN_DebugFun();
+//		MAIN_DebugFun();
 		WDT_FeedDog();			
 		// 若接收缓存数据全部处理完成，休眠
 		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg || !APP.NFCIrqFlg)
