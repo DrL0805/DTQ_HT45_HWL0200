@@ -12,7 +12,7 @@
 #define APP_TIMER_PRESCALER     0
 #define APP_TIMER_OP_QUEUE_SIZE 23
 
-#define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(400, 	APP_TIMER_PRESCALER)
+#define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(150, 	APP_TIMER_PRESCALER)
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
@@ -179,8 +179,6 @@ void TIMER_TempHandler(void * p_context)
 		KEY.ScanValue = 1;
 	else
 		KEY.ScanValue++;
-	
-	TEST.AutoSendCnt++;
 }
 
 
@@ -203,7 +201,7 @@ void TIMER_LCDStop(void)
 void TIMER_LCDHandler(void * p_context)
 {
 //	LCD.UpdateFlg = true;
-//	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 //	W25_WriteTestData();	
 }
 
@@ -474,7 +472,7 @@ void TIMER_RetransmitStart(void)
 	uint32_t random_delay;	
 	
 //	random_delay = 30 + (GetRandomNumber() >> 3);	// Г§вд8
-	random_delay = 40 + (GetRandomNumber() >> 3);	// Г§вд8
+	random_delay = 40 + GetRandomNumber() / 6;		
 	
 	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	APP_ERROR_CHECK(err_code);	

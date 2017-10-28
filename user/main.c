@@ -45,12 +45,14 @@ int main (void)
 	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 //	LCD_DisDigit(12, ++TmpCnt);		
 	
+	TIMER_TempStart();
+	
 	while(true)
 	{
 		switch(POWER.SysState)
 		{
-			case SYS_ON:
-				TIMER_EventHandler();
+			case SYS_ON:	
+				TIMER_EventHandler();	
 				RADIO_RxDataHandler();	
 				APP_KeyHandler();	
 				LCD_Update();	

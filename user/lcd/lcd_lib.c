@@ -386,6 +386,9 @@ void LCD_DisplayDeviceId(void)
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, TEST.TxSucCnt);
 //	LCD_DisDigit(12, RADIO.IM.LatestRssi);
+
+	LCD_DisDigit(0, RADIO.IM.TxIngFlg);
+	LCD_DisDigit(4, APP.KeyGapCnt);
 }
 
 
