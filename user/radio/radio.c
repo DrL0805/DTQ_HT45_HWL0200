@@ -189,7 +189,7 @@ void RADIO_TxSuccess(void)
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
-			APP.QUE.AnsweredFlg = true;
+//			APP.QUE.AnsweredFlg = true;
 			LCD.DATA.SendResultState = SEND_RESULT_OK;
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;			
 			TIMER_TxResultDisplayStop();

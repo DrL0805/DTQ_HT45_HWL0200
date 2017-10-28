@@ -45,7 +45,7 @@ int main (void)
 	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 //	LCD_DisDigit(12, ++TmpCnt);		
 	
-	TIMER_TempStart();
+//	TIMER_TempStart();
 	
 	while(true)
 	{
