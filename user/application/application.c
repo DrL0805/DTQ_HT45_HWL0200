@@ -1302,9 +1302,9 @@ void APP_CmdLcdCtrlHandler(void)
 	{
 		// 查看名单里是否有此答题器
 		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+7 + i*57, 4))
-		{			
+		{		
 			//bit1作为是否有回显标志位
-			if(RADIO.RX.PackData[2] & 0x02)
+			if(RADIO.RX.PackData[2+i*57] & 0x02)
 			{
 				// 查看是否是新的回显信息
 				if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+3 + i*57, 4))
@@ -1317,13 +1317,13 @@ void APP_CmdLcdCtrlHandler(void)
 			}
 			
 			// bit0作为是否有ACK标志位
-			if(RADIO.RX.PackData[2] & 0x01)
+			if(RADIO.RX.PackData[2+i*57] & 0x01)
 				APP.QUE.AnsweredFlg = true;				
 			
 			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		
 			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+11 + i*57, LCD.DATA.Scene[0]);
-						
+			
 			// 返回回显确认信息
 			RADIO.TX.EchoLen = 28;	
 			
