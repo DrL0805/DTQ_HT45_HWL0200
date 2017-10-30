@@ -1297,6 +1297,9 @@ void APP_CmdLcdCtrlHandler(void)
 	*/
 	uint8_t i;
 	static uint8_t  EchoSeq[4];				// 回显序号
+	uint8_t TmpBuf[64];
+	
+	memset(TmpBuf, 0x00, 64);
 	
 	for(i = 0;i < ((RADIO.RX.PackLen-2) / 57);i++) 
 	{
@@ -1311,8 +1314,11 @@ void APP_CmdLcdCtrlHandler(void)
 				{
 					memcpy(EchoSeq, RADIO.RX.PackData+3 + i*57, 4);				
 					APP.EchoCnt++;
-					LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 					LCD.DATA.ScenePos = 0;	
+					
+					// 如果全为0，不刷新LCD屏幕
+//					if(!ArrayCmp(TmpBuf, RADIO.RX.PackData+11 + i*57, 48))
+						LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 				}				
 			}
 			
