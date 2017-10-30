@@ -18,6 +18,8 @@
 #include "app_fifo.h"
 #include "nrf_drv_wdt.h"
 
+#include "drl_err.h"
+
 #include "simple_uart.h"
 #include "uart.h"
 #include "timers.h"
@@ -40,7 +42,7 @@
 // 软件版本 -----------------------------------------------------------
 #define 	VERSION_PROTOCOL	(1)			//版本支持的协议,1表示自有协议
 #define 	VERSION_LEVEL_1		(2)			//一级版本号
-#define     VERSION_LEVEL_2		(0)			//二级版本号
+#define     VERSION_LEVEL_2		(7)			//二级版本号
 
 
 #define 	SYS_SLEEP_DEBUG		(1)

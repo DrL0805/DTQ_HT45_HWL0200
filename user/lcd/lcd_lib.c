@@ -457,6 +457,17 @@ void LCD_DisDigit(uint8_t Pos, uint32_t Digit)
 	LCD_DRV_DisplayDigit(Pos+2,Digit%10);			
 }
 
+void LCD_DisVer(void)
+{
+	// Ver: HWL-SSLK
+	uint8_t VerBuf[16] = {0x56, 0x65, 0x72, 0x3A, 0x48, 0x57, 0x4C, 0x2d, 0x53, 0x53, 0x4c, 0x4b};
+	
+	LCD_DRV_DisplayN(20, 12, VerBuf+4);
+	
+	LCD_DRV_DisplayDigit(34, VERSION_PROTOCOL);
+	LCD_DRV_DisplayDigit(36, VERSION_LEVEL_1);
+	LCD_DRV_DisplayDigit(38, VERSION_LEVEL_2);
+}
 
 
 

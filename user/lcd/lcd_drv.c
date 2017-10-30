@@ -70,7 +70,7 @@ void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode)
 		case LCD_DRV_DOT_ASCII:	// asciiÂë			
 			if((uint8_t)DotCode > 0x20)
 			{
-				memcpy(DotBuf, ascii_dot[(uint8_t)DotCode-0x20], 16);
+				memcpy(DotBuf, ascii_songti[(uint8_t)DotCode-0x20], 16);
 			}
 			else
 			{

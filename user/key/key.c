@@ -121,6 +121,8 @@ void KEY_Scan(void)
 	static uint8_t KEY_NextValue = 0;				// 之后扫描到的值,用于与第一次扫描的到值进行比较
 	static bool	CombinationKeyFlg = false;			// 组合键被按下标志
 	
+	static uint8_t KEY_CombinationValue;			// 保存组合键的值
+	
 	if(true == KEY.PressFlg)
 	{
 		KEY.PressFlg = false;
@@ -170,13 +172,18 @@ void KEY_Scan(void)
 					if(KEY_NextValue != KEY_FirstValue)
 					{
 						CombinationKeyFlg = true;
+						KEY_CombinationValue = KEY_NextValue;					
 					}
 				}
 				else							// 所有按键都被释放
 				{
-					if(CombinationKeyFlg)		// 组合键暂时作为无效按键
+					if(CombinationKeyFlg)		// 组合键
 					{
-						CombinationKeyFlg  = false;			
+						CombinationKeyFlg  = false;	
+						if(KEY_CombinationValue == 0x25)	// 抢红包+D
+						{
+							LCD_DisVer();
+						}
 					}
 					else
 					{

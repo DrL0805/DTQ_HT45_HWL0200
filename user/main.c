@@ -75,8 +75,9 @@ int main (void)
 				break;
 		}
 		APP_ParUpdate();
-//		MAIN_DebugFun();
-		WDT_FeedDog();			
+		MAIN_DebugFun();
+		WDT_FeedDog();	
+		drERR_ErrHandler();
 		// 若接收缓存数据全部处理完成，休眠
 		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg || !APP.NFCIrqFlg)
 		{
@@ -97,6 +98,7 @@ static void MAIN_DebugFun(void)
 //	W25_FlashPageWrite(WriteBuf, addr, 5);
 //	
 //	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
+	drERROR_CHECK(22);
 }
 
 
