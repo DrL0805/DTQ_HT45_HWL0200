@@ -322,6 +322,9 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 		case BATTERY_LEVEL_3:
 			memcpy(BatteryDot, Battery_3, 64);
 			break;
+		case BATTERY_LEVEL_OFF:
+			memset(BatteryDot, 0x00, 64);
+			break;
 		default:
 //			memset(BatteryDot, 0x00, 64);
 			break;

@@ -11,6 +11,14 @@ void POWER_Init(void)
 	POWER_DCDCEnable();
 }
 
+// 51822深度休眠
+void POWER_SysPowerOff(void)
+{
+	GPIO_Default();							//关机前GPIO配置为高阻态，防止其他按键唤醒系统
+	nrf_gpio_cfg_sense_input(KEY_PWR, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_SENSE_LOW);			
+	NRF_POWER->SYSTEMOFF = 1;				//进入休眠模式	
+}
+
 //关机函数
 void POWER_SysOnToOff(void)
 {

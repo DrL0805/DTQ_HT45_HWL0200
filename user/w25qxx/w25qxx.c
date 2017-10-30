@@ -151,11 +151,11 @@ void W25_SpiReadHanziDot(uint8_t *DotBuf, uint16_t GBKCode)
 	GBKL = GBKCode &  0xFF;
 	
 	
-	if(GBKH < 0x7F)
+	if(GBKL < 0x7F)
 	{
 		Addr = ((GBKH - 0x81) * 190 + GBKL - 0x40) * 32;
 	}
-	else
+	else		
 	{
 		Addr = ((GBKH - 0x81) * 190 + GBKL - 0x41) * 32;
 	}

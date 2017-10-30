@@ -85,11 +85,18 @@ void APP_ParUpdate(void)
 		
 		TEST.TxFaiCnt = 0;
 		TEST.TxSucCnt = 0;
+
+		// Èô´ðÌâÆ÷ÐÝÃß£¬Ë¢¿¨»½ÐÑ
+		if(SYS_SLEEP == POWER.SysState)
+		{
+			POWER_SysSleepToOn();
+		}
 		
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
 //	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 //	LCD_DisDigit(12, ++TmpCnt);		
+		
 	}
 }
 

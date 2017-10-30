@@ -16,7 +16,7 @@
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
-#define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
+#define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30000,	APP_TIMER_PRESCALER)
 #define ADC_TIMEOUT_INTERVAL    					APP_TIMER_TICKS(997,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 #define ADC_FIRST_SAMPLE_TIMEOUT_INTERVAL    		APP_TIMER_TICKS(42,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 //#define TX_ATTEND_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1100,APP_TIMER_PRESCALER) 
@@ -27,6 +27,9 @@
 #define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
 #define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
 #define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
+#define LOW_POWER_PROMPT_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
+
+
 
 APP_TIMER_DEF(temp_timer_id);
 APP_TIMER_DEF(lcd_timer_id);					/* LCD定时刷新 */
@@ -45,6 +48,9 @@ APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 APP_TIMER_DEF(watch_dog_timer_id);
 APP_TIMER_DEF(key_freq_ctrl_timer_id);			/*  按键频率控制定时器 */
+APP_TIMER_DEF(low_power_prompt_timer_id);		/*  低电量提示报警 */
+
+
 
 TIMER_PARAMETERS_T	TIMER;
 
@@ -67,8 +73,8 @@ void TIMERS_Init(void)
 	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
 	APP_ERROR_CHECK(err_code);	
 	
-//	err_code = app_timer_create(&key_power_timer_id,APP_TIMER_MODE_REPEATED,TIMER_KeyPowerHandler);	
-//	APP_ERROR_CHECK(err_code);
+	err_code = app_timer_create(&low_power_prompt_timer_id,APP_TIMER_MODE_REPEATED,TIMER_LowPowerPromptHandler);	
+	APP_ERROR_CHECK(err_code);
 	
 	err_code = app_timer_create(&rx_window_timer_id,APP_TIMER_MODE_REPEATED,TIMER_RxWindowHandler);
 	APP_ERROR_CHECK(err_code);	
@@ -334,43 +340,40 @@ void TIMER_SysStateHandler(void * p_context)
 	#endif
 }
 
-//void TIMER_KeyPowerStart(void)
-//{
-//	uint32_t err_code;
-//	
-//	err_code = app_timer_start(key_power_timer_id,KEY_POWER_TIMEOUT_INTERVAL,NULL);
-//	APP_ERROR_CHECK(err_code);
-//	TIMER_ErrCheck(err_code);
-//}
+void TIMER_LowPowerPromptStart(void)
+{
+	uint32_t err_code;
+	
+	err_code = app_timer_start(low_power_prompt_timer_id,LOW_POWER_PROMPT_TIMEOUT_INTERVAL,NULL);
+	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
+}
 
 
-//void TIMER_KeyPowerStop(void)
-//{
-//	uint32_t err_code;
-//	err_code = app_timer_stop(key_power_timer_id);
-//	APP_ERROR_CHECK(err_code);
-//	TIMER_ErrCheck(err_code);
-//}
+void TIMER_LowPowerPromptStop(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_stop(low_power_prompt_timer_id);
+	APP_ERROR_CHECK(err_code);
+	TIMER_ErrCheck(err_code);
+}
 
 
-//void TIMER_KeyPowerHandler(void * p_context)
-//{
-//	if(0x00 == nrf_gpio_pin_read(KEY_PWR))
-//	{	
-//		switch(POWER.SysState)
-//		{
-//			case SYS_ON:
-//			case SYS_TEST:
-//				POWER_SysOnToOff();
-//				break;
-//			case SYS_OFF:
-//				POWER_SysOffToOn();
-//				break;
-//			default:
-//				break;
-//		}
-//	}
-//}
+void TIMER_LowPowerPromptHandler(void * p_context)
+{
+	static bool	TmpFlg = false;
+	
+	if(TmpFlg)
+	{
+		TmpFlg = false;
+		LCD_DisplayBattery(BATTERY_LEVEL_OFF);
+	}
+	else
+	{
+		TmpFlg = true;
+		LCD_DisplayBattery(BATTERY_LEVEL_0);	
+	}
+}
 
 void TIMER_ADCStart(void)
 {

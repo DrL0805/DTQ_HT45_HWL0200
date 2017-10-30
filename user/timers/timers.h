@@ -42,9 +42,9 @@ void TIMER_SysStateStart(void);
 void TIMER_SysStateStop(void);
 void TIMER_SysStateHandler(void * p_context);
 
-//void TIMER_KeyPowerStart(void);
-//void TIMER_KeyPowerStop(void);
-//void TIMER_KeyPowerHandler(void * p_context);
+void TIMER_LowPowerPromptStart(void);
+void TIMER_LowPowerPromptStop(void);
+void TIMER_LowPowerPromptHandler(void * p_context);
 
 void TIMER_ADCStart(void);
 void TIMER_ADCStop(void);

@@ -114,33 +114,65 @@ void bubbleSort(int16_t *buf, uint16_t len)
     } 
 } 
 
-
+/*
+	大于2900：显示3格
+	2900~2800：显示2格
+	2800~2700：显示1个
+	2700~2650：显示0格并闪动
+	小于2650：自动关机
+*/
 void ADC_LcdDisValue(void)
 {
-	
 	//"施密特"原理，
 	//注意：第一次显示的时候不能用"施密特"，因为有可能采集的电压刚好不在范围内，导致不显示	
 	if(ADC.FirstSampleFlg)
 	{
 		if(ADC.LatestADCVal >= 2900)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_3);
+		}
 		else if(ADC.LatestADCVal >= 2800 && ADC.LatestADCVal < 2900)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_2);
+		}
 		else if(ADC.LatestADCVal >= 2700 && ADC.LatestADCVal < 2800)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_1);
-		else
+		}
+		else if(ADC.LatestADCVal >= 2650 && ADC.LatestADCVal < 2700)
+		{
+			TIMER_LowPowerPromptStart();
 			LCD_DisplayBattery(BATTERY_LEVEL_0);
+		}	
+		else	
+		{
+			POWER_SysOnToOff();
+		}
 	}
-	else
+	else	
 	{
 		if(ADC.LatestADCVal > 2920)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_3);
+		}
 		else if(ADC.LatestADCVal > 2820 && ADC.LatestADCVal < 2880)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_2);
+		}		
 		else if(ADC.LatestADCVal > 2720 && ADC.LatestADCVal < 2780)
+		{
 			LCD_DisplayBattery(BATTERY_LEVEL_1);
-		else if(ADC.LatestADCVal < 2680)
-			LCD_DisplayBattery(BATTERY_LEVEL_0);			
+		}		
+		else if(ADC.LatestADCVal > 2630 && ADC.LatestADCVal < 2680)
+		{
+			TIMER_LowPowerPromptStart();
+			LCD_DisplayBattery(BATTERY_LEVEL_0);		
+		}
+		else
+		{
+			POWER_SysOnToOff();
+		}
+				
 	}	
 	
 	ADC.FirstSampleFlg = false;

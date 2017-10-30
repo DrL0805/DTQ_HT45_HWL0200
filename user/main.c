@@ -43,9 +43,10 @@ int main (void)
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
 //	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-//	LCD_DisDigit(12, ++TmpCnt);		
+//	LCD_DisDigit(12, ++TmpCnt);
 	
 //	TIMER_TempStart();
+	
 	
 	while(true)
 	{
