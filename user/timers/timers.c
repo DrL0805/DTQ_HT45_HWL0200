@@ -572,14 +572,22 @@ void TIMER_SendAllowHandler(void * p_context)
 
 void TIMER_TxRandomDelayStart(void)
 {
-	uint32_t err_code;								
-	uint32_t random_delay;							
-													
-	random_delay = 5 + (GetRandomNumber() >> 2);	// 除以4	
+//	uint32_t err_code;								
+//	uint32_t random_delay;							
+//	
+//	random_delay = 5 + (GetRandomNumber() >> 2);	// 除以2	
+//	
+//	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
+//	APP_ERROR_CHECK(err_code);
+//	TIMER_ErrCheck(err_code);
 	
-	err_code = app_timer_start(tx_random_delay_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
-	APP_ERROR_CHECK(err_code);
-	TIMER_ErrCheck(err_code);
+	uint32_t err_code;
+	uint32_t random_delay = 0;
+
+	// tick= 30.517us，随机延时：305.17us~62.56ms，
+	random_delay = 10 +  GetRandomNumber() * 8;	
+	err_code = app_timer_start(tx_random_delay_timer_id,random_delay,NULL);
+	APP_ERROR_CHECK(err_code);	
 }
 
 

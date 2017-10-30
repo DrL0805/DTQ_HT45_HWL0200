@@ -45,7 +45,7 @@
 #define     VERSION_LEVEL_2		(7)			//¶þ¼¶°æ±¾ºÅ
 
 
-#define 	SYS_SLEEP_DEBUG		(1)
+#define 	SYS_SLEEP_DEBUG		(0)
 
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);
