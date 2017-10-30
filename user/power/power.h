@@ -7,10 +7,10 @@
 
 typedef enum 
 {			 
-	SYS_OFF, 							//关机
-	SYS_ON, 							//开机
-	SYS_SLEEP,							//休眠
-	SYS_TEST,							//系统测试
+	SYS_OFF, 							// 关机
+	SYS_ON, 							// 开机
+	SYS_SLEEP,							// 休眠
+	SYS_TEST,							// 系统测试
 	SYS_MATCH							// 无线配对
 }POWER_SYSTEM_STATE_TYPE;
 

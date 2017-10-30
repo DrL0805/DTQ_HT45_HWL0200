@@ -144,7 +144,7 @@ void ADC_LcdDisValue(void)
 			TIMER_LowPowerPromptStart();
 			LCD_DisplayBattery(BATTERY_LEVEL_0);
 		}	
-		else	
+		else if( ADC.LatestADCVal < 2630)
 		{
 			POWER_SysOnToOff();
 		}
@@ -168,7 +168,7 @@ void ADC_LcdDisValue(void)
 			TIMER_LowPowerPromptStart();
 			LCD_DisplayBattery(BATTERY_LEVEL_0);		
 		}
-		else
+		else if(ADC.LatestADCVal < 2630)
 		{
 			POWER_SysOnToOff();
 		}

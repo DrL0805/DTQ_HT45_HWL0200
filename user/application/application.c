@@ -86,8 +86,13 @@ void APP_ParUpdate(void)
 		TEST.TxFaiCnt = 0;
 		TEST.TxSucCnt = 0;
 
-		// 若答题器休眠，刷卡唤醒
-		if(SYS_SLEEP == POWER.SysState)
+		// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
+		if(SYS_ON == POWER.SysState)
+		{
+			TIMER_SysStateStop();				//30S休眠定时器开启
+			TIMER_SysStateStart();				//30S休眠定时器开启			
+		}
+		else if(SYS_SLEEP == POWER.SysState)
 		{
 			POWER_SysSleepToOn();
 		}

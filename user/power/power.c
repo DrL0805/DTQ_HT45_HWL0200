@@ -63,6 +63,7 @@ void POWER_SysSleepToOn(void)
 	
 	TIMER_ADCStart();
 	
+	TIMER_SysStateStop();				//30S休眠定时器开启
 	TIMER_SysStateStart();				//30S休眠定时器开启
 	
 	LCD_WakeUp();
