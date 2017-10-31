@@ -12,7 +12,7 @@ typedef struct
 
 extern TIMER_PARAMETERS_T	TIMER;
 
-void TIMERS_Init(void);
+uint32_t TIMERS_Init(void);
 void TIMER_EventHandler(void);
 void TIMER_ErrCheck(uint32_t ErrCode);
 

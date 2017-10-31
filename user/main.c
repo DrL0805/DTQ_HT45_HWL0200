@@ -10,22 +10,21 @@ int main (void)
 	POWER.SysInitializedFlg = false;
 	
 	GPIO_Default();
-	CLOCK_Init();
-//	DEBUG_Init();
 	
-	TIMERS_Init();
-	KEY_Init();
+	drERROR_CHECK(CLOCK_Init());
+	drERROR_CHECK(DEBUG_Init());
+	drERROR_CHECK(TIMERS_Init());
+	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
-	FLASH_Init();
-	POWER_Init();	
-	APP_Init();
-	
-	RADIO_Init();
-	LED_Init();
-	W25_Init();
-	LCD_Init();
-	ADC_Init();
-	WDT_Init();	
+	drERROR_CHECK(FLASH_Init());
+	drERROR_CHECK(POWER_Init());	
+	drERROR_CHECK(APP_Init());
+	drERROR_CHECK(RADIO_Init());
+	drERROR_CHECK(LED_Init());
+	drERROR_CHECK(W25_Init());
+	drERROR_CHECK(LCD_Init());
+	drERROR_CHECK(ADC_Init());
+	drERROR_CHECK(WDT_Init());	
 	
 //	W25_ReadTestData();
 	
@@ -39,11 +38,6 @@ int main (void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
-	
-//	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-//	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-//	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-//	LCD_DisDigit(12, ++TmpCnt);
 	
 	TIMER_TempStart();
 	

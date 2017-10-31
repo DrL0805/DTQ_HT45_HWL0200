@@ -3,8 +3,6 @@
 
 #include "main.h"
 
-#define 	USE_WATCH_DOG
-
 typedef struct
 {
 	bool 	FeedFlg;
@@ -12,7 +10,7 @@ typedef struct
 
 extern WATCHDOG_PAR_T			 WDT;
 
-void WDT_Init(void);
+uint32_t WDT_Init(void);
 void WDT_FeedDog(void);
 
 

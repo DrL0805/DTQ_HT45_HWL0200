@@ -69,10 +69,12 @@ const uint8_t Signal_0[64] = {
 /* Functions ----------------------------------------------------*/
 
 
-void LCD_Init(void)
+uint32_t LCD_Init(void)
 {
 	LCD_DRV_Init();	
 	LCD.DATA.Scene[0] = 48;
+	
+	
 }
 
 

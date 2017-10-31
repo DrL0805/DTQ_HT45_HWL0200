@@ -16,21 +16,19 @@ RADIO_PARAMETERS_T 			RADIO;
 
 static uint32_t RADIO_Config(void);
 
-void RADIO_Init(void)
+uint32_t RADIO_Init(void)
 {
 	ret_code_t err_code;
-	
-
 	
 	//Ä¬ÈÏ²ÎÊý
 	RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
 	RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
 	RADIO.IM.TxPower = RADIO.MATCH.TxPower;
-	
 
-	
 	err_code = RADIO_Config();
     APP_ERROR_CHECK(err_code);
+	
+	return drERROR_RADIO_SUCCESS;
 }
 
 void RADIO_WakeUp(void)

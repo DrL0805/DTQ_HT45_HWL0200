@@ -36,10 +36,12 @@ FLASH_PARAMETERS_T 		FLASH;
 
 // Locals -------------------------------------------------------------
 
-void FLASH_Init(void)
+uint32_t FLASH_Init(void)
 {
 	// 使用51822最后一页flash来存储用户数据
 	FLASH.UserAddr = (uint32_t *)(NRF_FICR->CODEPAGESIZE * (NRF_FICR->CODESIZE - 1));	
+
+	return drERROR_SUCCESS;
 }
 
 

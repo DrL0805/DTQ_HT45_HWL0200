@@ -25,7 +25,7 @@ typedef struct
 
 extern adc_struct_t				ADC;
 
-void ADC_Init(void);
+uint32_t ADC_Init(void);
 void ADC_Update(void);
 void ADC_StartSample(void);
 void ADC_LcdDisValue(void);

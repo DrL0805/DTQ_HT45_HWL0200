@@ -105,7 +105,7 @@ typedef struct
 }APP_PARAMETERS_T;
 
 
-void APP_Init(void);
+uint32_t APP_Init(void);
 
 void APP_ParUpdate(void);
 

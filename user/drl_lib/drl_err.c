@@ -11,15 +11,15 @@ drERR_PATAMETERS_T			ERR;
 
 // Locals -------------------------------------------------------------
 
-uint32_t drERR_Init(void)
+drErrType drERR_Init(void)
 {
-
+	
 	return drERROR_SUCCESS;
 }
 
-void drERR_ErrCheck(uint32_t err_code)
+void drERR_ErrCheck(drErrType err_code)
 {
-	uint32_t i;
+	drErrType i;
 	
 //	switch(err_code)
 //	{
@@ -46,7 +46,7 @@ void drERR_ErrCheck(uint32_t err_code)
 void drERR_ErrHandler(void)
 {
 	char * ErrString = " Error:					";
-	uint32_t i;
+	drErrType i;
 	
 	if(ERR.HintFlg)
 	{

@@ -28,7 +28,7 @@
 #define RTS_PIN_NUMBER_2 26    // Not used if HWFC is set to false
 #define HWFC_2           false // UART hardware flow control
 
-void DEBUG_Init(void);
+uint32_t DEBUG_Init(void);
 void UART_PrintfNByte(uint8_t *buf,uint8_t len);
 
 void UART_Init(void);

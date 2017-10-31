@@ -12,9 +12,9 @@ void wdt_event_handler(void)
 } 
 
 
-void WDT_Init(void)
+uint32_t WDT_Init(void)
 {	
-	#ifdef USE_WATCH_DOG
+	#if USE_WATCH_DOG
 	
 	uint32_t err_code = NRF_SUCCESS;
 	
@@ -31,6 +31,8 @@ void WDT_Init(void)
 	WDT.FeedFlg = false;
 	
 	#endif
+	
+	return drERROR_SUCCESS;
 }
 
 

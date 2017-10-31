@@ -15,7 +15,7 @@ typedef struct
 }FLASH_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------
-extern void FLASH_Init(void);
+extern uint32_t FLASH_Init(void);
 extern void FLASH_WriteJsqUID(uint8_t *UID);
 extern void flash_page_erase(uint32_t * page_address);
 extern void flash_word_write(uint32_t * address, uint32_t value);

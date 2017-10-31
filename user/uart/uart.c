@@ -1,9 +1,15 @@
 #include "uart.h"
 
 
-void DEBUG_Init(void)
+uint32_t DEBUG_Init(void)
 {
+	#if USE_UART_DEBUG
+	
 	UART_Init();
+	
+	#endif
+	
+	return drERROR_SUCCESS;
 }
 
 //打印连续N个字节

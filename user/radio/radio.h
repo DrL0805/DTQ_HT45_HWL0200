@@ -148,7 +148,7 @@ extern RADIO_PARAMETERS_T 			RADIO;
 
 
 //外部函数声明
-void RADIO_Init(void);
+uint32_t RADIO_Init(void);
 void RADIO_WakeUp(void);
 void RADIO_Sleep(void);
 void RADIO_RxDataHandler(void);

@@ -3,12 +3,14 @@
 
 POWER_PARAMETERS_T		POWER;
 
-void POWER_Init(void)
+uint32_t POWER_Init(void)
 {
 	//结构体参数初始化
 	POWER.SysState = SYS_ON;
 	
 	POWER_DCDCEnable();
+	
+	return drERROR_SUCCESS;
 }
 
 // 51822深度休眠

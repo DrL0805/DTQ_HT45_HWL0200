@@ -14,7 +14,7 @@
 
 APP_PARAMETERS_T		APP;
 
-void APP_Init(void)
+uint32_t APP_Init(void)
 {
 	APP.ProjState = PROJECT_DEBUG;
 	
@@ -37,6 +37,8 @@ void APP_Init(void)
 		RADIO.MATCH.RxChannal = NRF_DEFAULT_RX_CHANNEL;		
 		RADIO.MATCH.TxPower = NRF_DEFAULT_TX_POWER;
 	}
+	
+	return drERROR_SUCCESS;
 }
 
 
@@ -1301,9 +1303,7 @@ void APP_CmdLcdCtrlHandler(void)
 					APP.EchoCnt++;
 					LCD.DATA.ScenePos = 0;	
 					
-					// 如果全为0，不刷新LCD屏幕
-//					if(!ArrayCmp(TmpBuf, RADIO.RX.PackData+11 + i*57, 48))
-						LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+					LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 				}				
 			}
 			
@@ -1339,48 +1339,6 @@ void APP_CmdLcdCtrlHandler(void)
 			break;				
 		}
 	}	
-	
-//	for(i = 0;i < ((RADIO.RX.PackLen-2) / 56);i++) 
-//	{
-//		// 查看名单里是否有此答题器
-//		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+6 + i*56, 4))
-//		{			
-//			// 查看是否是新的回显信息
-//			if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+2 + i*56, 4))
-//			{
-//				memcpy(EchoSeq, RADIO.RX.PackData+2 + i*56, 4);				
-//				APP.EchoCnt++;
-//				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-//				LCD.DATA.ScenePos = 0;
-//			}
-//			
-//			// 根据指令更新LCD显示	
-//			LCD.DATA.Scene[0] = 48;		
-//			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+10 + i*56, LCD.DATA.Scene[0]);
-//						
-//			// 返回回显确认信息
-//			RADIO.TX.EchoLen = 27;	
-//			
-//			RADIO.TX.EchoData[0] = NRF_DATA_HEAD;					// 头
-//			memcpy(RADIO.TX.EchoData+1, RADIO.MATCH.DtqUid, 4);		// 源UID
-//			memcpy(RADIO.TX.EchoData+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
-//			RADIO.TX.EchoData[9] = 0x11;							// 设备ID
-//			RADIO.TX.EchoData[10] = 0x20;
-//			RADIO.TX.EchoData[11] = 0;								// 回显指令的帧号/包号都为0
-//			RADIO.TX.EchoData[12] = 0;
-//			RADIO.TX.EchoData[13] = 0;								// 扩展字节长度
-//			RADIO.TX.EchoData[14] = 10;					// PackLen
-//			RADIO.TX.EchoData[15] = CMD_LCD_CTRL;		// 命令类型
-//			RADIO.TX.EchoData[16] = 8;					// 命令长度，
-//			memcpy(RADIO.TX.EchoData+17, RADIO.RX.PackData+2+i*56, 4);	// 序列号原样返回
-//			memcpy(RADIO.TX.EchoData+21, RADIO.MATCH.DtqUid, 4);
-//			RADIO.TX.EchoData[25] = XOR_Cal(RADIO.TX.EchoData+1, RADIO.TX.EchoLen - 3);
-//			RADIO.TX.EchoData[26] = NRF_DATA_END;
-//			
-//			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
-////			break;				
-//		}
-//	}
 }
 
 

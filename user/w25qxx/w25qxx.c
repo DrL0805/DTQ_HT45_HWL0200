@@ -12,7 +12,7 @@
 // Locals -------------------------------------------------------------
 static uint32_t* spi_base_address;
 
-void W25_Init(void)
+uint32_t W25_Init(void)
 {
 	uint8_t FlashReadBuffer[255];	
 	
@@ -24,6 +24,8 @@ void W25_Init(void)
 	}
 	
 	W25_SpiFlashBufferRead(FlashReadBuffer, 0, 32);
+	
+	return drERROR_SUCCESS;
 }
 
 

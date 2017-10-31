@@ -14,7 +14,7 @@ key_struct_t  KEY;
 
 /*-------------------------------- Revision record ---------------------------------------*/
 
-void KEY_Init(void)
+uint32_t KEY_Init(void)
 {
 	ret_code_t err_code;
 	
@@ -31,6 +31,8 @@ void KEY_Init(void)
 	KEY.ScanState		 = KEY_ONE;		//当前按键检测的状态
 	KEY.ScanValue		 = 0;			//按键扫描结果
 	KEY.FnCombFlg 		 = false;
+	
+	return drERROR_SUCCESS;
 }
 
 void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)

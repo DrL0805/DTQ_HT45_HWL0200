@@ -13,9 +13,11 @@ void LED_PerInit(void);
 
 
 
-void LED_Init(void)
+uint32_t LED_Init(void)
 {
 	nrf_gpio_cfg_output(LED_0);
+	
+	return drERROR_SUCCESS;
 }
 
 

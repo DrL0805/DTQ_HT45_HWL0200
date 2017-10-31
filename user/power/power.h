@@ -24,7 +24,7 @@ typedef struct
 
 extern POWER_PARAMETERS_T		POWER;
 
-void POWER_Init(void);
+uint32_t POWER_Init(void);
 void POWER_SysPowerOff(void);
 void POWER_SysOnToOff(void);
 void POWER_SysOnToSleep(void);

@@ -130,7 +130,7 @@ typedef struct
 extern key_struct_t  KEY;
 	
 
-extern void KEY_Init(void);
+extern uint32_t KEY_Init(void);
 extern void KEY_Scan(void);
 void KEY_PowerPinInit(void);
 void KEY_NFCPinInit(void);

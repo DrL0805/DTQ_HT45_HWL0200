@@ -27,7 +27,7 @@ static void bubbleSort(int16_t *buf, uint16_t len);
 static void swap(int16_t *a, int16_t *b);
 /*----------------------------------------------------------------------------------------*/
 
-void ADC_Init(void)
+uint32_t ADC_Init(void)
 {
     ret_code_t ret_code;
     nrf_drv_adc_config_t config = NRF_DRV_ADC_DEFAULT_CONFIG;
