@@ -47,6 +47,7 @@ int main (void)
 	
 //	TIMER_TempStart();
 	
+	APP_PwrOnRequest();
 	
 	while(true)
 	{

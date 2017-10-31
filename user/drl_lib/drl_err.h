@@ -33,8 +33,8 @@ typedef struct
 
 // 	13.56M相关ERR_CODE
 #define drERROR_1356M_BASE_NUM				(0x10)
-#define drERROR_1356M_CRC_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 1)
-
+#define drERROR_1356M_CRC_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 1)		// CRC校验错误
+#define drERROR_1356M_ID_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 2)		// UID读取失败
 
 	
 // Functions ----------------------------------------------------------

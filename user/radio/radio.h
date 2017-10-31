@@ -50,9 +50,7 @@ typedef enum
 
 // 链路层发送的数据类型
 typedef enum
-{
-	RADIO_TX_KEY_ANSWER,
-	
+{	
 	RADIO_TX_NEED_RETRY,			// 需要重发
 	RADIO_TX_NO_RETRY,				// 无需重发，只发送一次
 	RADIO_TX_NO_RETRY_RANDOM_DELAY,	// 无需重发，随机延时后在发送

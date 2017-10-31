@@ -54,21 +54,21 @@ void NFC_Init(void)
 	
 	TmpLen = NFC.DataRead[0] << 8 | NFC.DataRead[1];		//解析M24SR存储的数据长度
 	
-//	if(TmpLen > 10)											//长度太短肯定是错的
-//	{
-//		if(XOR_Cal(NFC.DataRead+2,TmpLen - 3) == NFC.DataRead[TmpLen - 1])
-//		{
+	if(TmpLen > 10)											//长度太短肯定是错的
+	{
+		if(XOR_Cal(NFC.DataRead,TmpLen - 1) == NFC.DataRead[TmpLen - 1])
+		{
 			NFC.MatchSucceedFlg = true;
-//		}
-//		else
-//		{
-//			NFC.MatchSucceedFlg = false;
-//		}	
-//	}
-//	else
-//	{
-//		NFC.MatchSucceedFlg = false;
-//	}
+		}
+		else
+		{
+			NFC.MatchSucceedFlg = false;
+		}	
+	}
+	else
+	{
+		NFC.MatchSucceedFlg = false;
+	}
 }
 
 

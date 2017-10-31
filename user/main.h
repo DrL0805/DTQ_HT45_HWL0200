@@ -44,6 +44,7 @@
 #define 	VERSION_LEVEL_1		(2)			//一级版本号
 #define     VERSION_LEVEL_2		(7)			//二级版本号
 
+#define     VERSION_LEVEL_STRING	"Ver: 1.2.7"
 
 #define 	SYS_SLEEP_DEBUG		(0)
 

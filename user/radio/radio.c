@@ -241,7 +241,7 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 {
 	switch (LinkTxType)
     {
-    	case RADIO_TX_KEY_ANSWER:
+    	case RADIO_TX_NEED_RETRY:
 			RADIO.IM.TxIngFlg = true;
 			RADIO.IM.ReTxCount = 0;	
 			

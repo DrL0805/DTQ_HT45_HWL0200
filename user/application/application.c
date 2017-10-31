@@ -358,6 +358,31 @@ void APP_CmdHandler(void)
 	}
 }
 
+// 上电回显请求，
+void APP_PwrOnRequest(void)
+{
+	RADIO.TX.DataLen = 28;	
+	
+	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
+	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
+	memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
+	RADIO.TX.Data[9] = 0x11;							// 设备ID
+	RADIO.TX.Data[10] = 0x20;
+	RADIO.TX.Data[11] = 0;								// 回显指令的帧号/包号都为0
+	RADIO.TX.Data[12] = 0;
+	RADIO.TX.Data[13] = 0;								// 扩展字节长度
+	RADIO.TX.Data[14] = 11;								// PackLen
+	RADIO.TX.Data[15] = CMD_LCD_CTRL;					// 命令类型
+	RADIO.TX.Data[16] = 9;								// 命令长度，
+	RADIO.TX.Data[17] = 0x04;							// 回显请求命令
+	memset(RADIO.TX.Data+18, 0x00, 4);					// 序列号
+	memcpy(RADIO.TX.Data+22, RADIO.MATCH.DtqUid, 4);	// 答题器UID
+	RADIO.TX.Data[26] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[27] = NRF_DATA_END;
+	
+	RADIO_ActivLinkProcess(RADIO_TX_NEED_RETRY);		
+}
+
 /* 按键处理函数-------------------------------------------------------------------- */
 
 // 举手键
@@ -489,7 +514,7 @@ void APP_KeySendHandler(void)
 	RADIO.TX.Data[40] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
-	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);
+	RADIO_ActivLinkProcess(RADIO_TX_NEED_RETRY);
 }
 
 void APP_KeyMultiSendHandler(void)
@@ -579,7 +604,7 @@ void APP_KeyMultiSendHandler(void)
 	RADIO.TX.Data[55] = NRF_DATA_END;
 	
 	// 把RADIO.TX结构体的数据发送出去
-	RADIO_ActivLinkProcess(RADIO_TX_KEY_ANSWER);	
+	RADIO_ActivLinkProcess(RADIO_TX_NEED_RETRY);	
 }
 
 void APP_KeyLastHandler(void)
@@ -594,89 +619,37 @@ void APP_KeyNextHandler(void)
 
 void APP_KeyFnAdd1Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_VER;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}
+
 }
 
 void APP_KeyFnAdd2Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_RSSI;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}	
+
 }
 
 void APP_KeyFnAdd3Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_VOLTAGE;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}
+
 }
 
 void APP_KeyFnAdd4Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_CHANNAL;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}
+
 }
 
 void APP_KeyFnAdd5Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_ATTEND;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}
+
 }
 
 void APP_KeyFnAdd6Handler(void)
 {
-//	if(PROJECT_DEBUG == APP.ProjState)
-//	{
-//		LCD.DisType = LCD_DIS_DATE;
-//		TIMER_DisVerStop();
-//		TIMER_DisVerStart();		
-//	}
+
 }
 
 void APP_KeyFnAdd7Handler(void)
 {		
-//	if(DEBUG_STATE == APP.SoftWareState)
-//	{
-//		// 要收到题目，自动作答才可用
-//		if(APP.QUES.AnswerIngFlg)
-//		{
-//			if(APP.AutoAnswerSwitchFlg)
-//			{	
-//				// 关闭自动作答功能
-//				APP.AutoAnswerSwitchFlg = false;
-//				TIMER_AutoAnswerStop();		
-//			}
-//			else
-//			{
-//				// 开启自动作答功能
-//				APP.AutoAnswerSwitchFlg = true;
-//				APP.AutoAnswerTxCnt = 0;
-//				APP.AutoAnswerTxSucCnt = 0;
-	
 
-//				TIMER_AutoAnswerStart();		
-//			}
-//		}	
-//	}	
 }
 
 //单选题按键处理函数

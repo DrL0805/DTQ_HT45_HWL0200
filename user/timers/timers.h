@@ -70,9 +70,9 @@ void TIMER_TxResultDisplayStart(void);
 void TIMER_TxResultDisplayStop(void);
 void TIMER_TxResultDisplayHandler(void * p_context);
 
-//void TIMER_DisVerStart(void);
-//void TIMER_DisVerStop(void);
-//void TIMER_DisVerHandler(void * p_context);
+void TIMER_DisVerStart(void);
+void TIMER_DisVerStop(void);
+void TIMER_DisVerHandler(void * p_context);
 
 void TIMER_SendAllowStart(void);
 void TIMER_SendAllowStop(void);

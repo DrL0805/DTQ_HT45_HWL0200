@@ -71,8 +71,8 @@ const uint8_t Signal_0[64] = {
 
 void LCD_Init(void)
 {
-		
 	LCD_DRV_Init();	
+	LCD.DATA.Scene[0] = 48;
 }
 
 
@@ -461,6 +461,9 @@ void LCD_DisVer(void)
 {
 	// Ver: HWL-SSLK
 	uint8_t VerBuf[16] = {0x56, 0x65, 0x72, 0x3A, 0x48, 0x57, 0x4C, 0x2d, 0x53, 0x53, 0x4c, 0x4b};
+//	uint8_t 
+	
+	LCD_DRV_DisplayN(20, 12, VerBuf+4);
 	
 	LCD_DRV_DisplayN(20, 12, VerBuf+4);
 	
