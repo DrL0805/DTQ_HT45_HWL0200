@@ -42,9 +42,10 @@ M24SR_PARAMETERS_T 		NFC;
 	    源代码请参考官方例程
 */
 
-void NFC_Init(void)
+uint32_t NFC_Init(void)
 {
 	uint16_t TmpLen = 0;
+	uint8_t TmpBuf[4] = {0,0,0,0};
 	
 	TT4_Init();	
 	M24SR_GetUID(NFC.UID);
@@ -52,22 +53,29 @@ void NFC_Init(void)
 	M24SR_ManageGPO(INTERRUPT,RF_GPO);		//GPO配置为中断模式
 	M24SR_Deselect();						//释放I2C控制权
 	
-	TmpLen = NFC.DataRead[0] << 8 | NFC.DataRead[1];		//解析M24SR存储的数据长度
+	if(ArrayCmp(NFC.UID+3, TmpBuf, 4))
+	{
+		return drERROR_1356M_ID_ERR;
+	}
 	
+	TmpLen = NFC.DataRead[0] << 8 | NFC.DataRead[1];		//解析M24SR存储的数据长度
 	if(TmpLen > 10)											//长度太短肯定是错的
 	{
 		if(XOR_Cal(NFC.DataRead,TmpLen - 1) == NFC.DataRead[TmpLen - 1])
 		{
 			NFC.MatchSucceedFlg = true;
+			return drERROR_1356M_SUCCESS;
 		}
 		else
 		{
 			NFC.MatchSucceedFlg = false;
+			return drERROR_1356M_CRC_ERR;
 		}	
 	}
 	else
 	{
 		NFC.MatchSucceedFlg = false;
+		return drERROR_1356M_LEN_ERR;
 	}
 }
 

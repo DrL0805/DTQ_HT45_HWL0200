@@ -15,7 +15,7 @@ int main (void)
 	
 	TIMERS_Init();
 	KEY_Init();
-	NFC_Init();
+	drERROR_CHECK(NFC_Init());
 	FLASH_Init();
 	POWER_Init();	
 	APP_Init();
@@ -45,7 +45,7 @@ int main (void)
 //	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 //	LCD_DisDigit(12, ++TmpCnt);
 	
-//	TIMER_TempStart();
+	TIMER_TempStart();
 	
 	APP_PwrOnRequest();
 	
@@ -99,7 +99,7 @@ static void MAIN_DebugFun(void)
 //	W25_FlashPageWrite(WriteBuf, addr, 5);
 //	
 //	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
-	drERROR_CHECK(22);
+//	drERROR_CHECK(22);
 }
 
 

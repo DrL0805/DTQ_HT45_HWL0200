@@ -78,7 +78,7 @@ typedef struct
 
 extern M24SR_PARAMETERS_T NFC;
 
-void NFC_Init(void);
+uint32_t NFC_Init(void);
 uint16_t TT4_Init( void );
 uint16_t TT4_ReadNDEF(uint8_t *pNDEF);
 uint16_t TT4_WriteNDEF(uint8_t *pNDEF);

@@ -64,15 +64,6 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
 				{
 					TIMER_RxWindowReset();		
 				}				
-				
-//				if(RADIO.IM.TxIngFlg)
-//				{
-//					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
-//				}
-//				else
-//				{
-//					TIMER_RxWindowReset();		
-//				}
 			}
             break;
         case NRF_ESB_EVENT_TX_FAILED:

@@ -44,10 +44,11 @@
 #define 	VERSION_LEVEL_1		(2)			//一级版本号
 #define     VERSION_LEVEL_2		(3)			//二级版本号
 
-#define     VERSION_LEVEL_COMPANY	"HWL-SSLK"
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.2.3"
+#define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.2.3              "
+#define		VERSION_LEVEL_TIME		"2017-10-31 09:47        "
 
-#define 	SYS_SLEEP_DEBUG		(0)
+#define 	SYS_NO_SLEEP_DEBUG		(1)
 
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);

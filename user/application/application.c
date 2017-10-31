@@ -422,7 +422,7 @@ void APP_KeySendHandler(void)
 	//若没收到题目，发送键无效
 	if(false == APP.QUE.ReceiveQueFlg)
 	{
-//		LCD_DisDigit(12, 888);	
+		LCD_DisDigit(12, 888);	
 		return;
 	}
 	
@@ -430,7 +430,7 @@ void APP_KeySendHandler(void)
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
 	{
-//		LCD_DisDigit(12, 999);	
+		LCD_DisDigit(12, 999);	
 		return;
 	}
 		
@@ -1200,7 +1200,7 @@ void APP_CmdAckHandler(void)
 						APP.CMD.CmdData[8] << 24 ;
 			if(uSerial == APP.SendCnt)
 			{
-				RADIO.IM.TxSucFlg = true;
+//				RADIO.IM.TxSucFlg = true;
 			}
 		}
 	

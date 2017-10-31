@@ -451,7 +451,7 @@ void LCD_ClearSceneArea(void)
 
 void LCD_DisDigit(uint8_t Pos, uint32_t Digit)
 {
-//	LCD_DRV_DisplayDigit(Pos,(Digit%10000)/1000);
+//	LCD_DRV_DisplayDigit(Pos,  (Digit%10000)/1000);
 	LCD_DRV_DisplayDigit(Pos+0,(Digit%1000)/100);
 	LCD_DRV_DisplayDigit(Pos+1,(Digit%100)/10);
 	LCD_DRV_DisplayDigit(Pos+2,Digit%10);			
@@ -459,8 +459,12 @@ void LCD_DisDigit(uint8_t Pos, uint32_t Digit)
 
 void LCD_DisVer(void)
 {
-	LCD_DRV_DisplayN(20, strlen(VERSION_LEVEL_COMPANY), (uint8_t *)VERSION_LEVEL_COMPANY);
-	LCD_DRV_DisplayN(35, strlen(VERSION_LEVEL_NUMBER), (uint8_t *)VERSION_LEVEL_NUMBER);
+//	LCD_DRV_DisplayN(20, strlen(VERSION_LEVEL_COMPANY), (uint8_t *)VERSION_LEVEL_COMPANY);
+//	LCD_DRV_DisplayN(35, strlen(VERSION_LEVEL_NUMBER), (uint8_t *)VERSION_LEVEL_NUMBER);
+//	LCD_DRV_DisplayN(48, strlen(VERSION_LEVEL_TIME), (uint8_t *)VERSION_LEVEL_TIME);
+	LCD_DRV_DisplayN(16, 16, (uint8_t *)VERSION_LEVEL_COMPANY);
+	LCD_DRV_DisplayN(32, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
+	LCD_DRV_DisplayN(48, 16, (uint8_t *)VERSION_LEVEL_TIME);
 }
 
 
