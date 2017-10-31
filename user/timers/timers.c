@@ -315,7 +315,7 @@ void TIMER_TxOvertimeHandler(void * p_context)
 
 void TIMER_SysStateStart(void)
 {
-	#if SYS_SLEEP_DEBUG
+	#if SYS_NO_SLEEP_DEBUG
 	uint32_t err_code;
 	err_code = app_timer_start(sys_state_timer_id,SYS_STATE_TIMEOUT_INTERVAL,NULL);
 	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
@@ -324,7 +324,7 @@ void TIMER_SysStateStart(void)
 
 void TIMER_SysStateStop(void)
 {
-	#if SYS_SLEEP_DEBUG
+	#if SYS_NO_SLEEP_DEBUG
 	uint32_t err_code;
 	err_code = app_timer_stop(sys_state_timer_id);
 	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
@@ -333,7 +333,7 @@ void TIMER_SysStateStop(void)
 
 void TIMER_SysStateHandler(void * p_context)
 {
-	#if SYS_SLEEP_DEBUG
+	#if SYS_NO_SLEEP_DEBUG
 	POWER_SysOnToSleep();
 	#endif
 }

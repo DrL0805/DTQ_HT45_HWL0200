@@ -74,7 +74,7 @@ uint32_t LCD_Init(void)
 	LCD_DRV_Init();	
 	LCD.DATA.Scene[0] = 48;
 	
-	
+	return drERROR_SUCCESS;
 }
 
 
@@ -457,6 +457,15 @@ void LCD_DisDigit(uint8_t Pos, uint32_t Digit)
 	LCD_DRV_DisplayDigit(Pos+0,(Digit%1000)/100);
 	LCD_DRV_DisplayDigit(Pos+1,(Digit%100)/10);
 	LCD_DRV_DisplayDigit(Pos+2,Digit%10);			
+}
+
+void LCD_DisDigit_5(uint8_t Pos, uint32_t Digit)
+{
+	LCD_DRV_DisplayDigit(Pos+0,(Digit%100000)/10000);
+	LCD_DRV_DisplayDigit(Pos+1,(Digit%10000)/1000);
+	LCD_DRV_DisplayDigit(Pos+2,(Digit%1000)/100);
+	LCD_DRV_DisplayDigit(Pos+3,(Digit%100)/10);
+	LCD_DRV_DisplayDigit(Pos+4,Digit%10);			
 }
 
 void LCD_DisVer(void)

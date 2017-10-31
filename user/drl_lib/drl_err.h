@@ -22,7 +22,7 @@ typedef struct
     do                                                      \
     {                                                       \
         const drErrType LOCAL_ERR_CODE = (ERR_CODE);         \
-        if (LOCAL_ERR_CODE != drERROR_SUCCESS)                  \
+        if ((LOCAL_ERR_CODE&0x00FF) != drERROR_SUCCESS)                  \
         {                                                   \
             drERR_ErrCheck(LOCAL_ERR_CODE);              \
         }                                                   \
@@ -42,7 +42,7 @@ typedef struct
 #define drERROR_CLK_LFCLK_START_TIMEOUT		(drERROR_BASE_NUM + drERROR_CLK_BASE_NUM + 1)			
 #define drERROR_CLK_HFCLK_START_TIMEOUT		(drERROR_BASE_NUM + drERROR_CLK_BASE_NUM + 2)	
 
-	
+
 // 	13.56MÏà¹ØERR_CODE
 #define drERROR_1356M_BASE_NUM				(0x0200)
 #define drERROR_1356M_SUCCESS				(drERROR_SUCCESS)
@@ -52,16 +52,16 @@ typedef struct
 
 // RADIO
 #define drERROR_RADIO_BASE_NUM				(0x0300)		
-#define drERROR_RADIO_SUCCESS					(drERROR_SUCCESS)
-#define drERROR_RADIO_1							(drERROR_BASE_NUM + drERROR_RADIO_BASE_NUM + 1)			
-#define drERROR_RADIO_2							(drERROR_BASE_NUM + drERROR_RADIO_BASE_NUM + 2)	
+#define drERROR_RADIO_SUCCESS				(drERROR_SUCCESS)
+#define drERROR_RADIO_1						(drERROR_BASE_NUM + drERROR_RADIO_BASE_NUM + 1)			
+#define drERROR_RADIO_2						(drERROR_BASE_NUM + drERROR_RADIO_BASE_NUM + 2)	
 	
 	
 // TIMER
 #define drERROR_TIMER_BASE_NUM				(0x0400)		
-#define drERROR_TIMER_SUCCESS					(drERROR_SUCCESS)
-#define drERROR_TIMER_1							(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 1)			
-#define drERROR_TIMER_2							(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 2)	
+#define drERROR_TIMER_SUCCESS				(drERROR_SUCCESS)
+#define drERROR_TIMER_1						(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 1)			
+#define drERROR_TIMER_2						(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 2)	
 
 
 

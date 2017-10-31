@@ -38,6 +38,8 @@ uint32_t ADC_Init(void)
     nrf_drv_adc_channel_enable(&m_channel_config);	
 	
 	ADC.FirstSampleFlg = true;
+	
+	return drERROR_SUCCESS;
 }
 
 void ADC_StartSample(void)

@@ -78,7 +78,7 @@ int main (void)
 		{
 			__WFE();							
 			__WFI();			
-		}		
+		}
 	}
 }
 

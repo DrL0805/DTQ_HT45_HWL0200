@@ -59,7 +59,7 @@ void drERR_ErrHandler(void)
 				if(ERR.ErrState & (0x01 << i))
 				{
 					LCD_DRV_DisplayN(32, 16, (uint8_t *)ErrString);
-					LCD_DisDigit(40, ERR.ErrData[i]);
+					LCD_DisDigit_5(40, ERR.ErrData[i]);
 					break;
 				}
 			}
