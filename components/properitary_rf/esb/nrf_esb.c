@@ -1257,6 +1257,8 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 //			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
 			m_config_local.mode = NRF_ESB_MODE_PTX;
+			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
+			
 			err_code = nrf_esb_set_rf_channel(Channal);
 			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			break;
@@ -1266,9 +1268,12 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			do
 			{
 				i--;
-//			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));
-			}while((i>0) && (get_tx_fifo_count()));	
-			
+			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));
+			if(0 == i)
+			{
+				drERROR_CHECK(drERROR_RADIO_SWITCH_RX_TIMEOUT);
+			}
+				
 			err_code = nrf_esb_flush_tx();
 			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
@@ -1290,7 +1295,11 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			{
 				i--;
 			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));	
-//			}while((i>0) && (get_tx_fifo_count()));	
+			if(0 == i)
+			{
+				drERROR_CHECK(drERROR_RADIO_SWITCH_STOP_TIMEOUT);
+			}
+			
 			err_code = nrf_esb_flush_tx();
 			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			

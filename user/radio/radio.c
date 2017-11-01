@@ -41,7 +41,7 @@ void RADIO_WakeUp(void)
 void RADIO_Sleep(void)
 {
 	TIMER_RxWindowStop();
-	my_esb_mode_change(NRF_ESB_MODE_PRX_STOP, 0);
+	my_esb_mode_change(NRF_ESB_MODE_PRX_STOP, RADIO.IM.RxChannal);
 }
 
 void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
