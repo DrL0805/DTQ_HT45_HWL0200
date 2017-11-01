@@ -45,7 +45,7 @@ int main (void)
 	
 	drTIM_TmpStart();
 	
-	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+//	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	
 	while(true)
 	{
@@ -99,6 +99,7 @@ static void MAIN_DebugFun(void)
 //	
 //	W25_SpiFlashBufferRead(ReadBuf, addr, 5);
 //	drERROR_CHECK(22);
+//	drERROR_CHECK(34);
 }
 
 

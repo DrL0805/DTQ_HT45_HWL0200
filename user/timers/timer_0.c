@@ -122,7 +122,7 @@ void drTIMER_EventHandler(void)
 // 用户定时器 ----------------------------------------------------------------
 void drTIM_TmpStart(void)
 {
-	drTIMER_Start(&drTIM_Tmp, 1);
+	drTIMER_Start(&drTIM_Tmp, 10);
 }
 
 void drTIM_TmpStop(void)
@@ -135,7 +135,7 @@ void drTIM_TmpHandler(void)
 	if(drTIM_Tmp.TimeOutFlg)
 	{
 		drTIM_Tmp.TimeOutFlg = false;
-//		LCD_DisDigit_5(0, TIMER0.TickCnt);
+		LCD_DisDigit(0, TIMER0.TickCnt/10);
 	}
 }
 

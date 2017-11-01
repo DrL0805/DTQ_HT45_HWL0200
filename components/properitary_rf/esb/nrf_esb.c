@@ -1264,7 +1264,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			break;
 		case NRF_ESB_MODE_PRX_START:
 			// 切换模式前，尽量保证RADIO不正在发送数据
-			i = 4096;	// 最大约2ms
+			i = 1024*4;	// 1024约1ms
 			do
 			{
 				i--;
@@ -1282,6 +1282,8 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 //			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
 			m_config_local.mode = NRF_ESB_MODE_PRX;
+			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
+			
 			err_code = nrf_esb_set_rf_channel(Channal);		//只有空闲状态才能重新配置频点、通道、地址等参数	
 			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
@@ -1290,7 +1292,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			break;
 		case NRF_ESB_MODE_PRX_STOP:
 			// 切换模式前，尽量保证RADIO不正在发送数据
-			i = 4096;	// 最大约2ms
+			i = 1024*4;	// 最大约2ms
 			do
 			{
 				i--;

@@ -46,7 +46,8 @@ void drERR_ErrCheck(drErrType err_code)
 void drERR_ErrHandler(void)
 {
 	char * ErrString = " Error:					";
-	drErrType i;
+	drErrType i = 0;
+	drErrType Pos = 0;
 	
 	if(ERR.HintFlg)
 	{
@@ -58,9 +59,9 @@ void drERR_ErrHandler(void)
 				// 检测当前bit是否保存有错误信息，若有，则处理
 				if(ERR.ErrState & (0x01 << i))
 				{
-					LCD_DRV_DisplayN(32, 16, (uint8_t *)ErrString);
-					LCD_DisDigit_5(40, ERR.ErrData[i]);
-					break;
+					LCD_DRV_DisplayN(16, 16, (uint8_t *)ErrString);
+					LCD_DisDigit_5(32+8*Pos, ERR.ErrData[i]);
+					Pos++;
 				}
 			}
 		}		
