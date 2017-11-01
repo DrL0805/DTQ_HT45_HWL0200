@@ -702,7 +702,7 @@ static void on_radio_disabled_rx(void)
         clear_events_restart_rx();
         return;
     }
-
+	
     p_pipe_info = &m_rx_pipe_info[NRF_RADIO->RXMATCH];
     if (NRF_RADIO->RXCRC             == p_pipe_info->m_crc &&
        (m_rx_payload_buffer[1] >> 1) == p_pipe_info->m_pid  )
@@ -710,13 +710,13 @@ static void on_radio_disabled_rx(void)
         retransmit_payload = true;
         send_rx_event = false;
     }
-
+	
     p_pipe_info->m_pid = m_rx_payload_buffer[1] >> 1;
     p_pipe_info->m_crc = NRF_RADIO->RXCRC;
 
     if(m_config_local.selective_auto_ack == false || ((m_rx_payload_buffer[1] & 0x01) == 0))
         ack = true;
-
+	
     if(ack)
     {
         NRF_RADIO->SHORTS = RADIO_SHORTS_COMMON | RADIO_SHORTS_DISABLED_RXEN_Msk;
@@ -804,7 +804,7 @@ static void on_radio_disabled_rx_ack(void)
 
     NRF_RADIO->PACKETPTR = (uint32_t)m_rx_payload_buffer;
     on_radio_disabled = on_radio_disabled_rx;
-
+	
     m_nrf_esb_mainstate = NRF_ESB_STATE_PRX;
 }
 
@@ -1022,7 +1022,7 @@ uint32_t nrf_esb_start_rx(void)
     NRF_RADIO->INTENCLR = 0xFFFFFFFF;
     NRF_RADIO->EVENTS_DISABLED = 0;
     on_radio_disabled = on_radio_disabled_rx;
-
+	
     NRF_RADIO->SHORTS      = RADIO_SHORTS_COMMON | RADIO_SHORTS_DISABLED_TXEN_Msk;
     NRF_RADIO->INTENSET    = RADIO_INTENSET_DISABLED_Msk;
     m_nrf_esb_mainstate    = NRF_ESB_STATE_PRX;
@@ -1260,7 +1260,11 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
 			
 			err_code = nrf_esb_set_rf_channel(Channal);
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM*1+err_code);	//err
+//			if(err_code != NRF_SUCCESS)
+//			{
+//				LCD_DisDigit(12, m_nrf_esb_mainstate);
+//			}
 			break;
 		case NRF_ESB_MODE_PRX_START:
 			// 切换模式前，尽量保证RADIO不正在发送数据
@@ -1275,7 +1279,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			}
 				
 			err_code = nrf_esb_flush_tx();
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM*2+err_code);
 			
 			// 若当前处于接收模式，依然要停止，因为可能需要配置新的频点
 			err_code = nrf_esb_stop_rx();
@@ -1285,14 +1289,18 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
 			
 			err_code = nrf_esb_set_rf_channel(Channal);		//只有空闲状态才能重新配置频点、通道、地址等参数	
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM*3+err_code);	
 			
 			err_code = nrf_esb_start_rx();	
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM*4+err_code);	// err
+//			if(err_code != NRF_SUCCESS)
+//			{
+//				LCD_DisDigit(12, m_nrf_esb_mainstate);
+//			}			
 			break;
 		case NRF_ESB_MODE_PRX_STOP:
 			// 切换模式前，尽量保证RADIO不正在发送数据
-			i = 1024*4;	// 最大约2ms
+			i = 1024*4;	// 1024约1ms
 			do
 			{
 				i--;
@@ -1303,7 +1311,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			}
 			
 			err_code = nrf_esb_flush_tx();
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM*5+err_code);
 			
 			err_code = nrf_esb_stop_rx();
 //			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);			

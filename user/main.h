@@ -48,7 +48,7 @@
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
 #define     VERSION_LEVEL_NUMBER	"Ver: 0.2.3              "
-#define		VERSION_LEVEL_TIME		"2017-10-31 09:47        "
+#define		VERSION_LEVEL_TIME		"2017-11-1 17:28         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(0)
 #define 	USE_WATCH_DOG			(0)

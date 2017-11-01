@@ -31,7 +31,7 @@ int main (void)
 //	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
-	TIMER_ADCStart();
+//	TIMER_ADCStart();
 	drTIM_SysSleepStart();
 	
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
@@ -45,7 +45,7 @@ int main (void)
 	
 	drTIM_TmpStart();
 	
-//	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	
 	while(true)
 	{
