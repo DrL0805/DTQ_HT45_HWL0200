@@ -14,6 +14,7 @@ int main (void)
 	drERROR_CHECK(CLOCK_Init());
 	drERROR_CHECK(DEBUG_Init());
 	drERROR_CHECK(TIMERS_Init());
+	drERROR_CHECK(TIMER0_Init());
 	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
 	drERROR_CHECK(FLASH_Init());
@@ -29,7 +30,9 @@ int main (void)
 //	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
-	TIMER_SysStateStart();	
+//	TIMER_SysStateStart();	
+//	drTIMER_Start(&drTIM_SysSleep, 50);
+	drTIM_SysSleepStart();
 //	TIMER_LCDStart();
 	TIMER_ADCStart();
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
@@ -42,6 +45,8 @@ int main (void)
 	TIMER_TempStart();
 	
 	APP_PwrOnRequest();
+	
+	drTIM_TmpStart();
 	
 	while(true)
 	{
@@ -69,6 +74,7 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
+		TIMER0_EventHandler();
 		APP_ParUpdate();
 		MAIN_DebugFun();
 		WDT_FeedDog();	

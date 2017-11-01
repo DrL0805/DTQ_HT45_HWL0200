@@ -610,6 +610,11 @@
               <FileType>5</FileType>
               <FilePath>..\user\application\application.h</FilePath>
             </File>
+            <File>
+              <FileName>drl_err.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\user\drl_lib\drl_err.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -91,8 +91,11 @@ void APP_ParUpdate(void)
 		// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
 		if(SYS_ON == POWER.SysState)
 		{
-			TIMER_SysStateStop();				//30S休眠定时器开启
-			TIMER_SysStateStart();				//30S休眠定时器开启			
+//			TIMER_SysStateStop();				//30S休眠定时器开启
+//			TIMER_SysStateStart();				//30S休眠定时器开启
+//			drTIMER_Stop(&drTIM_SysSleep);
+//			drTIMER_Start(&drTIM_SysSleep, 50);
+			drTIM_SysSleepStart();
 		}
 		else if(SYS_SLEEP == POWER.SysState)
 		{
@@ -137,8 +140,11 @@ void APP_KeyHandler(void)
 			case SYS_OFF:	
 				break;				
 			case SYS_ON:
-				TIMER_SysStateStop();
-				TIMER_SysStateStart();
+//				TIMER_SysStateStop();
+//				TIMER_SysStateStart();
+//				drTIMER_Stop(&drTIM_SysSleep);
+//				drTIMER_Start(&drTIM_SysSleep, 50);
+				drTIM_SysSleepStart();
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
 				{
 					switch(APP.QUE.Type)

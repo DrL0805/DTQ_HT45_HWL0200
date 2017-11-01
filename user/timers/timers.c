@@ -7,16 +7,16 @@
 #else  
 #define TIMER_Debug(...)                    
 #endif 
-
+				
 //定时器宏定义
-#define APP_TIMER_PRESCALER     0
+#define APP_TIMER_PRESCALER     0			// 1tick  = 32.768KHz / (APP_TIMER_PRESCALER+1),设置为32即约1ms一个tick
 #define APP_TIMER_OP_QUEUE_SIZE 23
 
 #define TEMP_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(2000, 	APP_TIMER_PRESCALER)
 #define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
-#define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
+//#define SYS_STATE_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(5000,	APP_TIMER_PRESCALER)
 #define ADC_TIMEOUT_INTERVAL    					APP_TIMER_TICKS(997,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 #define ADC_FIRST_SAMPLE_TIMEOUT_INTERVAL    		APP_TIMER_TICKS(42,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 //#define TX_ATTEND_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1100,APP_TIMER_PRESCALER) 
@@ -36,7 +36,7 @@ APP_TIMER_DEF(lcd_timer_id);					/* LCD定时刷新 */
 APP_TIMER_DEF(button_timer_id);
 APP_TIMER_DEF(rx_window_timer_id);				/* RX窗正常打开关闭 */
 APP_TIMER_DEF(tx_overtime_timer_id);			/* 发送超时 */
-APP_TIMER_DEF(sys_state_timer_id);				/* 系统状态控制，ON/OFF/SLEEP（30秒无按键系统进入休眠） */
+//APP_TIMER_DEF(sys_state_timer_id);				/* 系统状态控制，ON/OFF/SLEEP（30秒无按键系统进入休眠） */
 APP_TIMER_DEF(adc_timer_id);					/* ADC采集定时器 */
 //APP_TIMER_DEF(tx_attend_timer_id);			    /* 发送2.4G考勤 */
 APP_TIMER_DEF(sys_off_timer_id);				/* 关机定时器（系统休眠超过45min后自动关机）*/
@@ -89,8 +89,8 @@ uint32_t TIMERS_Init(void)
 	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);	
 
 	//-------------------------- 单次定时器 ------------------------------
-	err_code = app_timer_create(&sys_state_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SysStateHandler);
-	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+//	err_code = app_timer_create(&sys_state_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SysStateHandler);
+//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
 	// ADC采集，单次，每次采集完都需要重新开启定时器
 	err_code = app_timer_create(&adc_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_ADCHandler);

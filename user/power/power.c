@@ -65,8 +65,11 @@ void POWER_SysSleepToOn(void)
 	
 	TIMER_ADCStart();
 	
-	TIMER_SysStateStop();				//30S休眠定时器开启
-	TIMER_SysStateStart();				//30S休眠定时器开启
+//	TIMER_SysStateStop();				//30S休眠定时器开启
+//	TIMER_SysStateStart();				//30S休眠定时器开启
+//	drTIMER_Stop(&drTIM_SysSleep);
+//	drTIMER_Start(&drTIM_SysSleep, 50);
+	drTIM_SysSleepStart();
 	
 	LCD_WakeUp();
 }
@@ -76,7 +79,9 @@ void POWER_SysOnToTest(void)
 {
 	POWER.SysState = SYS_TEST;
 	
-	TIMER_SysStateStop();			//测试模式下，答题器30秒不休眠
+//	TIMER_SysStateStop();			//测试模式下，答题器30秒不休眠
+//	drTIMER_Stop(&drTIM_SysSleep);
+	drTIM_SysSleepStop();
 	
 	TEST.LcdLetterVal = 0;
 	TEST.RxRssi = 0;
@@ -87,7 +92,9 @@ void POWER_SysOnToTest(void)
 void POWER_SysOnToMatch(void)
 {
 	POWER.SysState = SYS_MATCH;
-	TIMER_SysStateStop();							// 配对模式下，答题器30秒不休眠
+//	TIMER_SysStateStop();							// 配对模式下，答题器30秒不休眠
+//	drTIMER_Stop(&drTIM_SysSleep);
+	drTIM_SysSleepStop();
 	
 	RADIO.IM.RxChannal = NRF_MATCH_RX_CHANNEL;		// 接收频点设置为配对频点
 	
@@ -103,7 +110,9 @@ void POWER_SysOnToMatch(void)
 void POWER_SysMatchToOn(void)
 {
 	POWER.SysState = SYS_ON;
-	TIMER_SysStateStart();							// 重新开启30秒休眠定时器	
+//	TIMER_SysStateStart();							// 重新开启30秒休眠定时器	
+//	drTIMER_Start(&drTIM_SysSleep, 50);
+	drTIM_SysSleepStart();
 	
 	RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;		// 接收频点设置为答题频点
 

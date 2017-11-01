@@ -17,6 +17,7 @@
 #include "app_error.h"
 #include "app_fifo.h"
 #include "nrf_drv_wdt.h"
+#include "nrf_drv_timer.h"
 
 #include "drl_err.h"
 
@@ -38,6 +39,7 @@
 #include "w25qxx.h"
 #include "lib_TagType4.h"
 #include "watchdog.h"
+#include "timer_0.h"
 
 // 软件版本 -----------------------------------------------------------
 #define 	VERSION_PROTOCOL	(0)			//版本支持的协议,1表示自有协议
@@ -48,7 +50,7 @@
 #define     VERSION_LEVEL_NUMBER	"Ver: 0.2.3              "
 #define		VERSION_LEVEL_TIME		"2017-10-31 09:47        "
 
-#define 	SYS_NO_SLEEP_DEBUG		(1)
+#define 	SYS_NO_SLEEP_DEBUG		(0)
 #define 	USE_WATCH_DOG			(1)
 #define 	USE_UART_DEBUG			(0)
 

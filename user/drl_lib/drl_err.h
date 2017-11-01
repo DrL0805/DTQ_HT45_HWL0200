@@ -57,11 +57,18 @@ typedef struct
 #define drERROR_RADIO_2						(drERROR_BASE_NUM + drERROR_RADIO_BASE_NUM + 2)	
 	
 	
-// TIMER
+// TIMER_RTC
 #define drERROR_TIMER_BASE_NUM				(0x0400)		
 #define drERROR_TIMER_SUCCESS				(drERROR_SUCCESS)
 #define drERROR_TIMER_1						(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 1)			
 #define drERROR_TIMER_2						(drERROR_BASE_NUM + drERROR_TIMER_BASE_NUM + 2)	
+
+
+// TIMER_0
+#define drERROR_TIMER0_BASE_NUM				(0x0500)		
+#define drERROR_TIMER0_SUCCESS				(drERROR_SUCCESS)
+#define drERROR_TIMER0_1					(drERROR_BASE_NUM + drERROR_TIMER0_BASE_NUM + 1)			
+#define drERROR_TIMER0_2					(drERROR_BASE_NUM + drERROR_TIMER0_BASE_NUM + 2)	
 
 
 
