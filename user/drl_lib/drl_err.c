@@ -13,7 +13,7 @@ drERR_PATAMETERS_T			ERR;
 
 drErrType drERR_Init(void)
 {
-	
+	drTIM_ERRStart();
 	return drERROR_SUCCESS;
 }
 

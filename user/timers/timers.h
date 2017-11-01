@@ -14,15 +14,14 @@ extern TIMER_PARAMETERS_T	TIMER;
 
 uint32_t TIMERS_Init(void);
 void TIMER_EventHandler(void);
-void TIMER_ErrCheck(uint32_t ErrCode);
 
-void TIMER_TempStart(void);
-void TIMER_TempStop(void);
-void TIMER_TempHandler(void * p_context);
+//void TIMER_TempStart(void);
+//void TIMER_TempStop(void);
+//void TIMER_TempHandler(void * p_context);
 
-void TIMER_LCDStart(void);
-void TIMER_LCDStop(void);
-void TIMER_LCDHandler(void * p_context);
+//void TIMER_LCDStart(void);
+//void TIMER_LCDStop(void);
+//void TIMER_LCDHandler(void * p_context);
 
 void TIMER_ButtonStart(void);
 void TIMER_ButtonStop(void);
@@ -38,13 +37,13 @@ void TIMER_TxOvertimeStart(void);
 void TIMER_TxOvertimeStop(void);
 void TIMER_TxOvertimeHandler(void * p_context);
 
-void TIMER_SysStateStart(void);
-void TIMER_SysStateStop(void);
-void TIMER_SysStateHandler(void * p_context);
+//void TIMER_SysStateStart(void);
+//void TIMER_SysStateStop(void);
+//void TIMER_SysStateHandler(void * p_context);
 
-void TIMER_LowPowerPromptStart(void);
-void TIMER_LowPowerPromptStop(void);
-void TIMER_LowPowerPromptHandler(void * p_context);
+//void TIMER_LowPowerPromptStart(void);
+//void TIMER_LowPowerPromptStop(void);
+//void TIMER_LowPowerPromptHandler(void * p_context);
 
 void TIMER_ADCStart(void);
 void TIMER_ADCStop(void);
@@ -54,9 +53,9 @@ void TIMER_ADCHandler(void * p_context);
 //void TIMER_TxAttendStop(void);
 //void TIMER_TxAttendHandler(void * p_context);
 
-void TIMER_SysOffStart(void);
-void TIMER_SysOffStop(void);
-void TIMER_SysOffHandler(void * p_context);
+//void TIMER_SysOffStart(void);
+//void TIMER_SysOffStop(void);
+//void TIMER_SysOffHandler(void * p_context);
 
 void TIMER_WaitDataStart(uint8_t time_ms);
 void TIMER_WaitDataStop(void);
@@ -66,17 +65,17 @@ void TIMER_RetransmitStart(void);
 void TIMER_RetransmitStop(void);
 void TIMER_RetransmitHandler(void * p_context);
 
-void TIMER_TxResultDisplayStart(void);
-void TIMER_TxResultDisplayStop(void);
-void TIMER_TxResultDisplayHandler(void * p_context);
+//void TIMER_TxResultDisplayStart(void);
+//void TIMER_TxResultDisplayStop(void);
+//void TIMER_TxResultDisplayHandler(void * p_context);
 
-void TIMER_DisVerStart(void);
-void TIMER_DisVerStop(void);
-void TIMER_DisVerHandler(void * p_context);
+//void TIMER_DisVerStart(void);
+//void TIMER_DisVerStop(void);
+//void TIMER_DisVerHandler(void * p_context);
 
-void TIMER_SendAllowStart(void);
-void TIMER_SendAllowStop(void);
-void TIMER_SendAllowHandler(void * p_context);
+//void TIMER_SendAllowStart(void);
+//void TIMER_SendAllowStop(void);
+//void TIMER_SendAllowHandler(void * p_context);
 
 void TIMER_TxRandomDelayStart(void);
 void TIMER_TxRandomDelayStop(void);

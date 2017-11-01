@@ -11,6 +11,7 @@ int main (void)
 	
 	GPIO_Default();
 	
+	drERROR_CHECK(drERR_Init());
 	drERROR_CHECK(CLOCK_Init());
 	drERROR_CHECK(DEBUG_Init());
 	drERROR_CHECK(TIMERS_Init());
@@ -30,23 +31,21 @@ int main (void)
 //	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
-//	TIMER_SysStateStart();	
-//	drTIMER_Start(&drTIM_SysSleep, 50);
-	drTIM_SysSleepStart();
-//	TIMER_LCDStart();
 	TIMER_ADCStart();
+	drTIM_SysSleepStart();
+	
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
 	
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
-	
-	TIMER_TempStart();
-	
+
 	APP_PwrOnRequest();
 	
 	drTIM_TmpStart();
+	
+	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	
 	while(true)
 	{
@@ -74,7 +73,7 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
-		TIMER0_EventHandler();
+		drTIMER_EventHandler();
 		APP_ParUpdate();
 		MAIN_DebugFun();
 		WDT_FeedDog();	

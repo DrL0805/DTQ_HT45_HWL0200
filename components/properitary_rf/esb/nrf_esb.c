@@ -1254,8 +1254,11 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 	{
 		case NRF_ESB_MODE_PTX_START:
 			nrf_esb_stop_rx();									//必须先STOP RX，让系统回到空闲状态
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			
 			m_config_local.mode = NRF_ESB_MODE_PTX;
-			err_code = nrf_esb_set_rf_channel(Channal);			
+			err_code = nrf_esb_set_rf_channel(Channal);
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			break;
 		case NRF_ESB_MODE_PRX_START:
 			// 切换模式前，尽量保证RADIO不正在发送数据
@@ -1265,11 +1268,20 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 				i--;
 //			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));
 			}while((i>0) && (get_tx_fifo_count()));	
-			nrf_esb_flush_tx();
+			
+			err_code = nrf_esb_flush_tx();
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			
+			// 若当前处于接收模式，依然要停止，因为可能需要配置新的频点
+			err_code = nrf_esb_stop_rx();
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
 			m_config_local.mode = NRF_ESB_MODE_PRX;
 			err_code = nrf_esb_set_rf_channel(Channal);		//只有空闲状态才能重新配置频点、通道、地址等参数	
-			nrf_esb_start_rx();	
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			
+			err_code = nrf_esb_start_rx();	
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			break;
 		case NRF_ESB_MODE_PRX_STOP:
 			// 切换模式前，尽量保证RADIO不正在发送数据
@@ -1277,35 +1289,19 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			do
 			{
 				i--;
-//			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));	
-			}while((i>0) && (get_tx_fifo_count()));	
-			nrf_esb_flush_tx();
+			}while((i>0) && (m_nrf_esb_mainstate == NRF_ESB_STATE_PTX_TX));	
+//			}while((i>0) && (get_tx_fifo_count()));	
+			err_code = nrf_esb_flush_tx();
+			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
 			
-			nrf_esb_stop_rx();	
+			err_code = nrf_esb_stop_rx();
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);			
 			break;
 		default:
 			break;
 	}
 	
 	return NRF_SUCCESS;
-	
-	
-//	switch (mode)
-//    {
-//    	case NRF_ESB_MODE_PRX:
-//				m_config_local.mode = NRF_ESB_MODE_PRX;
-//				err_code = nrf_esb_set_rf_channel(Channal);		//只有空闲状态才能重新配置频点、通道、地址等参数		
-//    		break;
-//    	case NRF_ESB_MODE_PTX:
-//				nrf_esb_stop_rx();									//必须先STOP RX，让系统回到空闲状态
-//				m_config_local.mode = NRF_ESB_MODE_PTX;
-//				err_code = nrf_esb_set_rf_channel(Channal);
-//    		break;
-//    	default:
-//    		break;
-//    }
-//	
-//	err_code = err_code;	//防止编译器报警告
 }
 
 void my_esb_tx_data(void)

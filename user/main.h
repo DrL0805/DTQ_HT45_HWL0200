@@ -51,7 +51,7 @@
 #define		VERSION_LEVEL_TIME		"2017-10-31 09:47        "
 
 #define 	SYS_NO_SLEEP_DEBUG		(0)
-#define 	USE_WATCH_DOG			(1)
+#define 	USE_WATCH_DOG			(0)
 #define 	USE_UART_DEBUG			(0)
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);

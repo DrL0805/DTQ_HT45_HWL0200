@@ -84,7 +84,7 @@ void LCD_Sleep(void)
 //	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
 	LCD_DRV_WriteCmd(LCD_DISPLAY_OFF);	
 	
-	TIMER_LCDStop();
+//	TIMER_LCDStop();
 }
 
 //LCD唤醒，重新显示LCD_RAM内容
@@ -93,7 +93,7 @@ void LCD_WakeUp(void)
 //	LCD_DRV_WriteCmd(0x40);  			// 从第一行开始显示
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 
-	TIMER_LCDStart();
+//	TIMER_LCDStart();
 }
 
 void LCD_Update(void)

@@ -170,7 +170,7 @@ void W25_WriteTestData(void)
 {
 	uint32_t addr = 0x100000;
 	uint8_t WriteBuf[16];
-	uint8_t ReadBuf[16];
+//	uint8_t ReadBuf[16];
 	
 	WriteBuf[0] = APP.PassCnt >> 0;			// ÎïÀí°´¼ü		
 	WriteBuf[1] = APP.PassCnt >> 8;

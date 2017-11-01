@@ -1108,8 +1108,8 @@ void APP_CmdTestHandler(void)
 
 void APP_CmdQuestionHandler(void)
 {
-	uint8_t i;
-	uint8_t TmpHanziNum;
+//	uint8_t i;
+//	uint8_t TmpHanziNum;
 	/* 
 	 * 1）答题器未收到题目，收取当前题目
 	 * 2）答题器已收到题目，根据包号判断是否是新题目，若是新的题目，接收并覆盖上次收到的题目

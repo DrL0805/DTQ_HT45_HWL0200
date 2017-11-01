@@ -181,8 +181,9 @@ void RADIO_TxSuccess(void)
 //			APP.QUE.AnsweredFlg = true;
 			LCD.DATA.SendResultState = SEND_RESULT_OK;
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;			
-			TIMER_TxResultDisplayStop();
-			TIMER_TxResultDisplayStart();
+//			TIMER_TxResultDisplayStop();
+//			TIMER_TxResultDisplayStart();
+			drTIM_SendResultStart();
 			break;
 		case SYS_SLEEP:
 			break;
@@ -207,8 +208,9 @@ void RADIO_TxFailed(void)
 		case SYS_ON:
 			LCD.DATA.SendResultState = SEND_RESULT_FAIL;
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;		
-			TIMER_TxResultDisplayStop();
-			TIMER_TxResultDisplayStart();
+//			TIMER_TxResultDisplayStop();
+//			TIMER_TxResultDisplayStart();
+			drTIM_SendResultStart();
 			break;
 		case SYS_SLEEP:
 			break;
@@ -234,8 +236,8 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			RADIO.IM.TxIngFlg = true;
 			RADIO.IM.ReTxCount = 0;	
 			
-			TIMER_SendAllowStop();					// 重新计时，否则可能出问题
-			TIMER_SendAllowStart();	
+//			TIMER_SendAllowStop();					// 重新计时，否则可能出问题
+//			TIMER_SendAllowStart();	
 			
 //			APP.QUE.KeySendLimitFlg = false;			// 处于发送过程时，不允许再次按键发送数据
 			APP.KeyGapCnt = 0;					
