@@ -431,8 +431,19 @@ void LCD_ClearInputArea(void)
 
 void  LCD_DisplaySceneArea(void)
 {	
+	uint32_t i;
+	
+	// 分三次刷新
+	for(i = 0;i < 3;i++)
+	{
+		// LCD每行，倒数第二个字节是ASCII码，而最后一个字节是汉字的前半个GBK码，则最后一个字节清除掉
+		if((LCD.DATA.Scene[16*(i+1) - 1] < 0x81) && (LCD.DATA.Scene[16*(i+1)] >= 0x81))
+			LCD.DATA.Scene[16*(i+1)] = 0x00;
+		LCD_DRV_DisplayN(16*(i+1), 16, LCD.DATA.Scene+1+16*i);	
+	}
+	
 	// 一次整屏刷新
-	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
+//	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
 	
 	// 分三行刷新
 //	if(LCD.DATA.Scene[1 + LCD.DATA.ScenePos*16 + 15] >= 0x81)	// 若每行最后一个字符是半个汉字

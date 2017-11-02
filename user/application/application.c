@@ -47,9 +47,9 @@ void APP_ParUpdate(void)
 {	
 	static uint32_t TmpCnt = 0;
 	
-	if(APP.NFCIrqFlg)
+	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
-		nrf_delay_ms(600);				//延时确保13.56M读头处理完，再通过I2C读取更新的数据
+//		nrf_delay_ms(600);							//延时确保13.56M读头处理完，再通过I2C读取更新的数据
 
 		TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
 		M24SR_Deselect();
@@ -91,10 +91,6 @@ void APP_ParUpdate(void)
 		// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
 		if(SYS_ON == POWER.SysState)
 		{
-//			TIMER_SysStateStop();				//30S休眠定时器开启
-//			TIMER_SysStateStart();				//30S休眠定时器开启
-//			drTIMER_Stop(&drTIM_SysSleep);
-//			drTIMER_Start(&drTIM_SysSleep, 50);
 			drTIM_SysSleepStart();
 		}
 		else if(SYS_SLEEP == POWER.SysState)

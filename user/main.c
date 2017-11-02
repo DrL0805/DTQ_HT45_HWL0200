@@ -3,8 +3,6 @@
 
 static void MAIN_DebugFun(void);
 
-
-
 int main (void)
 {
 	POWER.SysInitializedFlg = false;
@@ -44,7 +42,7 @@ int main (void)
 	APP_PwrOnRequest();
 	
 //	drTIM_TmpStart();					// 监测程序是否卡死
-	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+//	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	drTIM_RSSIStart();					// 信号强度显示
 	
 	

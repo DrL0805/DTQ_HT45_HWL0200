@@ -357,7 +357,7 @@ void M24SR_Init( void )
 	
 	M24SR_ManageI2CGPO(I2C_ANSWER_READY);
 	
-//	M24SR_Deselect ();
+	M24SR_Deselect ();
 }
 
 /**
@@ -385,6 +385,7 @@ uint16_t M24SR_GetSession ( void )
 Error :
 	/* Send STOP Condition */
 //  I2C_GenerateSTOP(M24SR_I2C, ENABLE);
+	M24SR_I2CStop();
 	return M24SR_ERROR_I2CTIMEOUT;	
 }
 
@@ -412,6 +413,7 @@ return M24SR_ACTION_COMPLETED;
 Error :
 	/* Send STOP Condition */
 //  I2C_GenerateSTOP(M24SR_I2C, ENABLE);
+	M24SR_I2CStop();
 	return M24SR_ERROR_I2CTIMEOUT;
 }
 
@@ -472,7 +474,7 @@ uint16_t	uP1P2 =0x0400,
 	
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));	
+	errchk( M24SR_IsAnswerReady ( ));	
 	errchk(M24SR_PollI2C ( )); 	
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead , pBuffer ));
@@ -516,7 +518,7 @@ uint16_t	uP1P2 =0x000C,
 	
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk(M24SR_PollI2C ( )); 
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead , pBuffer ));
@@ -560,7 +562,7 @@ uint16_t	uP1P2 =0x000C,
 	
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk(M24SR_PollI2C ( )); 	
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead , pBuffer ));
@@ -602,7 +604,7 @@ uint16_t	uP1P2 =0x000C,
 	
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead , pBuffer ));
 	
@@ -639,7 +641,7 @@ uint16_t M24SR_UpdateFileType ( u8 FileType )
 	M24SR_BuildIBlockCommand ( M24SR_CMDSTRUCT_UPDATEFILETYPE,  Command, &NbByte , pBuffer);
 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 	/* if the response is a Watiting frame extenstion request */ 
 	if (IsSBlock (pBuffer) == M24SR_STATUS_SUCCESS)
@@ -689,7 +691,7 @@ uint16_t M24SR_ReadBinary ( uc16 Offset ,uc8 NbByteToRead , uint8_t *pBufferRead
 	M24SR_BuildIBlockCommand ( M24SR_CMDSTRUCT_READBINARY,  Command, &NbByte , pBuffer);
 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk(M24SR_PollI2C ( )); 	
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead + M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 	
@@ -731,7 +733,7 @@ uint16_t	NbByte;
 	M24SR_BuildIBlockCommand ( M24SR_CMDSTRUCT_READBINARY,  Command, &NbByte , pBuffer);
 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk( M24SR_ReceiveI2Cresponse ( NbByteToRead + M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 	
 	status = M24SR_IsCorrectCRC16Residue (pBuffer,NbByteToRead+ M24SR_STATUSRESPONSE_NBBYTE); 
@@ -772,7 +774,7 @@ uint16_t	NbByte;
 	M24SR_BuildIBlockCommand ( M24SR_CMDSTRUCT_UPDATEBINARY,  Command, &NbByte , pBuffer);
 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk(M24SR_PollI2C ( )); 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 	/* if the response is a Watiting frame extenstion request */ 
@@ -847,7 +849,7 @@ uint16_t	NbByte;
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
 	/* wait for answer ready */
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	errchk(M24SR_PollI2C ( )); 	
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
@@ -895,7 +897,7 @@ uint16_t	NbByte;
 	
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 	
@@ -937,7 +939,7 @@ uint16_t	NbByte;
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
 	/* The right access to be updated in EEPROM need at least 6ms */	
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -978,7 +980,7 @@ uint16_t	NbByte;
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
 	/* The right access to be updated in EEPROM need at least 6ms */		
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -1018,7 +1020,7 @@ uint16_t	NbByte;
 
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -1058,7 +1060,7 @@ uint16_t	NbByte;
 
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -1096,7 +1098,7 @@ uint16_t M24SR_SendInterrupt ( void  )
 
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -1143,7 +1145,7 @@ uint16_t M24SR_StateControl ( uc8 uSetOrReset )
 
 	/* send the request */ 
 	errchk( M24SR_SendI2Ccommand ( NbByte , pBuffer ));
-//	errchk( M24SR_IsAnswerReady ( ));
+	errchk( M24SR_IsAnswerReady ( ));
 	/* read the response */ 
 	errchk( M24SR_ReceiveI2Cresponse ( M24SR_STATUSRESPONSE_NBBYTE , pBuffer ));
 
@@ -1172,7 +1174,7 @@ uint16_t M24SR_ManageI2CGPO( uc8 GPO_I2Cconfig)
 	}
 	
 	/* we must not be in interrupt mode for I2C synchro as we will change GPO purpose */
-//	M24SR_SetI2CSynchroMode(M24SR_WAITINGTIME_POLLING);
+	M24SR_SetI2CSynchroMode(M24SR_WAITINGTIME_POLLING);
 	
 	M24SR_SelectApplication();
 	M24SR_SelectSystemfile();
@@ -1185,8 +1187,8 @@ uint16_t M24SR_ManageI2CGPO( uc8 GPO_I2Cconfig)
 	status = M24SR_UpdateBinary ( 0x0004 ,0x01, &(GPO_config) );
 	
 	/* if we have set interrupt mode for I2C synchro we can enable interrupt mode */
-//	if ( GPO_I2Cconfig == I2C_ANSWER_READY)
-//		M24SR_SetI2CSynchroMode(M24SR_WAITINGTIME_GPO);
+	if ( GPO_I2Cconfig == I2C_ANSWER_READY)
+		M24SR_SetI2CSynchroMode(M24SR_WAITINGTIME_GPO);
 	
 	return status;
 }

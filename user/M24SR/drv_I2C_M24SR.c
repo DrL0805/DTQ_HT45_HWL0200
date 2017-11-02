@@ -29,7 +29,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "drv_I2C_M24SR.h"
 
-//static uint8_t						uSynchroMode = M24SR_WAITINGTIME_POLLING;
+static uint8_t						uSynchroMode = M24SR_WAITINGTIME_POLLING;
 //static uint8_t						uSynchroMode = M24SR_WAITINGTIME_TIMEOUT;
 
 
@@ -198,6 +198,23 @@ Error:
 }
 
 /**
+  * @brief  this functions configure I2C synchronization mode
+	* @param  mode : 
+  * @retval None
+  */
+void M24SR_SetI2CSynchroMode( uc8 mode )
+{
+#ifdef I2C_GPO_SYNCHRO_ALLOWED
+	uSynchroMode = mode;
+#else
+	if( mode == M24SR_WAITINGTIME_GPO)
+		uSynchroMode = M24SR_WAITINGTIME_POLLING;
+	else
+		uSynchroMode = mode;
+#endif /*  I2C_GPO_SYNCHRO_ALLOWED */
+}
+
+/**
   * @brief  This function generates an I2C Token release
   * @retval M24SR_STATUS_SUCCESS : the function is succesful
 	* @retval M24SR_ERROR_I2CTIMEOUT : The I2C timeout occured. 
@@ -315,7 +332,48 @@ Error:
   */
 int8_t M24SR_IsAnswerReady ( void )
 {
-	return 0;
+	int8_t status;
+  uint32_t retry = 0x3FFFF;
+	uint8_t stable = 0;
+	
+		switch (uSynchroMode)
+		{
+			case M24SR_WAITINGTIME_POLLING :
+				errchk(M24SR_PollI2C ( ));
+				return M24SR_STATUS_SUCCESS;
+			
+			case M24SR_WAITINGTIME_TIMEOUT :
+				// M24SR FWI=5 => (256*16/fc)*2^5=9.6ms but M24SR ask for extended time to program up to 246Bytes.
+				//delay_ms (80);	
+			  nrf_delay_ms(80);
+				return M24SR_STATUS_SUCCESS;
+			
+			case M24SR_WAITINGTIME_GPO :
+				/* Here we check if I2C answer is ready, so if GPO of M24SR is low */
+			  /* Mapping an interrupt was impossible because EXTI_line 6 was already taken by Joystick SEL */
+			  /* HW: GPO --> PA6 and Joystick SEL --> PB6 */
+				/* Idealy use an interrupt here */
+				do
+				{
+					//if( GPIO_ReadInputDataBit(M24SR_GPO_PIN_PORT,M24SR_GPO_PIN) == Bit_RESET)
+					if( nrf_gpio_pin_read(I2C_INT) == 1 )
+					{
+						stable ++;						
+					}
+					retry --;						
+				}
+				while(stable <5 && retry>0);
+				if(!retry)
+					goto Error;
+				
+				return M24SR_STATUS_SUCCESS;
+			
+			default : 
+				return M24SR_ERROR_DEFAULT;
+		}
+
+Error :
+		return M24SR_ERROR_DEFAULT;
 }
 
 /**

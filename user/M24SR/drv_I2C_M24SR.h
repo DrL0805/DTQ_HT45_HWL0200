@@ -144,6 +144,9 @@ int8_t M24SR_ReceiveI2Cbuffer 			( uint8_t NbByte , uint8_t *pBuffer );
 //void M24SR_GPOInt(void);
 //void M24SR_IntOnOffConfig(FunctionalState NewState);
 void M24SR_RFConfig_Hard( uc8 OnOffChoice);
+void M24SR_I2CStop(void);
+void M24SR_SetI2CSynchroMode( uc8 mode );
+
 
 #endif 
 
