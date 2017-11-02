@@ -20,6 +20,7 @@ drErrType drERR_Init(void)
 void drERR_ErrCheck(drErrType err_code)
 {
 	drErrType i;
+	uint32_t ErrCode;
 	
 //	switch(err_code)
 //	{
@@ -27,6 +28,8 @@ void drERR_ErrCheck(drErrType err_code)
 //		case drERROR_1356M_ID_ERR:
 //		case drERROR_1356M_LEN_ERR:
 ////			NVIC_SystemReset();				//¸´Î»
+//			
+//		
 //			break;
 //		default:
 //			for(i = 0;i < 32;i++)

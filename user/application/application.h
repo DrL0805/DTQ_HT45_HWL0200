@@ -89,6 +89,9 @@ typedef struct
 	PROJECT_DEVELOP_STATE_TYPE		ProjState;
 
 	bool				NFCIrqFlg;		// 13.56M刷卡中断标志
+	bool				NRFDelayFlg;	// 13.56M延时等待更新标志（收到NFC中断后不立马更新，而延时等待RF磁场释放稳定，否则数据易出错）
+										// 且等待过程中不刷新屏幕显示，防止回显内容被清空
+	bool				NRFUpdataFlg;	// 13.56M更新标志
 	bool				KeyCntLimitFlg;	// 按键300ms限制定时器
 	
 	uint32_t			PassCnt;	// 物理按键次数					

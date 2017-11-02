@@ -130,8 +130,11 @@ void LCD_Update(void)
 
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SCENE)
 		{
-			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SCENE;
-			LCD_DisplaySceneArea();
+			if(!APP.NRFDelayFlg)	// 等待读取13.56M数据前，不刷新回显业务内容，因为更新完13.56M数据后，会清屏
+			{
+				LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SCENE;
+				LCD_DisplaySceneArea();			
+			}
 		}
 		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_INPUT)
@@ -479,11 +482,17 @@ void  LCD_DisplaySceneArea(void)
 
 void LCD_ClearSceneArea(void)
 {
-	LCD.DATA.Scene[0] = 48;
-	memset(LCD.DATA.Scene+1, 0x00, 48);
+//	LCD.DATA.Scene[0] = 48;
+//	memset(LCD.DATA.Scene+1, 0x00, 48);
+//	
+//	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+//	LCD.DATA.ScenePos = 0;
 	
-	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-	LCD.DATA.ScenePos = 0;
+	uint8_t TmpBuf[48];
+	
+	memset(TmpBuf, 0x00, 48);
+	
+	LCD_DRV_DisplayN(16, 48, TmpBuf);		
 }
 
 void LCD_DisDigit(uint8_t Pos, uint32_t Digit)

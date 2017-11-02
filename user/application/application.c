@@ -50,11 +50,26 @@ uint32_t APP_ParUpdate(void)
 	
 	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
-//		nrf_delay_ms(600);							//延时确保13.56M读头处理完，再通过I2C读取更新的数据
-
-		TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
-		M24SR_Deselect();
+		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
+		APP.NFCIrqFlg = false;
+		APP.NRFDelayFlg = true;		
+		TIMER_NFCStart();
+	}
+	
+	if(APP.NRFUpdataFlg)
+	{
+		APP.NRFUpdataFlg = false;
+		APP.NRFDelayFlg = false;
 		
+		M24SR_RFConfig(0);
+		__set_PRIMASK(1);
+		
+		TT4_ReadNDEF(NFC.DataRead);					// 读取新的13.56M数据
+		M24SR_Deselect();							
+		
+		M24SR_RFConfig(1);
+		__set_PRIMASK(0);
+
 		TmpLen = NFC.DataRead[0] << 8 | NFC.DataRead[1];		//解析M24SR存储的数据长度
 		if(TmpLen > 10)											//长度太短肯定是错的
 		{
@@ -86,7 +101,7 @@ uint32_t APP_ParUpdate(void)
 				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
 			
 				// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
-				APP.NFCIrqFlg = false;				
+					
 				
 				TEST.TxFaiCnt = 0;
 				TEST.TxSucCnt = 0;
@@ -118,8 +133,10 @@ uint32_t APP_ParUpdate(void)
 		{
 			NFC.MatchSucceedFlg = false;
 			return drERROR_1356M_LEN_ERR;
-		}			
+		}		
 	}
+	
+	
 	
 	return drERROR_SUCCESS;
 }

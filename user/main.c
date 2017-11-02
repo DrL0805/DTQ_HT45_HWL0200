@@ -41,13 +41,14 @@ int main (void)
 
 	APP_PwrOnRequest();
 	
-//	drTIM_TmpStart();					// 监测程序是否卡死
+	drTIM_TmpStart();					// 监测程序是否卡死
 	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 //	drTIM_RSSIStart();					// 信号强度显示
 	
 	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
 	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+	
 
 	while(true)
 	{

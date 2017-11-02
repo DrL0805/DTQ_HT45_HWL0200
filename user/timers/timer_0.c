@@ -137,7 +137,7 @@ void drTIM_TmpHandler(void)
 	if(drTIM_Tmp.TimeOutFlg)
 	{
 		drTIM_Tmp.TimeOutFlg = false;
-		LCD_DisDigit(0, TIMER0.TickCnt/10);
+		LCD_DisDigit(8, TIMER0.TickCnt/10);
 	}
 }
 

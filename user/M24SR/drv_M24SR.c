@@ -358,7 +358,7 @@ void M24SR_Init( void )
 	
 	M24SR_ManageI2CGPO(I2C_ANSWER_READY);
 	
-//	M24SR_Deselect ();
+	M24SR_Deselect ();
 }
 
 /**

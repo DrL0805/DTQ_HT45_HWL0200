@@ -357,7 +357,7 @@ int8_t M24SR_IsAnswerReady ( void )
 				do
 				{
 					//if( GPIO_ReadInputDataBit(M24SR_GPO_PIN_PORT,M24SR_GPO_PIN) == Bit_RESET)
-					if( nrf_gpio_pin_read(I2C_INT) == 1 )
+					if( nrf_gpio_pin_read(I2C_INT) == 0 )
 					{
 						stable ++;						
 					}
@@ -384,7 +384,14 @@ Error :
   */
 void M24SR_RFConfig_Hard( uc8 OnOffChoice)
 {
-	;
+	if(OnOffChoice)			// Enable
+	{
+		nrf_gpio_pin_clear(I2C_RF_EN);
+	}
+	else					// Disable
+	{
+		nrf_gpio_pin_set(I2C_RF_EN);
+	}
 }
 
 /**

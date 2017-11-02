@@ -47,11 +47,15 @@ uint32_t NFC_Init(void)
 	uint16_t TmpLen = 0;
 	uint8_t TmpBuf[4] = {0,0,0,0};
 	
+	__set_PRIMASK(1);
+	
 	TT4_Init();	
 	M24SR_GetUID(NFC.UID);
 	TT4_ReadNDEF(NFC.DataRead);
 	M24SR_ManageGPO(STATE_CONTROL,RF_GPO);		
 	M24SR_Deselect();						// Õ∑≈I2Cøÿ÷∆»®
+	
+	__set_PRIMASK(0);
 	
 	if(ArrayCmp(NFC.UID+3, TmpBuf, 4))
 	{

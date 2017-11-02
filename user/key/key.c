@@ -89,7 +89,7 @@ void KEY_MatrixPinInit(void)
 
 //m24sr÷–∂œΩ≈≥ı ºªØ
 void KEY_NFCPinInit(void)
-{
+{	
 	ret_code_t err_code;
 	
 	nrf_gpio_cfg_input(I2C_INT, NRF_GPIO_PIN_NOPULL);
