@@ -60,6 +60,10 @@ void drTIM_ERRHandler(void);
 void drTIM_AutoSendStart(void);
 void drTIM_AutoSendStop(void);
 void drTIM_AutoSendHandler(void);
+
+void drTIM_RSSIStart(void);
+void drTIM_RSSIStop(void);
+void drTIM_RSSIHandler(void);
 // Globals ------------------------------------------------------------
 extern TIMER0_PATAMETERS_T		TIMER0; 			
 extern TIMER0_INSTANCE_T		drTIM_Tmp;

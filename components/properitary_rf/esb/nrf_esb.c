@@ -1018,7 +1018,7 @@ uint32_t nrf_esb_start_tx(void)
 uint32_t nrf_esb_start_rx(void)
 {
     VERIFY_TRUE(m_nrf_esb_mainstate == NRF_ESB_STATE_IDLE, NRF_ERROR_BUSY);
-
+	
     NRF_RADIO->INTENCLR = 0xFFFFFFFF;
     NRF_RADIO->EVENTS_DISABLED = 0;
     on_radio_disabled = on_radio_disabled_rx;
@@ -1253,18 +1253,15 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 	switch(mode)
 	{
 		case NRF_ESB_MODE_PTX_START:
-			nrf_esb_stop_rx();									//必须先STOP RX，让系统回到空闲状态
-//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+			nrf_esb_stop_rx();									// 必须先STOP RX，让系统回到空闲状态
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);		// 不加此检测，因为若不处于接收模式，比出错
 			
 			m_config_local.mode = NRF_ESB_MODE_PTX;
 			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
 			
 			err_code = nrf_esb_set_rf_channel(Channal);
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM*1+err_code);	//err
-//			if(err_code != NRF_SUCCESS)
-//			{
-//				LCD_DisDigit(12, m_nrf_esb_mainstate);
-//			}
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM*1+err_code);	//err
+			
 			break;
 		case NRF_ESB_MODE_PRX_START:
 			// 切换模式前，尽量保证RADIO不正在发送数据
@@ -1279,24 +1276,21 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			}
 				
 			err_code = nrf_esb_flush_tx();
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM*2+err_code);
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM*2+err_code);
 			
 			// 若当前处于接收模式，依然要停止，因为可能需要配置新的频点
 			err_code = nrf_esb_stop_rx();
-//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);		// 不加此检测，因为若不处于接收模式，比出错
 			
 			m_config_local.mode = NRF_ESB_MODE_PRX;
 			m_nrf_esb_mainstate = NRF_ESB_STATE_IDLE;
 			
 			err_code = nrf_esb_set_rf_channel(Channal);		//只有空闲状态才能重新配置频点、通道、地址等参数	
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM*3+err_code);	
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM*3+err_code);	
 			
 			err_code = nrf_esb_start_rx();	
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM*4+err_code);	// err
-//			if(err_code != NRF_SUCCESS)
-//			{
-//				LCD_DisDigit(12, m_nrf_esb_mainstate);
-//			}			
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM*4+err_code);	// err
+		
 			break;
 		case NRF_ESB_MODE_PRX_STOP:
 			// 切换模式前，尽量保证RADIO不正在发送数据

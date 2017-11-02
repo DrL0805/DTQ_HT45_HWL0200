@@ -145,6 +145,8 @@ extern void LCD_ClearInputArea(void);
 extern void LCD_DisplaySceneArea(void);
 extern void LCD_ClearSceneArea(void);
 
+extern void LCD_DisplayRSSI(uint8_t Rssi);
+
 extern void LCD_DisDigit(uint8_t Pos, uint32_t Digit);
 extern void LCD_DisDigit_5(uint8_t Pos, uint32_t Digit);
 extern void LCD_DisVer(void);

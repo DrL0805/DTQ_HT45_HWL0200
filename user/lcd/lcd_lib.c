@@ -113,7 +113,7 @@ void LCD_Update(void)
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SIGNAL)
 		{
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SIGNAL;
-			LCD_DisplaySignal(RSSI_4);
+			LCD_DisplayRSSI(RADIO.IM.LatestRssi);
 		}
 		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_BATTERY)
@@ -303,6 +303,30 @@ void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value)					//显示信号强度
 	for(i=32;i<64 ;i++)
 	{
 		LCD_DRV_WriteData(SignalDot[i]);
+	}	
+}
+
+void LCD_DisplayRSSI(uint8_t Rssi)
+{
+	if(Rssi >= 90)
+	{
+		LCD_DisplaySignal(RSSI_1);
+	}
+	else if(Rssi >= 80 && Rssi < 90)
+	{
+		LCD_DisplaySignal(RSSI_2);
+	}
+	else if(Rssi >= 70 && Rssi < 80)
+	{
+		LCD_DisplaySignal(RSSI_3);
+	}
+	else if(Rssi >= 20 && Rssi< 70)
+	{
+		LCD_DisplaySignal(RSSI_4);
+	}	
+	else
+	{
+		LCD_DisplaySignal(RSSI_0);
 	}	
 }
 

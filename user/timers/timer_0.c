@@ -24,6 +24,7 @@ TIMER0_INSTANCE_T		drTIM_SendResult;			// 显示发送结果（成功/失败）
 TIMER0_INSTANCE_T		drTIM_LCD;					// LCD显示
 TIMER0_INSTANCE_T		drTIM_ERR;					// 程序允许错误提示
 TIMER0_INSTANCE_T		drTIM_AutoSend;				// 自动按键发送压力测试
+TIMER0_INSTANCE_T		drTIM_RSSI;					// 定时刷新RSSI值
 
 
 // Locals -------------------------------------------------------------
@@ -47,6 +48,7 @@ void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
 			drTIMER_TimeOutCheck(&drTIM_LCD);	
 			drTIMER_TimeOutCheck(&drTIM_ERR);	
 			drTIMER_TimeOutCheck(&drTIM_AutoSend);	
+			drTIMER_TimeOutCheck(&drTIM_RSSI);
 		
             break;
         default:
@@ -106,7 +108,6 @@ uint32_t TIMER0_Init(void)
 void drTIMER_EventHandler(void)
 {
 
-	
 	drTIM_TmpHandler();
 	drTIM_SysSleepHandler();
 	drTIM_LowPwrPromptHandler();
@@ -114,6 +115,7 @@ void drTIMER_EventHandler(void)
 	drTIM_LCDHandler();
 	drTIM_ERRHandler();
 	drTIM_AutoSendHandler();
+	drTIM_RSSIHandler();
 }
 
 
@@ -289,6 +291,30 @@ void drTIM_AutoSendHandler(void)
 		KEY.ScanValue = KEY_APP_A_1;
 	}	
 }
+
+void drTIM_RSSIStart(void)
+{
+	drTIMER_Start(&drTIM_RSSI, 25);
+}
+
+void drTIM_RSSIStop(void)
+{
+	drTIMER_Stop(&drTIM_RSSI);
+}
+
+void drTIM_RSSIHandler(void)
+{
+//	static bool	TmpFlg = false;
+	
+	if(drTIM_RSSI.TimeOutFlg)
+	{
+		drTIM_RSSI.TimeOutFlg = false;
+		
+		LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
+	}	
+}
+
+
 
 
 

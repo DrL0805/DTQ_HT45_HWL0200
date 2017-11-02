@@ -140,12 +140,11 @@ void RADIO_RxDataHandler(void)
 			//是否是已匹配的接收器发过来的或广播
 			if(ArrayCmp(RADIO.RX.SrcId,RADIO.MATCH.JsqUid,4) || ArrayCmp(RADIO.RX.SrcId,RADIO.MATCH.PublicUid, 4))
 			{	
+				RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;				
+				
 				//发给特定UID或者广播
 				if(ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.PublicUid, 4) || ArrayCmp(RADIO.RX.DstId,RADIO.MATCH.DtqUid,4))
 				{
-					// 只有发给"我"的2.4G数据才更新RSSI值
-					RADIO.IM.LatestRssi = rx_payload.rssi&0x7F;
-					
 					// 新的包号，或者包号为0，则接收
 					if((RADIO.RX.PackNum != RADIO.IM.LastRxPackNum) | (0 == (RADIO.RX.PackNum&0x7F)) | (RADIO.RX.ExtendLen != 0))	
 					{

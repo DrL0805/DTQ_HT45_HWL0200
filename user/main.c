@@ -31,7 +31,7 @@ int main (void)
 //	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
-//	TIMER_ADCStart();
+	TIMER_ADCStart();
 	drTIM_SysSleepStart();
 	
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
@@ -43,9 +43,10 @@ int main (void)
 
 	APP_PwrOnRequest();
 	
-	drTIM_TmpStart();
-	
+//	drTIM_TmpStart();					// 监测程序是否卡死
 	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+	drTIM_RSSIStart();					// 信号强度显示
+	
 	
 	while(true)
 	{
