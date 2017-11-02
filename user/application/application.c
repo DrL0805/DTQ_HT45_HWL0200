@@ -43,9 +43,10 @@ uint32_t APP_Init(void)
 
 
 //应用参数更新
-void APP_ParUpdate(void)
+uint32_t APP_ParUpdate(void)
 {	
 	static uint32_t TmpCnt = 0;
+	uint16_t TmpLen = 0;
 	
 	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
@@ -54,56 +55,73 @@ void APP_ParUpdate(void)
 		TT4_ReadNDEF(NFC.DataRead);					//读取新的13.56M数据
 		M24SR_Deselect();
 		
-		NFC.MatchSucceedFlg = true;
-		
-		if(NFC.MatchSucceedFlg)
+		TmpLen = NFC.DataRead[0] << 8 | NFC.DataRead[1];		//解析M24SR存储的数据长度
+		if(TmpLen > 10)											//长度太短肯定是错的
 		{
-			memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
-			memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
-			memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
-			RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
-			RADIO.MATCH.Student.Score = 0;
-			RADIO.MATCH.TxChannal = NFC.DataRead[8];			
-			RADIO.MATCH.RxChannal = NFC.DataRead[9];	
-			RADIO.MATCH.TxPower = NFC.DataRead[10];	
-		}
+			if(XOR_Cal(NFC.DataRead,TmpLen - 1) == NFC.DataRead[TmpLen - 1])
+			{
+				NFC.MatchSucceedFlg = true;
+				
+				memcpy(RADIO.MATCH.JsqUid,NFC.DataRead+2,4);			//与之配对的接收器UID
+				memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//答题器UID
+				memcpy(RADIO.MATCH.Student.Name, NFC.DataRead+13, 10);	
+				RADIO.MATCH.DtqNum = NFC.DataRead[6] | (NFC.DataRead[7] << 8);
+				RADIO.MATCH.Student.Score = 0;
+				RADIO.MATCH.TxChannal = NFC.DataRead[8];			
+				RADIO.MATCH.RxChannal = NFC.DataRead[9];	
+				RADIO.MATCH.TxPower = NFC.DataRead[10];	
+			
+				LCD_ClearSceneArea();
+				APP.QUE.ReceiveQueFlg = false;
+				APP.QUE.Answer = 0;		
+				
+				// 更新当前收发频点
+				RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
+				RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
+				RADIO.IM.TxPower = RADIO.MATCH.TxPower;			
+				RADIO.IM.LastRxPackNum = 0;			
+				RADIO.IM.LastRxSeqNum = 0;	
+				RADIO.IM.LastRxPackNum = 0;
+				
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+			
+				// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
+				APP.NFCIrqFlg = false;				
+				
+				TEST.TxFaiCnt = 0;
+				TEST.TxSucCnt = 0;
 
-		LCD_ClearSceneArea();
-		APP.QUE.ReceiveQueFlg = false;
-		APP.QUE.Answer = 0;		
-		
-		// 更新当前收发频点
-		RADIO.IM.TxChannal = RADIO.MATCH.TxChannal;			
-		RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
-		RADIO.IM.TxPower = RADIO.MATCH.TxPower;			
-		RADIO.IM.LastRxPackNum = 0;			
-		RADIO.IM.LastRxSeqNum = 0;	
-		RADIO.IM.LastRxPackNum = 0;
-		
-		LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
-	
-		// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
-		APP.NFCIrqFlg = false;				
-		
-		TEST.TxFaiCnt = 0;
-		TEST.TxSucCnt = 0;
+				// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
+				if(SYS_ON == POWER.SysState)
+				{
+					drTIM_SysSleepStart();
+				}
+				else if(SYS_SLEEP == POWER.SysState)
+				{
+					POWER_SysSleepToOn();
+				}	
 
-		// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
-		if(SYS_ON == POWER.SysState)
-		{
-			drTIM_SysSleepStart();
+				LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+				LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+				LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+				LCD_DisDigit(12, ++TmpCnt);	
+				
+				return drERROR_1356M_SUCCESS;
+			}
+			else
+			{
+				NFC.MatchSucceedFlg = false;
+				return drERROR_1356M_CRC_ERR;
+			}	
 		}
-		else if(SYS_SLEEP == POWER.SysState)
+		else
 		{
-			POWER_SysSleepToOn();
-		}
-		
-//	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-//	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-//	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-//	LCD_DisDigit(12, ++TmpCnt);		
-		
+			NFC.MatchSucceedFlg = false;
+			return drERROR_1356M_LEN_ERR;
+		}			
 	}
+	
+	return drERROR_SUCCESS;
 }
 
 void APP_KeyHandler(void)

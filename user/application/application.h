@@ -107,7 +107,7 @@ typedef struct
 
 uint32_t APP_Init(void);
 
-void APP_ParUpdate(void);
+uint32_t APP_ParUpdate(void);
 
 void APP_KeyHandler(void);
 void APP_CmdHandler(void);
