@@ -28,6 +28,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "drv_I2C_M24SR.h"
+#include "drl_err.h"
 
 static uint8_t						uSynchroMode = M24SR_WAITINGTIME_POLLING;
 //static uint8_t						uSynchroMode = M24SR_WAITINGTIME_TIMEOUT;

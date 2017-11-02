@@ -27,6 +27,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "lib_NDEF.h"
+#include "drl_err.h"
 
 /** @addtogroup NFC_libraries
  * 	@{
@@ -60,7 +61,11 @@ uint16_t NDEF_ReadNDEF( uint8_t* pNDEF)
 	if( status == M24SR_ACTION_COMPLETED)
 		return SUCCESS;
 	else
+	{
+		drERROR_CHECK(drERROR_1356M_INIT+10);
 		return ERROR;
+	}
+		
 	
 }
 

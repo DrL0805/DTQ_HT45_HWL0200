@@ -17,7 +17,7 @@ int main (void)
 	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
 	drERROR_CHECK(FLASH_Init());
-	drERROR_CHECK(POWER_Init());	
+	drERROR_CHECK(POWER_Init());
 	drERROR_CHECK(APP_Init());
 	drERROR_CHECK(RADIO_Init());
 	drERROR_CHECK(LED_Init());

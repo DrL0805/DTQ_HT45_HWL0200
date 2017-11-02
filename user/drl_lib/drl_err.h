@@ -49,6 +49,7 @@ typedef struct
 #define drERROR_1356M_CRC_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 1)		// CRC校验错误
 #define drERROR_1356M_ID_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 2)		// UID读取失败
 #define drERROR_1356M_LEN_ERR				(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 3)		// 读取数据长度异常
+#define drERROR_1356M_INIT					(drERROR_BASE_NUM + drERROR_1356M_BASE_NUM + 20)
 
 // RADIO
 #define drERROR_RADIO_BASE_NUM				(0x0300)		

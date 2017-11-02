@@ -23,11 +23,22 @@ void drERR_ErrCheck(drErrType err_code)
 	
 //	switch(err_code)
 //	{
-//		case 0:
-//			break;
-//		case 1:
+//		case drERROR_1356M_CRC_ERR:
+//		case drERROR_1356M_ID_ERR:
+//		case drERROR_1356M_LEN_ERR:
+////			NVIC_SystemReset();				//复位
 //			break;
 //		default:
+//			for(i = 0;i < 32;i++)
+//			{
+//				// 检测当前bit是否保存有错误信息，若无，则保存
+//				if(!(ERR.ErrState & (0x01 << i)))
+//				{
+//					ERR.ErrState |= 0x01 << i;
+//					ERR.ErrData[i] = err_code;
+//					break;
+//				}
+//			}			
 //			break;
 //	}
 	
@@ -40,7 +51,7 @@ void drERR_ErrCheck(drErrType err_code)
 			ERR.ErrData[i] = err_code;
 			break;
 		}
-	}
+	}	
 }
 
 void drERR_ErrHandler(void)

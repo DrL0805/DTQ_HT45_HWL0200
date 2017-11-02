@@ -27,7 +27,8 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "drv_M24SR.h"
+#include "drv_M24SR.h"		
+#include "drl_err.h"		
 
 /** @addtogroup M24SR_Driver
   * @{
@@ -357,7 +358,7 @@ void M24SR_Init( void )
 	
 	M24SR_ManageI2CGPO(I2C_ANSWER_READY);
 	
-	M24SR_Deselect ();
+//	M24SR_Deselect ();
 }
 
 /**
@@ -369,8 +370,8 @@ uint16_t M24SR_GetSession ( void )
 {
 	uint8_t Buffer = M24SR_OPENSESSION;
 	int16_t 	status;
-
-	status = M24SR_SendI2Ccommand ( 0x01 , &Buffer );
+	
+	errchk(M24SR_SendI2Ccommand ( 0x01 , &Buffer ));
 
 	/* insure no access will be done just after open session */	
 	/* The only way here is to poll I2C to know when M24SR is ready */
@@ -386,6 +387,7 @@ Error :
 	/* Send STOP Condition */
 //  I2C_GenerateSTOP(M24SR_I2C, ENABLE);
 	M24SR_I2CStop();
+	drERROR_CHECK(drERROR_1356M_INIT+M24SR_ERROR_I2CTIMEOUT);
 	return M24SR_ERROR_I2CTIMEOUT;	
 }
 
@@ -414,6 +416,7 @@ Error :
 	/* Send STOP Condition */
 //  I2C_GenerateSTOP(M24SR_I2C, ENABLE);
 	M24SR_I2CStop();
+	drERROR_CHECK(drERROR_1356M_INIT+M24SR_ERROR_I2CTIMEOUT);
 	return M24SR_ERROR_I2CTIMEOUT;
 }
 
@@ -483,6 +486,7 @@ uint16_t	uP1P2 =0x0400,
 	return status;
 	
 Error :
+	drERROR_CHECK(drERROR_1356M_INIT+M24SR_ERROR_I2CTIMEOUT);
 	return M24SR_ERROR_I2CTIMEOUT;
 }
 
@@ -612,6 +616,7 @@ uint16_t	uP1P2 =0x000C,
 	return status;
 	
 Error :
+	drERROR_CHECK(drERROR_1356M_INIT+M24SR_ERROR_I2CTIMEOUT);
 	return M24SR_ERROR_I2CTIMEOUT;
 	
 }

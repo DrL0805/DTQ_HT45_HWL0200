@@ -50,7 +50,7 @@ uint32_t NFC_Init(void)
 	TT4_Init();	
 	M24SR_GetUID(NFC.UID);
 	TT4_ReadNDEF(NFC.DataRead);
-	M24SR_ManageGPO(STATE_CONTROL,RF_GPO);		//GPO配置为中断模式
+	M24SR_ManageGPO(STATE_CONTROL,RF_GPO);		
 	M24SR_Deselect();						//释放I2C控制权
 	
 	if(ArrayCmp(NFC.UID+3, TmpBuf, 4))
