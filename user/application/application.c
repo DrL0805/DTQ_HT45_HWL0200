@@ -183,7 +183,8 @@ void APP_KeyHandler(void)
 								return;
 							
 							// 不允许重复提交答案
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{								
 								APP_KeySingleChoiceHandler();
 							}						
@@ -196,7 +197,8 @@ void APP_KeyHandler(void)
 								return;
 						
 							// 不允许重复提交答案
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{								
 								APP_Key6SingleChoiceHandler();
 							}							
@@ -208,7 +210,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;
 							
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyJudgeHandler();
 							}							
@@ -218,7 +221,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;							
 							
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiChoiceHandler();
 							}
@@ -229,7 +233,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;									
 						
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyActivityHandler();
 							}
@@ -241,7 +246,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;															
 						
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
 							}
@@ -252,7 +258,7 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;																	
 							
-							if(!RADIO.IM.TxIngFlg)
+//							if(!RADIO.IM.TxIngFlg)
 								APP_KeyFreeHandler();
 							break;
 						default:
@@ -273,7 +279,8 @@ void APP_KeyHandler(void)
 								return;
 							
 							// 不允许重复提交答案
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{								
 								APP_KeySingleChoiceHandler();
 							}													
@@ -285,7 +292,8 @@ void APP_KeyHandler(void)
 								return;
 						
 							// 不允许重复提交答案
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{								
 								APP_Key6SingleChoiceHandler();
 							}							
@@ -296,7 +304,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;
 							
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyJudgeHandler();
 							}							
@@ -306,7 +315,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;							
 						
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiChoiceHandler();
 							}
@@ -317,7 +327,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;									
 						
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyActivityHandler();
 							}
@@ -328,7 +339,8 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;								
 						
-							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
 							}
@@ -339,7 +351,7 @@ void APP_KeyHandler(void)
 							if(APP.QUE.KeySendLimitFlg)
 								return;								
 							
-							if(!RADIO.IM.TxIngFlg)
+//							if(!RADIO.IM.TxIngFlg)
 								APP_KeyFreeHandler();
 							break;
 						default:
@@ -463,7 +475,7 @@ void APP_KeyPowerHandler(void)
 // 考勤键
 void APP_KeyFnAddOKHandler(void)
 {
-
+	
 }
 
 void APP_KeyClearHandler(void)

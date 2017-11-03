@@ -468,8 +468,7 @@ void TIMER_RetransmitStart(void)
 	uint32_t err_code;
 	uint32_t random_delay;	
 	
-//	random_delay = 30 + (GetRandomNumber() >> 3);	// Г§вд8
-	random_delay = 40 + GetRandomNumber() / 6;		
+	random_delay = 10 + (GetRandomNumber() >> 2);	// Г§вд4
 	
 	err_code = app_timer_start(retransmit_timer_id,APP_TIMER_TICKS(random_delay,APP_TIMER_PRESCALER)  ,NULL);
 	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
@@ -546,7 +545,7 @@ void TIMER_RetransmitHandler(void * p_context)
 
 //void TIMER_SendAllowHandler(void * p_context)
 //{
-
+////	APP.QUE.KeySendLimitFlg = false;
 //	TEST.StopCnt++;
 //}
 
