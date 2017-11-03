@@ -139,7 +139,7 @@ void drTIM_TmpHandler(void)
 	if(drTIM_Tmp.TimeOutFlg)
 	{
 		drTIM_Tmp.TimeOutFlg = false;
-		LCD_DisDigit(8, TIMER0.TickCnt/10);
+		LCD_DisDigitN(5, TIMER0.TickCnt/10, 6);
 	}
 }
 
@@ -226,7 +226,7 @@ void drTIM_SendResultHandler(void)
 
 void drTIM_LCDStart(void)
 {
-	drTIMER_Start(&drTIM_LCD, 20);
+	drTIMER_Start(&drTIM_LCD, 30);
 }
 
 void drTIM_LCDStop(void)

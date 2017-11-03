@@ -31,6 +31,7 @@ int main (void)
 	TIMER_RxWindowStart();	
 	TIMER_ADCStart();
 	drTIM_SysSleepStart();
+	drTIM_RSSIStart();					// 信号强度显示
 	
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
@@ -42,8 +43,8 @@ int main (void)
 	APP_PwrOnRequest();
 	
 	drTIM_TmpStart();					// 监测程序是否卡死
-	drTIM_AutoSendStart();				// 自动按键发送测试定时器
-	drTIM_RSSIStart();					// 信号强度显示
+//	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+	
 	
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);

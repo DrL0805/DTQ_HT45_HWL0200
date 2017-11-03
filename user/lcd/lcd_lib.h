@@ -149,6 +149,7 @@ extern void LCD_DisplayRSSI(uint8_t Rssi);
 
 extern void LCD_DisDigit(uint8_t Pos, uint32_t Digit);
 extern void LCD_DisDigit_5(uint8_t Pos, uint32_t Digit);
+extern void LCD_DisDigitN(uint8_t Pos, uint32_t Digit, uint8_t Len);
 extern void LCD_DisVer(void);
 
 #endif 

@@ -376,7 +376,6 @@ void LCD_DisplayBattery(LCD_BATTERY_LEVEL_TYPE Value)			//显示电池电量
 	{
 		LCD_DRV_WriteData(BatteryDot[i]);
 	}	
-	
 }
 
 void LCD_DisplayDeviceId(void)
@@ -541,21 +540,27 @@ void LCD_DisVer(void)
 //	LCD_DRV_DisplayN(16, 16, (uint8_t *)VERSION_LEVEL_COMPANY);
 //	LCD_DRV_DisplayN(32, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
 //	LCD_DRV_DisplayN(48, 16, (uint8_t *)VERSION_LEVEL_TIME);
-	
-	// 完整ID
+	char* uID = "uID:";
+	char* Vol = "Vol:      mV";
 	uint32_t TmpUid;
 	
+	// 先临时清除显示
+	LCD_ClearSceneArea();
+	
+	// 完整ID
 	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
 			   RADIO.MATCH.DtqUid[1] << 8  |
 			   RADIO.MATCH.DtqUid[2] << 16 |
 			   RADIO.MATCH.DtqUid[3] << 24 ;
-	LCD_DisDigitN(18, TmpUid, 10);
+	LCD_DRV_DisplayN(17, 4, (uint8_t *)uID);
+	LCD_DisDigitN(21, TmpUid, 10);
 	
 	// 版本号
 	LCD_DRV_DisplayN(34, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
 	
 	// 电池电量
-	LCD_DisDigitN(50, ADC.LatestADCVal, 4);
+	LCD_DRV_DisplayN(50, 12, (uint8_t *)Vol);
+	LCD_DisDigitN(55, ADC.LatestADCVal, 4);
 	
 }
 
