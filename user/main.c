@@ -42,7 +42,7 @@ int main (void)
 	
 	APP_PwrOnRequest();
 	
-	drTIM_TmpStart();					// 监测程序是否卡死
+//	drTIM_TmpStart();					// 监测程序是否卡死
 //	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	
 	
@@ -57,7 +57,7 @@ int main (void)
 			case SYS_ON:	
 				TIMER_EventHandler();	
 				RADIO_RxDataHandler();	
-				APP_KeyHandler();	
+				APP_KeyHandler();
 				LCD_Update();	
 				ADC_Update();	
 				break;

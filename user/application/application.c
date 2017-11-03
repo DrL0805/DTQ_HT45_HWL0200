@@ -158,11 +158,10 @@ void APP_KeyHandler(void)
 		}
 		
 		if(RADIO.IM.TxIngFlg)
-		{		
+		{	
 			if(++APP.KeyGapCnt > 3)
 			{
-				RADIO.IM.TxIngFlg = false;
-				TIMER_RetransmitStop();
+				APP.QUE.KeySendLimitFlg = false;
 			}
 		}
 
