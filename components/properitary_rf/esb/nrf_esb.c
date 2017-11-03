@@ -1305,7 +1305,7 @@ uint32_t my_esb_mode_change(drl_nrf_esb_mode_t mode, uint32_t Channal)
 			}
 			
 			err_code = nrf_esb_flush_tx();
-			drERROR_CHECK(drERROR_RADIO_BASE_NUM*5+err_code);
+//			drERROR_CHECK(drERROR_RADIO_BASE_NUM*5+err_code);
 			
 			err_code = nrf_esb_stop_rx();
 //			drERROR_CHECK(drERROR_RADIO_BASE_NUM+err_code);			

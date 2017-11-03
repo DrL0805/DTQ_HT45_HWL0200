@@ -4,7 +4,7 @@
 static void MAIN_DebugFun(void);
 
 int main (void)
-{
+{	
 	POWER.SysInitializedFlg = false;
 	
 	GPIO_Default();
@@ -14,6 +14,7 @@ int main (void)
 	drERROR_CHECK(DEBUG_Init());
 	drERROR_CHECK(TIMERS_Init());
 	drERROR_CHECK(TIMER0_Init());
+	drERROR_CHECK(WDT_Init());	
 	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
 	drERROR_CHECK(FLASH_Init());
@@ -24,7 +25,6 @@ int main (void)
 	drERROR_CHECK(W25_Init());
 	drERROR_CHECK(LCD_Init());
 	drERROR_CHECK(ADC_Init());
-	drERROR_CHECK(WDT_Init());	
 	
 //	W25_ReadTestData();
 	
@@ -38,18 +38,17 @@ int main (void)
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 	POWER.SysInitializedFlg = true;	
-
+	
 	APP_PwrOnRequest();
 	
 	drTIM_TmpStart();					// 监测程序是否卡死
-//	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+	drTIM_AutoSendStart();				// 自动按键发送测试定时器
 	drTIM_RSSIStart();					// 信号强度显示
 	
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
 //	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
 	
-
 	while(true)
 	{
 		switch(POWER.SysState)

@@ -25,6 +25,8 @@ TIMER0_INSTANCE_T		drTIM_LCD;					// LCD显示
 TIMER0_INSTANCE_T		drTIM_ERR;					// 程序允许错误提示
 TIMER0_INSTANCE_T		drTIM_AutoSend;				// 自动按键发送压力测试
 TIMER0_INSTANCE_T		drTIM_RSSI;					// 定时刷新RSSI值
+TIMER0_INSTANCE_T		drTIM_KeyFreqCtrl;			// 按键频率控制
+
 
 
 // Locals -------------------------------------------------------------
@@ -34,8 +36,6 @@ const nrf_drv_timer_t TIMER_PUBLIC = NRF_DRV_TIMER_INSTANCE(0);				// 公共定时器
 
 void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
 {
-
-    
     switch(event_type)
     {
         case NRF_TIMER_EVENT_COMPARE0:
@@ -49,6 +49,7 @@ void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
 			drTIMER_TimeOutCheck(&drTIM_ERR);	
 			drTIMER_TimeOutCheck(&drTIM_AutoSend);	
 			drTIMER_TimeOutCheck(&drTIM_RSSI);
+			drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
 		
             break;
         default:
@@ -116,6 +117,7 @@ void drTIMER_EventHandler(void)
 	drTIM_ERRHandler();
 	drTIM_AutoSendHandler();
 	drTIM_RSSIHandler();
+	drTIM_KeyFreqCtrlHandler();
 }
 
 
@@ -316,7 +318,28 @@ void drTIM_RSSIHandler(void)
 
 
 
+void drTIM_KeyFreqCtrlStart(void)
+{
+	drTIMER_Start(&drTIM_KeyFreqCtrl, 3);
+}
 
+void drTIM_KeyFreqCtrlStop(void)
+{
+	drTIMER_Stop(&drTIM_KeyFreqCtrl);
+}
+
+void drTIM_KeyFreqCtrlHandler(void)
+{
+//	static bool	TmpFlg = false;
+	
+	if(drTIM_KeyFreqCtrl.TimeOutFlg)
+	{
+		drTIM_KeyFreqCtrl.TimeOutFlg = false;
+		
+		drTIM_KeyFreqCtrlStop();
+		APP.KeyCntLimitFlg = false;
+	}	
+}
 
 
 

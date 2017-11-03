@@ -621,6 +621,7 @@ void TIMER_KeyFreqCtrlStop(void)
 void TIMER_KeyFreqCtrlHandler(void * p_context)
 {
 	APP.KeyCntLimitFlg = false;
+	
 }
 
 

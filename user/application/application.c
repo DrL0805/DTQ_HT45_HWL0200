@@ -154,7 +154,8 @@ void APP_KeyHandler(void)
 		{
 			APP.KeyCnt++;
 			APP.KeyCntLimitFlg = true;
-			TIMER_KeyFreqCtrlStart();
+			drTIM_KeyFreqCtrlStart();
+//			TIMER_KeyFreqCtrlStart();
 		}
 		
 		if(RADIO.IM.TxIngFlg)

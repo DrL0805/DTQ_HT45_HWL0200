@@ -47,12 +47,13 @@
 #define     VERSION_LEVEL_2		(3)			//¶þ¼¶°æ±¾ºÅ
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.3.5              "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.3.6              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
-#define 	SYS_NO_SLEEP_DEBUG		(1)
+#define 	SYS_NO_SLEEP_DEBUG		(0)
 #define 	USE_WATCH_DOG			(0)
 #define 	USE_UART_DEBUG			(0)
+#define 	USE_ERR_CHECK			(0)
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);
 extern bool ArrayCmp(uint8_t *str1, uint8_t *str2, uint8_t len);

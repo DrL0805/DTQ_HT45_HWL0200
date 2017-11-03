@@ -64,6 +64,11 @@ void drTIM_AutoSendHandler(void);
 void drTIM_RSSIStart(void);
 void drTIM_RSSIStop(void);
 void drTIM_RSSIHandler(void);
+
+void drTIM_KeyFreqCtrlStart(void);
+void drTIM_KeyFreqCtrlStop(void);
+void drTIM_KeyFreqCtrlHandler(void);
+
 // Globals ------------------------------------------------------------
 extern TIMER0_PATAMETERS_T		TIMER0; 			
 extern TIMER0_INSTANCE_T		drTIM_Tmp;
