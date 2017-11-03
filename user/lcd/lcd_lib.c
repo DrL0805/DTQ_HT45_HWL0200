@@ -512,14 +512,51 @@ void LCD_DisDigit_5(uint8_t Pos, uint32_t Digit)
 	LCD_DRV_DisplayDigit(Pos+4,Digit%10);			
 }
 
+void LCD_DisDigit_10(uint8_t Pos, uint32_t Digit)
+{
+	uint32_t i;
+	uint32_t Tmp = Digit;
+	
+	for(i = 0;i < 10;i++)
+	{
+		LCD_DRV_DisplayDigit(Pos+9-i,Tmp%10);
+		Tmp = Tmp / 10;
+	}		
+}
+
+void LCD_DisDigitN(uint8_t Pos, uint32_t Digit, uint8_t Len)
+{
+	uint32_t i;
+	uint32_t Tmp = Digit;
+	
+	for(i = 0;i < Len;i++)
+	{
+		LCD_DRV_DisplayDigit(Pos+Len-1-i,Tmp%10);
+		Tmp = Tmp / 10;
+	}
+}
+
 void LCD_DisVer(void)
 {
-//	LCD_DRV_DisplayN(20, strlen(VERSION_LEVEL_COMPANY), (uint8_t *)VERSION_LEVEL_COMPANY);
-//	LCD_DRV_DisplayN(35, strlen(VERSION_LEVEL_NUMBER), (uint8_t *)VERSION_LEVEL_NUMBER);
-//	LCD_DRV_DisplayN(48, strlen(VERSION_LEVEL_TIME), (uint8_t *)VERSION_LEVEL_TIME);
-	LCD_DRV_DisplayN(16, 16, (uint8_t *)VERSION_LEVEL_COMPANY);
-	LCD_DRV_DisplayN(32, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
-	LCD_DRV_DisplayN(48, 16, (uint8_t *)VERSION_LEVEL_TIME);
+//	LCD_DRV_DisplayN(16, 16, (uint8_t *)VERSION_LEVEL_COMPANY);
+//	LCD_DRV_DisplayN(32, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
+//	LCD_DRV_DisplayN(48, 16, (uint8_t *)VERSION_LEVEL_TIME);
+	
+	// 完整ID
+	uint32_t TmpUid;
+	
+	TmpUid =  RADIO.MATCH.DtqUid[0] 	   | 
+			   RADIO.MATCH.DtqUid[1] << 8  |
+			   RADIO.MATCH.DtqUid[2] << 16 |
+			   RADIO.MATCH.DtqUid[3] << 24 ;
+	LCD_DisDigitN(18, TmpUid, 10);
+	
+	// 版本号
+	LCD_DRV_DisplayN(34, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
+	
+	// 电池电量
+	LCD_DisDigitN(50, ADC.LatestADCVal, 4);
+	
 }
 
 

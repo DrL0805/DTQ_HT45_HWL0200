@@ -47,10 +47,10 @@
 #define     VERSION_LEVEL_2		(3)			//¶þ¼¶°æ±¾ºÅ
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.2.3              "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.3.5              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
-#define 	SYS_NO_SLEEP_DEBUG		(0)
+#define 	SYS_NO_SLEEP_DEBUG		(1)
 #define 	USE_WATCH_DOG			(0)
 #define 	USE_UART_DEBUG			(0)
 
