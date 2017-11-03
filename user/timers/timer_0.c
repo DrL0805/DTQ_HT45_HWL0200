@@ -294,7 +294,7 @@ void drTIM_AutoSendHandler(void)
 
 void drTIM_RSSIStart(void)
 {
-	drTIMER_Start(&drTIM_RSSI, 25);
+	drTIMER_Start(&drTIM_RSSI, 3);
 }
 
 void drTIM_RSSIStop(void)

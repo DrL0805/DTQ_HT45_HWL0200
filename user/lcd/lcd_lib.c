@@ -311,19 +311,19 @@ void LCD_DisplaySignal(LCD_SIGNAL_LEVEL_TYPE Value)					//显示信号强度
 
 void LCD_DisplayRSSI(uint8_t Rssi)
 {
-	if(Rssi >= 90)
+	if(Rssi >= 80)
 	{
 		LCD_DisplaySignal(RSSI_1);
 	}
-	else if(Rssi >= 80 && Rssi < 90)
+	else if(Rssi >= 70 && Rssi < 80)
 	{
 		LCD_DisplaySignal(RSSI_2);
 	}
-	else if(Rssi >= 70 && Rssi < 80)
+	else if(Rssi >= 60 && Rssi < 70)
 	{
 		LCD_DisplaySignal(RSSI_3);
 	}
-	else if(Rssi >= 20 && Rssi< 70)
+	else if(Rssi >= 20 && Rssi< 60)
 	{
 		LCD_DisplaySignal(RSSI_4);
 	}	
