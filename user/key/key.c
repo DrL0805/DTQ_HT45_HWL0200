@@ -149,7 +149,7 @@ void KEY_Scan(void)
 				// 有效按键才开启按键定时器
 				if((0x00 != KEY_FirstValue) && (0x0F != KEY_FirstValue) && (0xF0 != KEY_FirstValue))
 				{
-					KEY.ScanState = KEY_TWO;					
+					KEY.ScanState = KEY_TWO;	
 					TIMER_ButtonStart();
 				}				
 				break;
@@ -186,6 +186,7 @@ void KEY_Scan(void)
 						{
 							LCD_DisVer();
 							drTIM_LCDStart();
+							drTIM_SysSleepStart();			
 						}
 					}
 					else
