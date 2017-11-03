@@ -546,7 +546,7 @@ void TIMER_RetransmitHandler(void * p_context)
 
 //void TIMER_SendAllowHandler(void * p_context)
 //{
-////	APP.QUE.KeySendLimitFlg = false;
+
 //	TEST.StopCnt++;
 //}
 

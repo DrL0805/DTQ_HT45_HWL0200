@@ -26,7 +26,7 @@ TIMER0_INSTANCE_T		drTIM_ERR;					// 程序允许错误提示
 TIMER0_INSTANCE_T		drTIM_AutoSend;				// 自动按键发送压力测试
 TIMER0_INSTANCE_T		drTIM_RSSI;					// 定时刷新RSSI值
 TIMER0_INSTANCE_T		drTIM_KeyFreqCtrl;			// 按键频率控制
-
+TIMER0_INSTANCE_T		drTIM_SendLimit;			// 发送频率限制
 
 
 // Locals -------------------------------------------------------------
@@ -50,6 +50,7 @@ void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
 			drTIMER_TimeOutCheck(&drTIM_AutoSend);	
 			drTIMER_TimeOutCheck(&drTIM_RSSI);
 			drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
+			drTIMER_TimeOutCheck(&drTIM_SendLimit);
 		
             break;
         default:
@@ -118,6 +119,7 @@ void drTIMER_EventHandler(void)
 	drTIM_AutoSendHandler();
 	drTIM_RSSIHandler();
 	drTIM_KeyFreqCtrlHandler();
+	drTIM_SendLimitHandler();
 }
 
 
@@ -338,6 +340,29 @@ void drTIM_KeyFreqCtrlHandler(void)
 		
 		drTIM_KeyFreqCtrlStop();
 		APP.KeyCntLimitFlg = false;
+	}	
+}
+
+void drTIM_SendLimitStart(void)
+{
+	drTIMER_Start(&drTIM_SendLimit, 3);
+}
+
+void drTIM_SendLimitStop(void)
+{
+	drTIMER_Stop(&drTIM_SendLimit);
+}
+
+void drTIM_SendLimitHandler(void)
+{
+//	static bool	TmpFlg = false;
+	
+	if(drTIM_SendLimit.TimeOutFlg)
+	{
+		drTIM_SendLimit.TimeOutFlg = false;
+		
+		drTIM_SendLimitStop();
+		APP.QUE.KeySendLimitFlg = false;
 	}	
 }
 

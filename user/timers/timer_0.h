@@ -69,6 +69,10 @@ void drTIM_KeyFreqCtrlStart(void);
 void drTIM_KeyFreqCtrlStop(void);
 void drTIM_KeyFreqCtrlHandler(void);
 
+void drTIM_SendLimitStart(void);
+void drTIM_SendLimitStop(void);
+void drTIM_SendLimitHandler(void);
+
 // Globals ------------------------------------------------------------
 extern TIMER0_PATAMETERS_T		TIMER0; 			
 extern TIMER0_INSTANCE_T		drTIM_Tmp;

@@ -235,12 +235,10 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			RADIO.IM.TxIngFlg = true;
 			RADIO.IM.ReTxCount = 0;	
 			
-//			TIMER_SendAllowStop();					// 重新计时，否则可能出问题
-//			TIMER_SendAllowStart();	
-			
-//			APP.QUE.KeySendLimitFlg = false;			// 处于发送过程时，不允许再次按键发送数据
+			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
+			drTIM_SendLimitStart();
 			APP.KeyGapCnt = 0;					
-		
+			
 			TEST.StartCnt++;
 			
 			// 发送一次数据

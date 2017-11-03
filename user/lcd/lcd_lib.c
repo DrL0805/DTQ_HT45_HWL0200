@@ -401,7 +401,6 @@ void LCD_DisplayDeviceId(void)
 	// œ‘ æ≤‚ ‘ƒ⁄»›
 //	LCD_DisDigit(0, KEY.ScanValue);
 //	LCD_DisDigit(4, TEST.TxIrqCnt);
-//	LCD_DisDigit(8, TEST.SendLimitCnt);
 //	LCD_DisDigit(12, TEST.ReturnCnt);
 
 //	LCD_DisDigit(16, TEST.StartCnt);
