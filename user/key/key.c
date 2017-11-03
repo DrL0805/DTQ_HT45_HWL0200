@@ -185,7 +185,6 @@ void KEY_Scan(void)
 						if(KEY_CombinationValue == 0x25)	// ÇÀºì°ü+D
 						{
 							LCD_DisVer();
-//							TIMER_DisVerStart();
 							drTIM_LCDStart();
 						}
 					}

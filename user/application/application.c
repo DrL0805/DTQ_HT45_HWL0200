@@ -116,10 +116,10 @@ uint32_t APP_ParUpdate(void)
 					POWER_SysSleepToOn();
 				}	
 
-				LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-				LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-				LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-				LCD_DisDigit(12, ++TmpCnt);	
+//				LCD_DisDigit(0, RADIO.MATCH.DtqNum);
+//				LCD_DisDigit(4, RADIO.MATCH.TxChannal);
+//				LCD_DisDigit(8, RADIO.MATCH.RxChannal);
+//				LCD_DisDigit(12, ++TmpCnt);	
 				
 				return drERROR_1356M_SUCCESS;
 			}
@@ -193,6 +193,14 @@ void APP_KeyHandler(void)
 							}						
 							
 							break;
+						case QUE_6_SINGLE_CHOICE:				// 6键单选
+							// 不允许重复提交答案
+							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
+							{								
+								APP_Key6SingleChoiceHandler();
+							}							
+							break;						
+							
 						case QUE_JUDGE:						// 判断
 							
 							//发送允许标志，用于控制按发送键的频率
@@ -722,6 +730,99 @@ void APP_KeySingleChoiceHandler(void)
 		case KEY_APP_RINGHT:
 			break;
 		case KEY_APP_WRONG:	
+			break;
+		case KEY_APP_QUERY:				
+			break;
+		case KEY_APP_POWER:	
+			break;
+		case KEY_APP_FN:				
+			break;
+		case KEY_APP_CLEAR:	
+			APP_KeyClearHandler();
+			break;
+		case KEY_APP_SEND:   
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_LAST:	
+			APP_KeyLastHandler();
+			break;			
+		case KEY_APP_NEXT:	
+			APP_KeyNextHandler();
+			break;
+		case KEY_APP_FN_ADD_1:	
+			APP_KeyFnAdd1Handler();
+			break;
+		case KEY_APP_FN_ADD_2:	
+			APP_KeyFnAdd2Handler();
+			break;
+		case KEY_APP_FN_ADD_3:	
+			APP_KeyFnAdd3Handler();
+			break;
+		case KEY_APP_FN_ADD_4:	
+			APP_KeyFnAdd4Handler();
+			break;
+		case KEY_APP_FN_ADD_5:	
+			APP_KeyFnAdd5Handler();
+			break;
+		case KEY_APP_FN_ADD_6:	
+			APP_KeyFnAdd6Handler();
+			break;
+		case KEY_APP_FN_ADD_7:	
+			APP_KeyFnAdd7Handler();
+			break;
+		case KEY_APP_FN_ADD_OK:			//Fn+ok 按键考勤
+			APP_KeyFnAddOKHandler();
+			break;
+		case KEY_APP_FN_ADD_8:			//Fn+? 按键举手
+			APP_KeyFnAdd8Handler();
+			break;
+		case KEY_APP_FN_ADD_UP:			// Fn+上题，进入24G配对模式
+			POWER_SysOnToMatch();
+			break;
+		case KEY_APP_FN_ADD_DOWN:		
+			break;	
+		default:
+			break;
+	}
+}
+
+// 6键单选题按键处理函数
+void APP_Key6SingleChoiceHandler(void)
+{
+	switch(KEY.ScanValue)
+	{
+		case KEY_APP_A_1:
+			APP.QUE.Answer = 0x01;
+			LCD_DisplayLetter(APP.QUE.Answer);
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_B_2:
+			APP.QUE.Answer = 0x02;
+			LCD_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_C_3:
+			APP.QUE.Answer = 0x04;
+			LCD_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_D_4: 
+			APP.QUE.Answer = 0x08;
+			LCD_DisplayLetter(APP.QUE.Answer);	
+			APP_KeySendHandler();
+			break;
+		case KEY_APP_E_5:
+		case KEY_APP_F_6:
+			break;
+		case KEY_APP_RINGHT:
+			APP.QUE.Answer = 0x10;
+			LCD_DisplayJudge(JUDGE_TRUE);			
+			APP_KeySendHandler();			
+			break;
+		case KEY_APP_WRONG:	
+			APP.QUE.Answer = 0x20;
+			LCD_DisplayJudge(JUDGE_FALSE);	
+			APP_KeySendHandler();				
 			break;
 		case KEY_APP_QUERY:				
 			break;

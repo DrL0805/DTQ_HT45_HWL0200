@@ -52,6 +52,7 @@ typedef enum
 	QUE_ACTIVITY    = 0x04,				// 抢红包
 	QUE_MULTI_SINGLE_CHOICE = 0x05,		// 多题单选
 	QUE_FREE = 0x06,						// 通用题
+	QUE_6_SINGLE_CHOICE = 0X07,				// 6键单选题，
 	QUE_FREE_STOP = 0x80					// 通用题停止作答
 }APP_QUE_TYPE;
 
@@ -135,6 +136,7 @@ void APP_KeyFnAdd8Handler(void);
 void APP_KeyFnAddOKHandler(void);
 
 void APP_KeySingleChoiceHandler(void);
+void APP_Key6SingleChoiceHandler(void);
 void APP_KeyMultiChoiceHandler(void);
 void APP_KeyMultiSingleChoiceHandler(void);
 void APP_KeyFreeHandler(void);
