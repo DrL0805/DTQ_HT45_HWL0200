@@ -20,6 +20,8 @@
 #include "nrf_drv_timer.h"
 
 #include "drl_err.h"
+#include "drl_debug.h"
+#include "drl_common.h"
 
 #include "simple_uart.h"
 #include "uart.h"
@@ -47,10 +49,10 @@
 #define     VERSION_LEVEL_2		(3)			//¶þ¼¶°æ±¾ºÅ
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.4.0              "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.4.2              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
-#define 	SYS_NO_SLEEP_DEBUG		(1)
+#define 	SYS_NO_SLEEP_DEBUG		(0)
 #define 	USE_WATCH_DOG			(1)
 #define 	USE_UART_DEBUG			(0)
 #define 	USE_ERR_CHECK			(0)

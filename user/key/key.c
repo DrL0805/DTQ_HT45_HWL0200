@@ -122,7 +122,6 @@ void KEY_Scan(void)
 	static uint8_t KEY_FirstValue = 0;				// 第一次扫描到的值
 	static uint8_t KEY_NextValue = 0;				// 之后扫描到的值,用于与第一次扫描的到值进行比较
 	static bool	CombinationKeyFlg = false;			// 组合键被按下标志
-	
 	static uint8_t KEY_CombinationValue;			// 保存组合键的值
 	
 	if(true == KEY.PressFlg)
@@ -186,7 +185,19 @@ void KEY_Scan(void)
 						{
 							LCD_DisVer();
 							drTIM_LCDStart();
-							drTIM_SysSleepStart();			
+							drTIM_SysSleepStart();		
+
+//							static bool TmpFlg = false;
+//							if(TmpFlg)
+//							{
+//								TmpFlg = false;
+//								nrf_drv_timer_enable(&TIMER_PUBLIC);	
+//							}
+//							else
+//							{
+//								TmpFlg = true;
+//								nrf_drv_timer_disable(&TIMER_PUBLIC);	
+//							}
 						}
 					}
 					else

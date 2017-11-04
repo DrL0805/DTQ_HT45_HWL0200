@@ -8,6 +8,9 @@
 
 typedef		uint32_t 	drErrType;			
 
+
+
+
 typedef struct
 {
 	bool				HintFlg;

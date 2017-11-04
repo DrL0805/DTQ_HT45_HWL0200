@@ -1486,7 +1486,10 @@ void APP_CmdLcdCtrlHandler(void)
 			
 			// bit0作为是否有ACK标志位
 			if(RADIO.RX.PackData[2+i*57] & 0x01)
-				APP.QUE.AnsweredFlg = true;				
+			{
+				APP.QUE.AnsweredFlg = true;
+//				RADIO.IM.TxSucFlg = true;
+			}			
 			
 			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		

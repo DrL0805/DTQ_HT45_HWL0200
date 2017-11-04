@@ -1,6 +1,12 @@
 // Revision record ----------------------------------------------------
 /*
 	使用外部定时器0，减少内部RTC app_timer的负担
+	
+	drlTIM_Start
+	drlTIM_Stop
+	drlTIM_
+	
+	
 */
 
 
@@ -30,7 +36,7 @@ TIMER0_INSTANCE_T		drTIM_SendLimit;			// 发送频率限制
 
 
 // Locals -------------------------------------------------------------
-const nrf_drv_timer_t TIMER_PUBLIC = NRF_DRV_TIMER_INSTANCE(0);				// 公共定时器
+nrf_drv_timer_t TIMER_PUBLIC = NRF_DRV_TIMER_INSTANCE(0);				// 公共定时器
 
 
 
@@ -275,7 +281,7 @@ void drTIM_ERRHandler(void)
 
 void drTIM_AutoSendStart(void)
 {
-	drTIMER_Start(&drTIM_AutoSend, 5);
+	drTIMER_Start(&drTIM_AutoSend, 2);
 }
 
 void drTIM_AutoSendStop(void)

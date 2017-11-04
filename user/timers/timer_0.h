@@ -74,6 +74,9 @@ void drTIM_SendLimitStop(void);
 void drTIM_SendLimitHandler(void);
 
 // Globals ------------------------------------------------------------
+
+extern nrf_drv_timer_t TIMER_PUBLIC;				// 公共定时器
+
 extern TIMER0_PATAMETERS_T		TIMER0; 			
 extern TIMER0_INSTANCE_T		drTIM_Tmp;
 extern TIMER0_INSTANCE_T		drTIM_SysSleep;;
