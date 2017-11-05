@@ -957,21 +957,35 @@ void APP_KeyMultiChoiceHandler(void)
 void APP_KeyMultiSingleChoiceHandler(void)
 {
 
+	
+	
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
+			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
+				return ;
+			
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x01;
 			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
 			break;
 		case KEY_APP_B_2:
+			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
+				return ;			
+		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x02;
 			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);	
 			break;
 		case KEY_APP_C_3:
+			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
+				return ;			
+		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x04;
 			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);	
 			break;
 		case KEY_APP_D_4: 
+			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
+				return ;			
+		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x08;
 			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);	
 			break;

@@ -3,12 +3,13 @@
 
 static void MAIN_DebugFun(void);
 
+
 int main (void)
-{	
+{
 	POWER.SysInitializedFlg = false;
 	
 	GPIO_Default();
-	
+
 	drERROR_CHECK(drERR_Init());
 	drERROR_CHECK(CLOCK_Init());
 	drERROR_CHECK(DEBUG_Init());
@@ -44,7 +45,6 @@ int main (void)
 	
 //	drTIM_TmpStart();					// 监测程序是否卡死
 //	drTIM_AutoSendStart();				// 自动按键发送测试定时器
-	
 	
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);

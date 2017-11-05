@@ -5,6 +5,45 @@
 	drlTIM_Start
 	drlTIM_Stop
 	drlTIM_
+
+
+//void TIMER0_IRQHandler(void)
+//{
+//	static uint32_t i;
+//	
+//	i++;
+//	NRF_TIMER0->TASKS_CLEAR   		 = 1; 
+//	NRF_TIMER0->EVENTS_COMPARE[0]	   = 0;
+//	NRF_TIMER0->TASKS_START;
+//	
+//	nrf_gpio_pin_toggle(17);
+//	nrf_gpio_pin_toggle(18);
+//}
+
+//void TIMER_0_Init(void)
+//{
+//    NRF_TIMER0->MODE = 0;		// 计时模式
+//	NRF_TIMER0->PRESCALER = 6;	// 不分频
+//	NRF_TIMER0->BITMODE = 3;	// 32位宽	
+//	NRF_TIMER0->TASKS_CLEAR    = 1; 
+//	
+//	NRF_TIMER0->CC[0] = (uint32_t)100000;
+//	NRF_TIMER0->CC[1] = (uint32_t)100000;
+//	NRF_TIMER0->CC[2] = (uint32_t)100000;
+//	NRF_TIMER0->CC[3] = (uint32_t)100000;
+//	
+//    NVIC_SetPriority(TIMER0_IRQn, 1);
+//    NVIC_ClearPendingIRQ(TIMER0_IRQn);
+//    NVIC_EnableIRQ(TIMER0_IRQn);	
+//	
+//	NRF_TIMER0->INTENSET = 0x01 << 16;
+//	NRF_TIMER0->TASKS_START = 1;
+//}
+
+
+
+
+
 	
 	
 */
@@ -46,7 +85,7 @@ void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
     {
         case NRF_TIMER_EVENT_COMPARE0:
 			TIMER0.TickCnt++;
-		
+			
 			drTIMER_TimeOutCheck(&drTIM_Tmp);
 			drTIMER_TimeOutCheck(&drTIM_SysSleep);
 			drTIMER_TimeOutCheck(&drTIM_LowPwrPrompt);		
