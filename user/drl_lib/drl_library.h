@@ -5,7 +5,7 @@
 
 // Typedefs -----------------------------------------------------------
 
-#define 	USE_ERR_CHECK			(1)
+#define 	USE_ERR_CHECK			(0)
 
 
 
