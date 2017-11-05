@@ -275,7 +275,7 @@ void drTIM_ERRHandler(void)
 	{
 		drTIM_ERR.TimeOutFlg = false;
 		
-		ERR.HintFlg = true;
+		drERR.HintFlg = true;
 	}	
 }
 

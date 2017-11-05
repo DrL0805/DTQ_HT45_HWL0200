@@ -7,7 +7,7 @@
 
 
 // Globals ------------------------------------------------------------
-drERR_PATAMETERS_T			ERR;
+drERR_PATAMETERS_T			drERR;
 
 // Locals -------------------------------------------------------------
 
@@ -25,7 +25,7 @@ drErrType drERR_Init(void)
 void drERR_ErrCheck(drErrType err_code)
 {
 	drErrType i;
-	uint32_t ErrCode;
+	drErrType ErrCode;
 	
 	switch(err_code)
 	{
@@ -39,41 +39,40 @@ void drERR_ErrCheck(drErrType err_code)
 			break;
 	}
 	
-	for(i = 0;i < 32;i++)
+	// 若错误码已存在，Cnt++
+	for(i = 0;i < drERR.ErrNum;i++)
 	{
-		// 检测当前bit是否保存有错误信息，若无，则保存
-		if(!(ERR.ErrState & (0x01 << i)))
+		if(err_code == drERR.Err[i].Code)
 		{
-			ERR.ErrState |= 0x01 << i;
-			ERR.ErrData[i] = err_code;
-			break;
+			drERR.Err[i].Cnt++;
+			return;
 		}
-	}	
+	}
+	
+	// 若为新的错误码，存入
+	drERR.Err[drERR.ErrNum].Code = err_code;
+	drERR.Err[drERR.ErrNum].Cnt++;
+	drERR.ErrNum++;	
 }
 
 void drERR_ErrHandler(void)
 {
 	char * ErrString = " Error:					";
 	drErrType i = 0;
-	drErrType Pos = 0;
 	
-	if(ERR.HintFlg)
+	if(drERR.HintFlg)
 	{
-		ERR.HintFlg = false;
-		if(ERR.ErrState)
+		drERR.HintFlg = false;
+		
+//		LCD_DRV_DisplayN(16, 16, (uint8_t *)ErrString);
+		
+		// LCD显示错误码和次数
+		for(i = 0;i < drERR.ErrNum;i++)
 		{
-			for(i = 0;i < 32;i++)
-			{
-				// 检测当前bit是否保存有错误信息，若有，则处理
-				if(ERR.ErrState & (0x01 << i))
-				{
-					LCD_DRV_DisplayN(16, 16, (uint8_t *)ErrString);
-					LCD_DisDigit_5(32+8*Pos, ERR.ErrData[i]);
-					Pos++;
-				}
-			}
-		}		
-	}
+			LCD_DisDigit_5(16*(i+1)+0, drERR.Err[i].Code);	
+			LCD_DisDigit_5(16*(i+1)+8, drERR.Err[i].Cnt);				
+		}
+	}	
 }
 
 

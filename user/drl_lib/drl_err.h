@@ -3,19 +3,27 @@
 
 // Includes -----------------------------------------------------------
 #include "main.h"
+#include "drl_library.h"
 
 // Typedefs -----------------------------------------------------------
+
+#define 	MAX_ERR_CODE_STORE			(10)		// 最大错误存储数量
 
 typedef		uint32_t 	drErrType;			
 
 
-
+typedef struct 
+{
+	drErrType 	 Cnt;			// 错误次数统计
+	drErrType    Code;			// 错误码
+}drERR_CODE_T;
 
 typedef struct
 {
-	bool				HintFlg;
-	drErrType 			ErrState;	
-	drErrType    		ErrData[32];
+	bool					HintFlg;
+	
+	drErrType				ErrNum;						// 错误码数量
+	drERR_CODE_T 			Err[MAX_ERR_CODE_STORE];	// 错误码内容
 }drERR_PATAMETERS_T;
 
 
@@ -25,7 +33,7 @@ typedef struct
     do                                                      \
     {                                                       \
         const drErrType LOCAL_ERR_CODE = (ERR_CODE);         \
-        if ((LOCAL_ERR_CODE&0x00FF) != drERROR_SUCCESS)                  \
+        if ((LOCAL_ERR_CODE&0x00FF) != drERROR_SUCCESS)      \
         {                                                   \
             drERR_ErrCheck(LOCAL_ERR_CODE);              \
         }                                                   \
@@ -80,12 +88,12 @@ typedef struct
 
 // Functions ----------------------------------------------------------
 extern drErrType drERR_Init(void);
-extern void drERR_ErrCheck(uint32_t err_code);	
+extern void drERR_ErrCheck(drErrType err_code);	
 extern void drERR_ErrHandler(void);
 
 // Globals ------------------------------------------------------------
  				
-extern drERR_PATAMETERS_T			ERR;
+extern drERR_PATAMETERS_T			drERR;
 
 #endif
 

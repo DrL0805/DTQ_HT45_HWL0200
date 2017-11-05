@@ -52,10 +52,10 @@
 #define     VERSION_LEVEL_NUMBER	"Ver: 0.4.2              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
-#define 	SYS_NO_SLEEP_DEBUG		(0)
+#define 	SYS_NO_SLEEP_DEBUG		(1)
 #define 	USE_WATCH_DOG			(1)
 #define 	USE_UART_DEBUG			(0)
-#define 	USE_ERR_CHECK			(0)
+
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);
 extern bool ArrayCmp(uint8_t *str1, uint8_t *str2, uint8_t len);

@@ -51,7 +51,7 @@ uint32_t APP_ParUpdate(void)
 	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
 		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
-		APP.NFCIrqFlg = false;
+		APP.NFCIrqFlg = false;		
 		APP.NRFDelayFlg = true;		
 		TIMER_NFCStart();
 	}

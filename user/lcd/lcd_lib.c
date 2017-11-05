@@ -127,7 +127,7 @@ void LCD_Update(void)
 			LCD.DATA.RefreshFlg &= ~LCD_REFRESH_STUDEN_ID;
 			LCD_DisplayDeviceId();
 		}
-
+		
 		if(LCD.DATA.RefreshFlg & LCD_REFRESH_SCENE)
 		{
 			if(!APP.NRFDelayFlg)	// 等待读取13.56M数据前，不刷新回显业务内容，因为更新完13.56M数据后，会清屏
