@@ -102,11 +102,6 @@ TIMER0_INSTANCE_T		drTIM_NFC;
 #define 				drTIM_WDT_TIMING_MS				(1000)
 TIMER0_INSTANCE_T		drTIM_WDT;
 
-// 底层按键检测定时器
-#define 				drTIM_BUTTON_TIMING_MS				(30)
-TIMER0_INSTANCE_T		drTIM_BUTTON;
-
-
 // Locals -------------------------------------------------------------
 nrf_drv_rtc_t rtc = NRF_DRV_RTC_INSTANCE(0); 
 
@@ -128,8 +123,7 @@ static void RTC0_TickHandler(nrf_drv_rtc_int_type_t int_type)
 	drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
 	drTIMER_TimeOutCheck(&drTIM_SendLimit);	
 	drTIMER_TimeOutCheck(&drTIM_NFC);	
-	drTIMER_TimeOutCheck(&drTIM_WDT);
-	drTIMER_TimeOutCheck(&drTIM_BUTTON);	
+	drTIMER_TimeOutCheck(&drTIM_WDT);	
 }
 
 void drTIMER_EventHandler(void)
@@ -146,8 +140,7 @@ void drTIMER_EventHandler(void)
 	drTIM_KeyFreqCtrlHandler();
 	drTIM_SendLimitHandler();
 	drTIM_NFCHandler();
-	drTIM_WDTHandler();
-//	drTIM_ButtonHandler();
+
 }
 
 // 初始化TickSource
@@ -454,45 +447,8 @@ void drTIM_NFCHandler(void)
 	}	
 }
 
-void drTIM_WDTStart(void)
-{
-	drTIMER_Start(&drTIM_WDT, drTIM_WDT_TIMING_MS);
-}
 
-void drTIM_WDTStop(void)
-{
-	drTIMER_Stop(&drTIM_WDT);
-}
 
-void drTIM_WDTHandler(void)
-{
-	if(drTIM_WDT.TimeOutFlg)
-	{
-		drTIM_WDT.TimeOutFlg = false;
-		
-		WDT.FeedFlg = true;
-	}	
-}
-
-//void drTIM_ButtonStart(void)
-//{
-//	drTIMER_Start(&drTIM_BUTTON, drTIM_BUTTON_TIMING_MS);
-//}
-
-//void drTIM_ButtonStop(void)
-//{
-//	drTIMER_Stop(&drTIM_BUTTON);
-//}
-
-//void drTIM_ButtonHandler(void)
-//{
-//	if(drTIM_BUTTON.TimeOutFlg)
-//	{
-//		drTIM_BUTTON.TimeOutFlg = false;
-//		
-//		KEY.PressFlg = true;
-//	}	
-//}
 
 
 

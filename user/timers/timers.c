@@ -13,7 +13,7 @@
 											// 分频 = 0 ，1tick=30.517us，分频 = 9, 1tick = 305.17us
 #define APP_TIMER_OP_QUEUE_SIZE 10
 
-//#define NFC_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
+#define NFC_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
 //#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 #define BUTTON_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(30, 	APP_TIMER_PRESCALER)
 #define TX_OVERTIME_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(15,		APP_TIMER_PRESCALER)
@@ -32,7 +32,7 @@
 
 
 	
-//APP_TIMER_DEF(nfc_timer_id);					/*            */
+APP_TIMER_DEF(nfc_timer_id);					/*            */
 //APP_TIMER_DEF(lcd_timer_id);					/* LCD定时刷新 */
 APP_TIMER_DEF(button_timer_id);
 APP_TIMER_DEF(rx_window_timer_id);				/* RX窗正常打开关闭 */
@@ -119,8 +119,8 @@ uint32_t TIMERS_Init(void)
 //	err_code = app_timer_create(&key_freq_ctrl_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_KeyFreqCtrlHandler);	// 重发定时器，每次重新开始一个随机值
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 
-//	err_code = app_timer_create(&nfc_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_NFCHandler);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+	err_code = app_timer_create(&nfc_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_NFCHandler);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 
 	return drERROR_SUCCESS;
 }
@@ -161,24 +161,24 @@ void TIMER_EventHandler(void)
 
 
 
-//void TIMER_NFCStart(void)
-//{
-//	uint32_t err_code;
-//	err_code = app_timer_start(nfc_timer_id,NFC_TIMEOUT_INTERVAL,NULL);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-//}
+void TIMER_NFCStart(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_start(nfc_timer_id,NFC_TIMEOUT_INTERVAL,NULL);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+}
 
-//void TIMER_NFCStop(void)
-//{
-//	uint32_t err_code;
-//	err_code = app_timer_stop(nfc_timer_id);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-//}
+void TIMER_NFCStop(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_stop(nfc_timer_id);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+}
 
-//void TIMER_NFCHandler(void * p_context)
-//{
-//	APP.NRFUpdataFlg = true;
-//}
+void TIMER_NFCHandler(void * p_context)
+{
+	APP.NRFUpdataFlg = true;
+}
 
 
 //void TIMER_LCDStart(void)

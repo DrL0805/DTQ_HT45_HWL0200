@@ -28,7 +28,6 @@ uint32_t WDT_Init(void)
 	
 	//Æô¶¯Î¹¹·¶¨Ê±Æ÷
 	TIMER_WatchDogStart();
-//	drTIM_WDTStart();
 	WDT.FeedFlg = false;
 	
 	#endif

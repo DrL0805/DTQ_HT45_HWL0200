@@ -9,7 +9,7 @@ int main (void)
 	POWER.SysInitializedFlg = false;
 	
 	GPIO_Default();
-
+	
 //	nrf_gpio_cfg_output(17);
 //	nrf_gpio_cfg_output(18);	
 	

@@ -15,9 +15,9 @@ extern TIMER_PARAMETERS_T	TIMER;
 uint32_t TIMERS_Init(void);
 void TIMER_EventHandler(void);
 
-//void TIMER_NFCStart(void);
-//void TIMER_NFCStop(void);
-//void TIMER_NFCHandler(void * p_context);
+void TIMER_NFCStart(void);
+void TIMER_NFCStop(void);
+void TIMER_NFCHandler(void * p_context);
 
 //void TIMER_LCDStart(void);
 //void TIMER_LCDStop(void);

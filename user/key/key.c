@@ -151,7 +151,6 @@ void KEY_Scan(void)
 				{
 					KEY.ScanState = KEY_TWO;	
 					TIMER_ButtonStart();
-//					drTIM_ButtonStart();
 				}				
 				break;
 			case KEY_TWO:
@@ -164,7 +163,6 @@ void KEY_Scan(void)
 				else											//ÎÞÐ§°´¼ü
 				{
 					TIMER_ButtonStop();	
-//					drTIM_ButtonStop();
 					KEY.ScanState = KEY_ONE;
 				}					
 				break;
@@ -234,7 +232,6 @@ void KEY_Scan(void)
 						KEY.ScanDownFlg = true;	
 					}
 					TIMER_ButtonStop();
-//					drTIM_ButtonStop();
 					KEY.ScanState = KEY_ONE;
 					KEY_FirstValue = 0;
 					KEY_NextValue = 0;						

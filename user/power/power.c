@@ -39,7 +39,6 @@ void POWER_SysOnToSleep(void)
 {
 	POWER.SysState = SYS_SLEEP;
 	
-//	nrf_drv_timer_disable(&TIMER_PUBLIC);
 	drTIMER_StopTickSource();
 	
 	CLOCK_HFCLKStop();
