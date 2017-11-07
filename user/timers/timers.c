@@ -22,12 +22,12 @@
 #define ADC_FIRST_SAMPLE_TIMEOUT_INTERVAL    		APP_TIMER_TICKS(42,APP_TIMER_PRESCALER)		//42 不设置为整数是为了使ADC采集尽量与其他外设避开
 //#define TX_ATTEND_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1100,APP_TIMER_PRESCALER) 
 //#define SYS_OFF_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(60000,APP_TIMER_PRESCALER)
-#define RETRANSMIT_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(70, 	APP_TIMER_PRESCALER)
+//#define RETRANSMIT_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(70, 	APP_TIMER_PRESCALER)
 //#define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
 //#define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
 //#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
 //#define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
-#define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
+//#define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
 //#define LOW_POWER_PROMPT_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 
 
@@ -48,7 +48,7 @@ APP_TIMER_DEF(retransmit_timer_id);				/* 链路层的重发定时器 */
 //APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
 //APP_TIMER_DEF(watch_dog_timer_id);
-APP_TIMER_DEF(key_freq_ctrl_timer_id);			/*  按键频率控制定时器 */
+//APP_TIMER_DEF(key_freq_ctrl_timer_id);			/*  按键频率控制定时器 */
 //APP_TIMER_DEF(low_power_prompt_timer_id);		/*  低电量提示报警 */
 
 
@@ -69,8 +69,8 @@ uint32_t TIMERS_Init(void)
 //	err_code = app_timer_create(&lcd_timer_id,APP_TIMER_MODE_REPEATED,TIMER_LCDHandler);
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
-	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
-	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+//	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
+//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
 //	err_code = app_timer_create(&low_power_prompt_timer_id,APP_TIMER_MODE_REPEATED,TIMER_LowPowerPromptHandler);	
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
@@ -116,8 +116,8 @@ uint32_t TIMERS_Init(void)
 	err_code = app_timer_create(&tx_overtime_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_TxOvertimeHandler);	// 重发定时器，每次重新开始一个随机值
 	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
-	err_code = app_timer_create(&key_freq_ctrl_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_KeyFreqCtrlHandler);	// 重发定时器，每次重新开始一个随机值
-	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+//	err_code = app_timer_create(&key_freq_ctrl_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_KeyFreqCtrlHandler);	// 重发定时器，每次重新开始一个随机值
+//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 
 //	err_code = app_timer_create(&nfc_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_NFCHandler);
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
@@ -218,7 +218,6 @@ void TIMER_ButtonStop(void)
 
 void TIMER_ButtonHandler(void * p_context)
 {
-//	TIMER_Debug("[TIMER] TIMER_ButtonHandler  \r\n");
 	KEY.PressFlg = true;
 }
 
@@ -602,26 +601,26 @@ void TIMER_TxRandomDelayHandler(void * p_context)
 //	WDT.FeedFlg = true;
 //}
 
-void TIMER_KeyFreqCtrlStart(void)
-{
-	uint32_t err_code;
-	
-	err_code = app_timer_start(key_freq_ctrl_timer_id,KEY_FREQ_CTRL_TIMEOUT_INTERVAL,NULL);
-	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-}
+//void TIMER_KeyFreqCtrlStart(void)
+//{
+//	uint32_t err_code;
+//	
+//	err_code = app_timer_start(key_freq_ctrl_timer_id,KEY_FREQ_CTRL_TIMEOUT_INTERVAL,NULL);
+//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+//}
 
-void TIMER_KeyFreqCtrlStop(void)
-{
-	uint32_t err_code;
-	err_code = app_timer_stop(key_freq_ctrl_timer_id);
-	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-}
+//void TIMER_KeyFreqCtrlStop(void)
+//{
+//	uint32_t err_code;
+//	err_code = app_timer_stop(key_freq_ctrl_timer_id);
+//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+//}
 
-void TIMER_KeyFreqCtrlHandler(void * p_context)
-{
-	APP.KeyCntLimitFlg = false;
-	
-}
+//void TIMER_KeyFreqCtrlHandler(void * p_context)
+//{
+//	APP.KeyCntLimitFlg = false;
+//	
+//}
 
 
 

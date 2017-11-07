@@ -85,9 +85,9 @@ void TIMER_TxRandomDelayHandler(void * p_context);
 //void TIMER_WatchDogStop(void);
 //void TIMER_WatchDogHandler(void * p_context);
 
-void TIMER_KeyFreqCtrlStart(void);
-void TIMER_KeyFreqCtrlStop(void);
-void TIMER_KeyFreqCtrlHandler(void * p_context);
+//void TIMER_KeyFreqCtrlStart(void);
+//void TIMER_KeyFreqCtrlStop(void);
+//void TIMER_KeyFreqCtrlHandler(void * p_context);
 
 #endif 
 

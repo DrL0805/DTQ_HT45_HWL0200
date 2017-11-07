@@ -81,6 +81,11 @@ void drTIM_NFCHandler(void);
 void drTIM_WDTStart(void);
 void drTIM_WDTStop(void);
 void drTIM_WDTHandler(void);
+
+
+void drTIM_ButtonStart(void);
+void drTIM_ButtonStop(void);
+void drTIM_ButtonHandler(void);
 // Globals ------------------------------------------------------------
 
 //extern nrf_drv_timer_t TIMER_PUBLIC;				// 公共定时器

@@ -59,7 +59,7 @@ uint32_t APP_ParUpdate(void)
 	if(APP.NRFUpdataFlg)
 	{
 		APP.NRFUpdataFlg = false;
-		APP.NRFDelayFlg = false;
+//		APP.NRFDelayFlg = false;
 		
 		M24SR_RFConfig(0);
 		__set_PRIMASK(1);
@@ -98,7 +98,8 @@ uint32_t APP_ParUpdate(void)
 				RADIO.IM.LastRxSeqNum = 0;	
 				RADIO.IM.LastRxPackNum = 0;
 				
-				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;	
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;		// 重新显示设备ID
+				LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;			// 重新刷新回显信息
 			
 				// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
 					

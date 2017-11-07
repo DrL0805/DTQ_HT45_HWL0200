@@ -41,7 +41,7 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 	if((I2C_INT == pin) && POWER.SysInitializedFlg && !APP.NFCIrqFlg) 	
 	{		
 		APP.NFCIrqFlg = true;
-		APP.NRFDelayFlg = true;		
+//		APP.NRFDelayFlg = true;		
 		LED_TOG(LED_0);			
 	}
 	else
@@ -151,6 +151,7 @@ void KEY_Scan(void)
 				{
 					KEY.ScanState = KEY_TWO;	
 					TIMER_ButtonStart();
+//					drTIM_ButtonStart();
 				}				
 				break;
 			case KEY_TWO:
@@ -163,6 +164,7 @@ void KEY_Scan(void)
 				else											//无效按键
 				{
 					TIMER_ButtonStop();	
+//					drTIM_ButtonStop();
 					KEY.ScanState = KEY_ONE;
 				}					
 				break;
@@ -232,47 +234,11 @@ void KEY_Scan(void)
 						KEY.ScanDownFlg = true;	
 					}
 					TIMER_ButtonStop();
+//					drTIM_ButtonStop();
 					KEY.ScanState = KEY_ONE;
 					KEY_FirstValue = 0;
 					KEY_NextValue = 0;						
 				}
-			
-				// 等待按键释放
-//				if(KEY_NextValue != KEY_FirstValue)		
-//				if(0x0F == KEY_NextValue)				// 所有按键都被释放了
-//				{
-//					switch (KEY_FirstValue)
-//					{
-//						case KEY_SCAN_A_1:
-//							KEY.ScanValue = KEY_APP_A_1;
-//							break;
-//						case KEY_SCAN_B_2:
-//							KEY.ScanValue = KEY_APP_B_2;
-//							break;
-//						case KEY_SCAN_C_3:
-//							KEY.ScanValue = KEY_APP_C_3;
-//							break;
-//						case KEY_SCAN_D_4:
-//							KEY.ScanValue = KEY_APP_D_4;
-//							break;
-//						case KEY_SCAN_RINGHT:
-//							KEY.ScanValue = KEY_APP_RINGHT;
-//							break;
-//						case KEY_SCAN_WRONG:
-//							KEY.ScanValue = KEY_APP_WRONG;
-//							break;
-//						case KEY_SCAN_FN:
-//							KEY.ScanValue = KEY_APP_FN;
-//							break;
-//						default:
-//							break;
-//					}
-//					KEY.ScanDownFlg = true;	
-//					TIMER_ButtonStop();
-//					KEY.ScanState = KEY_ONE;
-//					KEY_FirstValue = 0;
-//					KEY_NextValue = 0;				
-//				}
 				break;
 			default:
 				break;
