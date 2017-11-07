@@ -147,7 +147,7 @@ void drTIMER_EventHandler(void)
 	drTIM_SendLimitHandler();
 	drTIM_NFCHandler();
 	drTIM_WDTHandler();
-	drTIM_ButtonHandler();
+//	drTIM_ButtonHandler();
 }
 
 // ≥ı ºªØTickSource
@@ -474,25 +474,25 @@ void drTIM_WDTHandler(void)
 	}	
 }
 
-void drTIM_ButtonStart(void)
-{
-	drTIMER_Start(&drTIM_BUTTON, drTIM_BUTTON_TIMING_MS);
-}
+//void drTIM_ButtonStart(void)
+//{
+//	drTIMER_Start(&drTIM_BUTTON, drTIM_BUTTON_TIMING_MS);
+//}
 
-void drTIM_ButtonStop(void)
-{
-	drTIMER_Stop(&drTIM_BUTTON);
-}
+//void drTIM_ButtonStop(void)
+//{
+//	drTIMER_Stop(&drTIM_BUTTON);
+//}
 
-void drTIM_ButtonHandler(void)
-{
-	if(drTIM_BUTTON.TimeOutFlg)
-	{
-		drTIM_BUTTON.TimeOutFlg = false;
-		
-		KEY.PressFlg = true;
-	}	
-}
+//void drTIM_ButtonHandler(void)
+//{
+//	if(drTIM_BUTTON.TimeOutFlg)
+//	{
+//		drTIM_BUTTON.TimeOutFlg = false;
+//		
+//		KEY.PressFlg = true;
+//	}	
+//}
 
 
 

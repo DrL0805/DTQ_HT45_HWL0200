@@ -69,8 +69,8 @@ uint32_t TIMERS_Init(void)
 //	err_code = app_timer_create(&lcd_timer_id,APP_TIMER_MODE_REPEATED,TIMER_LCDHandler);
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
-//	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+	err_code = app_timer_create(&button_timer_id,APP_TIMER_MODE_REPEATED,TIMER_ButtonHandler);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
 //	err_code = app_timer_create(&low_power_prompt_timer_id,APP_TIMER_MODE_REPEATED,TIMER_LowPowerPromptHandler);	
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
