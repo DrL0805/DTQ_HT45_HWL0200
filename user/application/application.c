@@ -51,9 +51,9 @@ uint32_t APP_ParUpdate(void)
 	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
 		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
-		APP.NFCIrqFlg = false;		
-		APP.NRFDelayFlg = true;		
-		TIMER_NFCStart();
+		APP.NFCIrqFlg = false;			
+		drTIM_NFCStart();
+		
 	}
 	
 	if(APP.NRFUpdataFlg)
@@ -102,7 +102,6 @@ uint32_t APP_ParUpdate(void)
 			
 				// 13.56M刷卡中断标志位要放在函数最后，否则调用TT4_ReadNDEF()函数时又会触发PIN=I2C_INT的按键（即刷卡）中断	
 					
-				
 				TEST.TxFaiCnt = 0;
 				TEST.TxSucCnt = 0;
 

@@ -49,7 +49,7 @@
 
 
 // Defines ------------------------------------------------------------
-#define TIMER_TICK_MS	100			// 定时器周期
+#define TIMER_TICK_MS	10			// 定时器周期
 
 
 // Globals ------------------------------------------------------------
@@ -94,6 +94,13 @@ TIMER0_INSTANCE_T		drTIM_KeyFreqCtrl;
 #define 				drTIM_SendLimit_TIMING_MS				(300)
 TIMER0_INSTANCE_T		drTIM_SendLimit;						
 
+// 读取13.56M中断延时
+#define 				drTIM_NFC_TIMING_MS				(500)
+TIMER0_INSTANCE_T		drTIM_NFC;	
+
+// 看门狗
+#define 				drTIM_WDT_TIMING_MS				(1000)
+TIMER0_INSTANCE_T		drTIM_WDT;
 
 // Locals -------------------------------------------------------------
 nrf_drv_rtc_t rtc = NRF_DRV_RTC_INSTANCE(0); 
@@ -117,6 +124,8 @@ static void RTC0_TickHandler(nrf_drv_rtc_int_type_t int_type)
 	drTIMER_TimeOutCheck(&drTIM_RSSI);
 	drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
 	drTIMER_TimeOutCheck(&drTIM_SendLimit);	
+	drTIMER_TimeOutCheck(&drTIM_NFC);	
+	drTIMER_TimeOutCheck(&drTIM_WDT);		
 }
 
 void drTIMER_EventHandler(void)
@@ -132,21 +141,23 @@ void drTIMER_EventHandler(void)
 	drTIM_RSSIHandler();
 	drTIM_KeyFreqCtrlHandler();
 	drTIM_SendLimitHandler();
+	drTIM_NFCHandler();
+	drTIM_WDTHandler();
 }
 
 // 初始化TickSource
 uint32_t RTC0_Init(void)
 {
     uint32_t err_code;
-
+	
     //Initialize RTC instance
 	//注：创建的RTC定时周期必须与 TIMER_TICK_MS 定义的相同
     err_code = nrf_drv_rtc_init(&rtc, NULL, RTC0_TickHandler);
     APP_ERROR_CHECK(err_code);
-
+	
     //Enable tick event & interrupt
     nrf_drv_rtc_tick_enable(&rtc,true);
-
+	
     //Power on RTC instance
 //    nrf_drv_rtc_enable(&rtc);
 	drTIMER_StartTickSource();
@@ -431,9 +442,50 @@ void drTIM_SendLimitHandler(void)
 	}	
 }
 
+void drTIM_NFCStart(void)
+{
+	drTIMER_Start(&drTIM_NFC, drTIM_NFC_TIMING_MS);
+}
 
+void drTIM_NFCStop(void)
+{
+	drTIMER_Stop(&drTIM_NFC);
+}
 
+void drTIM_NFCHandler(void)
+{
+//	static bool	TmpFlg = false;
+	
+	if(drTIM_NFC.TimeOutFlg)
+	{
+		drTIM_NFC.TimeOutFlg = false;
+		drTIM_NFCStop();
+		
+		APP.NRFUpdataFlg = true;		
+	}	
+}
 
+void drTIM_WDTStart(void)
+{
+	drTIMER_Start(&drTIM_WDT, drTIM_WDT_TIMING_MS);
+}
+
+void drTIM_WDTStop(void)
+{
+	drTIMER_Stop(&drTIM_WDT);
+}
+
+void drTIM_WDTHandler(void)
+{
+//	static bool	TmpFlg = false;
+	
+	if(drTIM_WDT.TimeOutFlg)
+	{
+		drTIM_WDT.TimeOutFlg = false;
+		
+		WDT.FeedFlg = true;
+	}	
+}
 
 
 

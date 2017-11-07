@@ -108,7 +108,7 @@
 #define RTC0_ENABLED 1
 
 #if (RTC0_ENABLED == 1)
-#define RTC0_CONFIG_FREQUENCY    10		// Prescaler = (32768 / RTC0_CONFIG_FREQUENCY) - 1
+#define RTC0_CONFIG_FREQUENCY    100		// Prescaler = (32768 / RTC0_CONFIG_FREQUENCY) - 1
 										// 这个参数配置的是TICK频率的HZ数，若为100，则100HZ，10ms触发一次，
 										// 若为8，则8HZ，125ms触发一次
 										

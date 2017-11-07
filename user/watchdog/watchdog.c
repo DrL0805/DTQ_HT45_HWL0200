@@ -27,7 +27,8 @@ uint32_t WDT_Init(void)
     nrf_drv_wdt_enable();	
 	
 	//Æô¶¯Î¹¹·¶¨Ê±Æ÷
-	TIMER_WatchDogStart();
+//	TIMER_WatchDogStart();
+	drTIM_WDTStart();
 	WDT.FeedFlg = false;
 	
 	#endif
