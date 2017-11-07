@@ -25,8 +25,9 @@ typedef struct
 
 
 // Functions ----------------------------------------------------------
-extern uint32_t TIMER0_Init(void);
-//extern void drTIMER_TimerOutCheck(void);
+extern uint32_t RTC0_Init(void);
+extern void drTIMER_StartTickSource(void);
+extern void drTIMER_StopTickSource(void);
 extern void drTIMER_Start(TIMER0_INSTANCE_T * TimerInstance, uint32_t OutTickCnt);
 extern void drTIMER_Stop(TIMER0_INSTANCE_T * TimerInstance);
 extern void drTIMER_TimeOutCheck(TIMER0_INSTANCE_T * TimerInstance);
@@ -75,7 +76,10 @@ void drTIM_SendLimitHandler(void);
 
 // Globals ------------------------------------------------------------
 
-extern nrf_drv_timer_t TIMER_PUBLIC;				// 公共定时器
+//extern nrf_drv_timer_t TIMER_PUBLIC;				// 公共定时器
+extern nrf_drv_rtc_t rtc; 
+
+
 
 extern TIMER0_PATAMETERS_T		TIMER0; 			
 extern TIMER0_INSTANCE_T		drTIM_Tmp;

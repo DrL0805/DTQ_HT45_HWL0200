@@ -39,7 +39,8 @@ void POWER_SysOnToSleep(void)
 {
 	POWER.SysState = SYS_SLEEP;
 	
-	nrf_drv_timer_disable(&TIMER_PUBLIC);	
+//	nrf_drv_timer_disable(&TIMER_PUBLIC);
+	drTIMER_StopTickSource();
 	
 	CLOCK_HFCLKStop();
 	
@@ -61,7 +62,8 @@ void POWER_SysSleepToOn(void)
 {
 	POWER.SysState = SYS_ON;
 	
-	nrf_drv_timer_enable(&TIMER_PUBLIC);	
+//	nrf_drv_timer_enable(&TIMER_PUBLIC);
+	drTIMER_StartTickSource();
 	
 	CLOCK_HFCLKStart();
 	

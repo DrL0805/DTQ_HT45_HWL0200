@@ -18,6 +18,7 @@
 #include "app_fifo.h"
 #include "nrf_drv_wdt.h"
 #include "nrf_drv_timer.h"
+#include "nrf_drv_rtc.h"
 
 #include "drl_err.h"
 #include "drl_debug.h"

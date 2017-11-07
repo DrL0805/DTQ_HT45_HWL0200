@@ -11,7 +11,7 @@
 //定时器宏定义
 #define APP_TIMER_PRESCALER     9			// 1tick  = 32.768KHz / (APP_TIMER_PRESCALER+1),设置为32即约1ms一个tick
 											// 分频 = 0 ，1tick=30.517us，分频 = 9, 1tick = 305.17us
-#define APP_TIMER_OP_QUEUE_SIZE 15
+#define APP_TIMER_OP_QUEUE_SIZE 10
 
 #define NFC_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(500, 	APP_TIMER_PRESCALER)
 //#define LCD_TIMEOUT_INTERVAL     					APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)

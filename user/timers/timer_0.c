@@ -38,14 +38,7 @@
 //	
 //	NRF_TIMER0->INTENSET = 0x01 << 16;
 //	NRF_TIMER0->TASKS_START = 1;
-//}
-
-
-
-
-
-	
-	
+//}	
 */
 
 
@@ -62,54 +55,120 @@
 // Globals ------------------------------------------------------------
 TIMER0_PATAMETERS_T		TIMER0;
 
+#define 				drTIM_Tmp_TIMING_MS						(1000)
 TIMER0_INSTANCE_T		drTIM_Tmp;
-TIMER0_INSTANCE_T		drTIM_SysSleep;				// 系统休眠
-TIMER0_INSTANCE_T		drTIM_LowPwrPrompt;			// 低电量报警
-TIMER0_INSTANCE_T		drTIM_SendResult;			// 显示发送结果（成功/失败）
-TIMER0_INSTANCE_T		drTIM_LCD;					// LCD显示
-TIMER0_INSTANCE_T		drTIM_ERR;					// 程序允许错误提示
-TIMER0_INSTANCE_T		drTIM_AutoSend;				// 自动按键发送压力测试
-TIMER0_INSTANCE_T		drTIM_RSSI;					// 定时刷新RSSI值
-TIMER0_INSTANCE_T		drTIM_KeyFreqCtrl;			// 按键频率控制
-TIMER0_INSTANCE_T		drTIM_SendLimit;			// 发送频率限制
+
+// 系统休眠
+#define 				drTIM_SysSleep_TIMING_MS				(5000)
+TIMER0_INSTANCE_T		drTIM_SysSleep;							
+
+// 低电量报警
+#define 				drTIM_LowPwrPrompt_TIMING_MS			(1000)
+TIMER0_INSTANCE_T		drTIM_LowPwrPrompt;						
+
+// 显示发送结果（成功/失败）
+#define 				drTIM_SendResult_TIMING_MS				(1000)
+TIMER0_INSTANCE_T		drTIM_SendResult;						
+
+// LCD显示
+#define 				drTIM_LCD_TIMING_MS						(3000)
+TIMER0_INSTANCE_T		drTIM_LCD;								
+
+// 程序允许错误提示
+#define 				drTIM_ERR_TIMING_MS						(2000)
+TIMER0_INSTANCE_T		drTIM_ERR;								
+
+// 自动按键发送压力测试
+#define 				drTIM_AutoSend_TIMING_MS				(200)
+TIMER0_INSTANCE_T		drTIM_AutoSend;							
+
+// 定时刷新RSSI值
+#define 				drTIM_RSSI_TIMING_MS					(1000)
+TIMER0_INSTANCE_T		drTIM_RSSI;								
+
+// 按键频率控制
+#define 				drTIM_KeyFreqCtrl_TIMING_MS				(300)
+TIMER0_INSTANCE_T		drTIM_KeyFreqCtrl;						
+
+// 发送频率限制
+#define 				drTIM_SendLimit_TIMING_MS				(300)
+TIMER0_INSTANCE_T		drTIM_SendLimit;						
 
 
 // Locals -------------------------------------------------------------
-nrf_drv_timer_t TIMER_PUBLIC = NRF_DRV_TIMER_INSTANCE(0);				// 公共定时器
+nrf_drv_rtc_t rtc = NRF_DRV_RTC_INSTANCE(0); 
 
-
-
-void timer_public_event_handler(nrf_timer_event_t event_type, void* p_context)
+static void RTC0_TickHandler(nrf_drv_rtc_int_type_t int_type)
 {
-    switch(event_type)
-    {
-        case NRF_TIMER_EVENT_COMPARE0:
-			TIMER0.TickCnt++;
-			
-			drTIMER_TimeOutCheck(&drTIM_Tmp);
-			drTIMER_TimeOutCheck(&drTIM_SysSleep);
-			drTIMER_TimeOutCheck(&drTIM_LowPwrPrompt);		
-			drTIMER_TimeOutCheck(&drTIM_SendResult);
-			drTIMER_TimeOutCheck(&drTIM_LCD);	
-			drTIMER_TimeOutCheck(&drTIM_ERR);	
-			drTIMER_TimeOutCheck(&drTIM_AutoSend);	
-			drTIMER_TimeOutCheck(&drTIM_RSSI);
-			drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
-			drTIMER_TimeOutCheck(&drTIM_SendLimit);
-		
-            break;
-        default:
-            //Do nothing.
-            break;
-    }    
+	 uint32_t err_code;
+
+//	nrf_gpio_pin_toggle(17);
+//	nrf_gpio_pin_toggle(18);
+	
+	TIMER0.TickCnt++;
+	
+	drTIMER_TimeOutCheck(&drTIM_Tmp);
+	drTIMER_TimeOutCheck(&drTIM_SysSleep);
+	drTIMER_TimeOutCheck(&drTIM_LowPwrPrompt);		
+	drTIMER_TimeOutCheck(&drTIM_SendResult);
+	drTIMER_TimeOutCheck(&drTIM_LCD);	
+	drTIMER_TimeOutCheck(&drTIM_ERR);	
+	drTIMER_TimeOutCheck(&drTIM_AutoSend);	
+	drTIMER_TimeOutCheck(&drTIM_RSSI);
+	drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
+	drTIMER_TimeOutCheck(&drTIM_SendLimit);	
 }
 
+void drTIMER_EventHandler(void)
+{
 
-void drTIMER_Start(TIMER0_INSTANCE_T * TimerInstance, uint32_t OutTickCnt)
+	drTIM_TmpHandler();
+	drTIM_SysSleepHandler();
+	drTIM_LowPwrPromptHandler();
+	drTIM_SendResultHandler();
+	drTIM_LCDHandler();
+	drTIM_ERRHandler();
+	drTIM_AutoSendHandler();
+	drTIM_RSSIHandler();
+	drTIM_KeyFreqCtrlHandler();
+	drTIM_SendLimitHandler();
+}
+
+// 初始化TickSource
+uint32_t RTC0_Init(void)
+{
+    uint32_t err_code;
+
+    //Initialize RTC instance
+	//注：创建的RTC定时周期必须与 TIMER_TICK_MS 定义的相同
+    err_code = nrf_drv_rtc_init(&rtc, NULL, RTC0_TickHandler);
+    APP_ERROR_CHECK(err_code);
+
+    //Enable tick event & interrupt
+    nrf_drv_rtc_tick_enable(&rtc,true);
+
+    //Power on RTC instance
+//    nrf_drv_rtc_enable(&rtc);
+	drTIMER_StartTickSource();
+	
+	return 0;		
+}
+
+void drTIMER_StartTickSource(void)
+{
+	 nrf_drv_rtc_enable(&rtc);	
+}
+
+void drTIMER_StopTickSource(void)
+{
+	 nrf_drv_rtc_disable(&rtc);	
+}
+
+void drTIMER_Start(TIMER0_INSTANCE_T * TimerInstance, uint32_t OutTickCntMs)
 {
 	TimerInstance->InitedFlg = true;
 	TimerInstance->TimeOutFlg = false;
-	TimerInstance->TimeOutTickCnt = OutTickCnt;
+	TimerInstance->TimeOutTickCnt = OutTickCntMs / TIMER_TICK_MS;
 	TimerInstance->StartTickCnt = TIMER0.TickCnt;
 }
 
@@ -130,50 +189,11 @@ void drTIMER_TimeOutCheck(TIMER0_INSTANCE_T * TimerInstance)
 	}
 }
 
-uint32_t TIMER0_Init(void)
-{
-	uint32_t err_code, time_ticks;
-	
-	// TIMER0初始化
-    err_code = nrf_drv_timer_init(&TIMER_PUBLIC, NULL, timer_public_event_handler);
-    drERROR_CHECK(drERROR_TIMER0_BASE_NUM+err_code);
-	
-	// 计算tick数
-    time_ticks = nrf_drv_timer_ms_to_ticks(&TIMER_PUBLIC, TIMER_TICK_MS);
-	
-	// 
-    nrf_drv_timer_extended_compare(
-         &TIMER_PUBLIC, NRF_TIMER_CC_CHANNEL0, time_ticks, NRF_TIMER_SHORT_COMPARE0_CLEAR_MASK, true);
-    
-	// 使能定时器
-	nrf_drv_timer_enable(&TIMER_PUBLIC);	
-		
-	return drERROR_SUCCESS;
-}
-
-
-void drTIMER_EventHandler(void)
-{
-
-	drTIM_TmpHandler();
-	drTIM_SysSleepHandler();
-	drTIM_LowPwrPromptHandler();
-	drTIM_SendResultHandler();
-	drTIM_LCDHandler();
-	drTIM_ERRHandler();
-	drTIM_AutoSendHandler();
-	drTIM_RSSIHandler();
-	drTIM_KeyFreqCtrlHandler();
-	drTIM_SendLimitHandler();
-}
-
-
-
 
 // 用户定时器 ----------------------------------------------------------------
 void drTIM_TmpStart(void)
 {
-	drTIMER_Start(&drTIM_Tmp, 10);
+	drTIMER_Start(&drTIM_Tmp, drTIM_Tmp_TIMING_MS);
 }
 
 void drTIM_TmpStop(void)
@@ -193,7 +213,7 @@ void drTIM_TmpHandler(void)
 void drTIM_SysSleepStart(void)
 {
 	#if SYS_NO_SLEEP_DEBUG
-	drTIMER_Start(&drTIM_SysSleep, 50);
+	drTIMER_Start(&drTIM_SysSleep, drTIM_SysSleep_TIMING_MS);
 	#endif
 }
 
@@ -218,7 +238,7 @@ void drTIM_SysSleepHandler(void)
 
 void drTIM_LowPwrPromptStart(void)
 {
-	drTIMER_Start(&drTIM_LowPwrPrompt, 10);
+	drTIMER_Start(&drTIM_LowPwrPrompt, drTIM_LowPwrPrompt_TIMING_MS);
 }
 
 void drTIM_LowPwrPromptStop(void)
@@ -250,7 +270,7 @@ void drTIM_LowPwrPromptHandler(void)
 
 void drTIM_SendResultStart(void)
 {
-	drTIMER_Start(&drTIM_SendResult, 10);
+	drTIMER_Start(&drTIM_SendResult, drTIM_SendResult_TIMING_MS);
 }
 
 void drTIM_SendResultStop(void)
@@ -273,7 +293,7 @@ void drTIM_SendResultHandler(void)
 
 void drTIM_LCDStart(void)
 {
-	drTIMER_Start(&drTIM_LCD, 30);
+	drTIMER_Start(&drTIM_LCD, drTIM_LCD_TIMING_MS);
 }
 
 void drTIM_LCDStop(void)
@@ -297,7 +317,7 @@ void drTIM_LCDHandler(void)
 
 void drTIM_ERRStart(void)
 {
-	drTIMER_Start(&drTIM_ERR, 20);
+	drTIMER_Start(&drTIM_ERR, drTIM_ERR_TIMING_MS);
 }
 
 void drTIM_ERRStop(void)
@@ -320,7 +340,7 @@ void drTIM_ERRHandler(void)
 
 void drTIM_AutoSendStart(void)
 {
-	drTIMER_Start(&drTIM_AutoSend, 2);
+	drTIMER_Start(&drTIM_AutoSend, drTIM_AutoSend_TIMING_MS);
 }
 
 void drTIM_AutoSendStop(void)
@@ -343,7 +363,7 @@ void drTIM_AutoSendHandler(void)
 
 void drTIM_RSSIStart(void)
 {
-	drTIMER_Start(&drTIM_RSSI, 3);
+	drTIMER_Start(&drTIM_RSSI, drTIM_RSSI_TIMING_MS);
 }
 
 void drTIM_RSSIStop(void)
@@ -367,7 +387,7 @@ void drTIM_RSSIHandler(void)
 
 void drTIM_KeyFreqCtrlStart(void)
 {
-	drTIMER_Start(&drTIM_KeyFreqCtrl, 3);
+	drTIMER_Start(&drTIM_KeyFreqCtrl, drTIM_KeyFreqCtrl_TIMING_MS);
 }
 
 void drTIM_KeyFreqCtrlStop(void)
@@ -390,7 +410,7 @@ void drTIM_KeyFreqCtrlHandler(void)
 
 void drTIM_SendLimitStart(void)
 {
-	drTIMER_Start(&drTIM_SendLimit, 3);
+	drTIMER_Start(&drTIM_SendLimit, drTIM_SendLimit_TIMING_MS);
 }
 
 void drTIM_SendLimitStop(void)

@@ -10,11 +10,14 @@ int main (void)
 	
 	GPIO_Default();
 
+//	nrf_gpio_cfg_output(17);
+//	nrf_gpio_cfg_output(18);	
+	
 	drERROR_CHECK(drERR_Init());
 	drERROR_CHECK(CLOCK_Init());
 	drERROR_CHECK(DEBUG_Init());
 	drERROR_CHECK(TIMERS_Init());
-	drERROR_CHECK(TIMER0_Init());
+	drERROR_CHECK(RTC0_Init());
 	drERROR_CHECK(WDT_Init());	
 	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
