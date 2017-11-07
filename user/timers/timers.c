@@ -26,7 +26,7 @@
 //#define TX_RESULT_DISPLAY_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000,APP_TIMER_PRESCALER)
 //#define DISPLAY_VERSION_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(2000,APP_TIMER_PRESCALER)
 //#define SEND_ALLOW_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300,APP_TIMER_PRESCALER)
-//#define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
+#define WATCH_DOG_TIMEOUT_INTERVAL     				APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
 //#define KEY_FREQ_CTRL_TIMEOUT_INTERVAL     			APP_TIMER_TICKS(300, 	APP_TIMER_PRESCALER)
 //#define LOW_POWER_PROMPT_TIMEOUT_INTERVAL     		APP_TIMER_TICKS(1000, 	APP_TIMER_PRESCALER)
 
@@ -47,7 +47,7 @@ APP_TIMER_DEF(retransmit_timer_id);				/* 链路层的重发定时器 */
 //APP_TIMER_DEF(display_version_timer_id);		/*  显示版本信息定时器 */
 //APP_TIMER_DEF(send_allow_timer_id);				/*  发送限制定时器 */
 APP_TIMER_DEF(tx_random_delay_timer_id);		/*  随机发送延时 */
-//APP_TIMER_DEF(watch_dog_timer_id);
+APP_TIMER_DEF(watch_dog_timer_id);
 //APP_TIMER_DEF(key_freq_ctrl_timer_id);			/*  按键频率控制定时器 */
 //APP_TIMER_DEF(low_power_prompt_timer_id);		/*  低电量提示报警 */
 
@@ -84,8 +84,8 @@ uint32_t TIMERS_Init(void)
 //	err_code = app_timer_create(&sys_off_timer_id,APP_TIMER_MODE_REPEATED,TIMER_SysOffHandler);
 //	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
 	
-//	err_code = app_timer_create(&watch_dog_timer_id,APP_TIMER_MODE_REPEATED,TIMER_WatchDogHandler);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);	
+	err_code = app_timer_create(&watch_dog_timer_id,APP_TIMER_MODE_REPEATED,TIMER_WatchDogHandler);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);	
 
 	//-------------------------- 单次定时器 ------------------------------
 //	err_code = app_timer_create(&sys_state_timer_id,APP_TIMER_MODE_SINGLE_SHOT,TIMER_SysStateHandler);
@@ -582,24 +582,24 @@ void TIMER_TxRandomDelayHandler(void * p_context)
 	RADIO_StartLinkTx(TX_DATA_TYPE_ECHO);
 }
 
-//void TIMER_WatchDogStart(void)
-//{
-//	uint32_t err_code;
-//	err_code = app_timer_start(watch_dog_timer_id,WATCH_DOG_TIMEOUT_INTERVAL,NULL);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-//}
+void TIMER_WatchDogStart(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_start(watch_dog_timer_id,WATCH_DOG_TIMEOUT_INTERVAL,NULL);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+}
 
-//void TIMER_WatchDogStop(void)
-//{
-//	uint32_t err_code;
-//	err_code = app_timer_stop(watch_dog_timer_id);
-//	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
-//}
+void TIMER_WatchDogStop(void)
+{
+	uint32_t err_code;
+	err_code = app_timer_stop(watch_dog_timer_id);
+	drERROR_CHECK(drERROR_TIMER_BASE_NUM+err_code);
+}
 
-//void TIMER_WatchDogHandler(void * p_context)
-//{
-//	WDT.FeedFlg = true;
-//}
+void TIMER_WatchDogHandler(void * p_context)
+{
+	WDT.FeedFlg = true;
+}
 
 //void TIMER_KeyFreqCtrlStart(void)
 //{
