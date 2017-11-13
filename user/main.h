@@ -50,7 +50,7 @@
 #define     VERSION_LEVEL_2		(3)			//¶þ¼¶°æ±¾ºÅ
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.4.3              "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.6.0              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(1)
@@ -64,6 +64,7 @@ extern uint8_t GetRandomNumber(void);
 extern void GPIO_Default(void);
 
 #endif
+
 
 
 
