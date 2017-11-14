@@ -31,7 +31,7 @@
 
 
 #define RX_WINDOW_ADD_WAIT_ACK			(20)	//主动发送数据后，增加RX窗等待"ACK"的时间，20ms增到到25ms，保证成功率
-#define RX_WINDOW_ADD_WAIT_DATA			(60)	//接收到前导帧后，增加RX窗等待有效数据的时间
+#define RX_WINDOW_ADD_WAIT_DATA			(30)	//接收到前导帧后，增加RX窗等待有效数据的时间
 #define RX_WINDOW_ON					(3)		//RX窗打开时间
 #define RX_WINDOW_OFF					(100)	//RX窗关闭时间
 #define RETURN_ACK_DELAY				(300)	//随机回复ACK的最大时间
@@ -119,8 +119,8 @@ typedef struct
 	bool 						TxIngFlg;					//链路层正在发送标志
 	bool 						TxSucFlg;					//发送成功标志
 	bool 						RxWindowOnFlg;				//接收窗正常打开
-	bool 						RxWindowAddFlg;			//接收窗临时增加用于等待ACK
-	bool 						RxWindowWaitFlg;			//收到前导帧后，接收窗临时增加用于等待有效数据'	
+	bool 						RxWindowAddFlg;				//接收窗临时增加用于等待ACK/有效数据
+	bool 						RxWindowWaitFlg;			//收到前导帧后，开始等待ACK/有效数据
 	
 	uint8_t 					LatestRssi;				//保存最新收到2.4G的信号强度值
 	uint8_t 					ReTxCount;				//重发计数

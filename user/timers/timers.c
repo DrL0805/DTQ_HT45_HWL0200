@@ -247,6 +247,7 @@ void TIMER_RxWindowStart(void)
 // 接收器重置，按约定比例循环开关
 void TIMER_RxWindowReset(void)
 {
+	RADIO.IM.RxWindowAddFlg = false;		// 清除增加接收窗等待有效数据/ACK标志	
 	RADIO.IM.RxWindowWaitFlg = false;
 	RADIO.IM.RxWindowOnFlg = false;
 	
