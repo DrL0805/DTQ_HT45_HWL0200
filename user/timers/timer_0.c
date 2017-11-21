@@ -103,30 +103,30 @@ TIMER0_INSTANCE_T		drTIM_NFC;
 TIMER0_INSTANCE_T		drTIM_WDT;
 
 // Locals -------------------------------------------------------------
-nrf_drv_rtc_t rtc = NRF_DRV_RTC_INSTANCE(0); 
+//nrf_drv_rtc_t rtc = NRF_DRV_RTC_INSTANCE(0); 
 
-static void RTC0_TickHandler(nrf_drv_rtc_int_type_t int_type)
-{
+//static void RTC0_TickHandler(nrf_drv_rtc_int_type_t int_type)
+//{
 //	nrf_gpio_pin_toggle(17);
 //	nrf_gpio_pin_toggle(18);
-	
-	TIMER0.TickCnt++;
-	
-	drTIMER_TimeOutCheck(&drTIM_Tmp);
-	drTIMER_TimeOutCheck(&drTIM_SysSleep);
-	drTIMER_TimeOutCheck(&drTIM_LowPwrPrompt);		
-	drTIMER_TimeOutCheck(&drTIM_SendResult);
-	drTIMER_TimeOutCheck(&drTIM_LCD);	
-	drTIMER_TimeOutCheck(&drTIM_ERR);	
-	drTIMER_TimeOutCheck(&drTIM_AutoSend);	
-	drTIMER_TimeOutCheck(&drTIM_RSSI);
-	drTIMER_TimeOutCheck(&drTIM_KeyFreqCtrl);
-	drTIMER_TimeOutCheck(&drTIM_SendLimit);	
-	drTIMER_TimeOutCheck(&drTIM_NFC);	
-	drTIMER_TimeOutCheck(&drTIM_WDT);	
-}
+//	
+//	TIMER0.TickCnt++;
+//	
+//	drTIM_TimeOutCheck(&drTIM_Tmp);
+//	drTIM_TimeOutCheck(&drTIM_SysSleep);
+//	drTIM_TimeOutCheck(&drTIM_LowPwrPrompt);		
+//	drTIM_TimeOutCheck(&drTIM_SendResult);
+//	drTIM_TimeOutCheck(&drTIM_LCD);	
+//	drTIM_TimeOutCheck(&drTIM_ERR);	
+//	drTIM_TimeOutCheck(&drTIM_AutoSend);	
+//	drTIM_TimeOutCheck(&drTIM_RSSI);
+//	drTIM_TimeOutCheck(&drTIM_KeyFreqCtrl);
+//	drTIM_TimeOutCheck(&drTIM_SendLimit);	
+//	drTIM_TimeOutCheck(&drTIM_NFC);	
+//	drTIM_TimeOutCheck(&drTIM_WDT);	
+//}
 
-void drTIMER_EventHandler(void)
+void drTIM_EventHandler(void)
 {
 
 	drTIM_TmpHandler();
@@ -146,305 +146,304 @@ void drTIMER_EventHandler(void)
 // 初始化TickSource
 uint32_t RTC0_Init(void)
 {
-    uint32_t err_code;
-	
-    //Initialize RTC instance
-	//注：创建的RTC定时周期必须与 TIMER_TICK_MS 定义的相同
-    err_code = nrf_drv_rtc_init(&rtc, NULL, RTC0_TickHandler);
-    APP_ERROR_CHECK(err_code);
-	
-    //Enable tick event & interrupt
-    nrf_drv_rtc_tick_enable(&rtc,true);
-	
-    //Power on RTC instance
-//    nrf_drv_rtc_enable(&rtc);
-	drTIMER_StartTickSource();
-	
-	return 0;		
+//    uint32_t err_code;
+//	
+//    //Initialize RTC instance
+//	//注：创建的RTC定时周期必须与 TIMER_TICK_MS 定义的相同
+//    err_code = nrf_drv_rtc_init(&rtc, NULL, RTC0_TickHandler);
+//    APP_ERROR_CHECK(err_code);
+//	
+//    //Enable tick event & interrupt
+//    nrf_drv_rtc_tick_enable(&rtc,true);
+//	
+//    //Power on RTC instance
+////    nrf_drv_rtc_enable(&rtc);
+//	drTIM_StartTickSource();
+//	return 0;		
 }
 
-void drTIMER_StartTickSource(void)
+void drTIM_StartTickSource(void)
 {
-	 nrf_drv_rtc_enable(&rtc);	
+//	 nrf_drv_rtc_enable(&rtc);	
 }
 
-void drTIMER_StopTickSource(void)
+void drTIM_StopTickSource(void)
 {
-	 nrf_drv_rtc_disable(&rtc);	
+//	 nrf_drv_rtc_disable(&rtc);	
 }
 
-void drTIMER_Start(TIMER0_INSTANCE_T * TimerInstance, uint32_t OutTickCntMs)
+void drTIM_Start_2(TIMER0_INSTANCE_T * TimerInstance, uint32_t OutTickCntMs)
 {
-	TimerInstance->InitedFlg = true;
-	TimerInstance->TimeOutFlg = false;
-	TimerInstance->TimeOutTickCnt = OutTickCntMs / TIMER_TICK_MS;
-	TimerInstance->StartTickCnt = TIMER0.TickCnt;
+//	TimerInstance->InitedFlg = true;
+//	TimerInstance->TimeOutFlg = false;
+//	TimerInstance->TimeOutTickCnt = OutTickCntMs / TIMER_TICK_MS;
+//	TimerInstance->StartTickCnt = TIMER0.TickCnt;
 }
 
-void drTIMER_Stop(TIMER0_INSTANCE_T * TimerInstance)
+void drTIM_Stop_2(TIMER0_INSTANCE_T * TimerInstance)
 {
-	TimerInstance->InitedFlg = false;
+//	TimerInstance->InitedFlg = false;
 }
 
-void drTIMER_TimeOutCheck(TIMER0_INSTANCE_T * TimerInstance)
+void drTIM_TimeOutCheck(TIMER0_INSTANCE_T * TimerInstance)
 {
-	if(TimerInstance->InitedFlg)
-	{
-		if((TIMER0.TickCnt - TimerInstance->StartTickCnt) >= TimerInstance->TimeOutTickCnt)
-		{
-			TimerInstance->TimeOutFlg = true;
-			TimerInstance->StartTickCnt = TIMER0.TickCnt;
-		}		
-	}
+//	if(TimerInstance->InitedFlg)
+//	{
+//		if((TIMER0.TickCnt - TimerInstance->StartTickCnt) >= TimerInstance->TimeOutTickCnt)
+//		{
+//			TimerInstance->TimeOutFlg = true;
+//			TimerInstance->StartTickCnt = TIMER0.TickCnt;
+//		}		
+//	}
 }
 
 
 // 用户定时器 ----------------------------------------------------------------
 void drTIM_TmpStart(void)
 {
-	drTIMER_Start(&drTIM_Tmp, drTIM_Tmp_TIMING_MS);
+//	drTIM_Start_2(&drTIM_Tmp, drTIM_Tmp_TIMING_MS);
 }
 
 void drTIM_TmpStop(void)
 {
-	drTIMER_Stop(&drTIM_Tmp);
+//	drTIM_Stop_2(&drTIM_Tmp);
 }
 
 void drTIM_TmpHandler(void)
 {
-	if(drTIM_Tmp.TimeOutFlg)
-	{
-		drTIM_Tmp.TimeOutFlg = false;
-		LCD_DisDigitN(5, TIMER0.TickCnt/10, 6);
-	}
+//	if(drTIM_Tmp.TimeOutFlg)
+//	{
+//		drTIM_Tmp.TimeOutFlg = false;
+//		LCD_DisDigitN(5, TIMER0.TickCnt/10, 6);
+//	}
 }
 
 void drTIM_SysSleepStart(void)
 {
-	#if SYS_NO_SLEEP_DEBUG
-	drTIMER_Start(&drTIM_SysSleep, drTIM_SysSleep_TIMING_MS);
-	#endif
+//	#if SYS_NO_SLEEP_DEBUG
+//	drTIM_Start_2(&drTIM_SysSleep, drTIM_SysSleep_TIMING_MS);
+//	#endif
 }
 
 void drTIM_SysSleepStop(void)
 {
-	#if SYS_NO_SLEEP_DEBUG
-	drTIMER_Stop(&drTIM_SysSleep);
-	#endif
+//	#if SYS_NO_SLEEP_DEBUG
+//	drTIM_Stop_2(&drTIM_SysSleep);
+//	#endif
 }
 
 void drTIM_SysSleepHandler(void)
 {
-	#if SYS_NO_SLEEP_DEBUG
-	if(drTIM_SysSleep.TimeOutFlg)
-	{
-		drTIM_SysSleep.TimeOutFlg = false;
-		
-		POWER_SysOnToSleep();
-	}	
-	#endif
+//	#if SYS_NO_SLEEP_DEBUG
+//	if(drTIM_SysSleep.TimeOutFlg)
+//	{
+//		drTIM_SysSleep.TimeOutFlg = false;
+//		
+//		POWER_SysOnToSleep();
+//	}	
+//	#endif
 }
 
 void drTIM_LowPwrPromptStart(void)
 {
-	drTIMER_Start(&drTIM_LowPwrPrompt, drTIM_LowPwrPrompt_TIMING_MS);
+//	drTIM_Start_2(&drTIM_LowPwrPrompt, drTIM_LowPwrPrompt_TIMING_MS);
 }
 
 void drTIM_LowPwrPromptStop(void)
 {
-	drTIMER_Stop(&drTIM_LowPwrPrompt);
+//	drTIM_Stop_2(&drTIM_LowPwrPrompt);
 }
 
 void drTIM_LowPwrPromptHandler(void)
 {
-	static bool	TmpFlg = false;
-	
-	if(drTIM_LowPwrPrompt.TimeOutFlg)
-	{
-		drTIM_LowPwrPrompt.TimeOutFlg = false;
-		
-		if(TmpFlg)
-		{
-			TmpFlg = false;
-			LCD_DisplayBattery(BATTERY_LEVEL_OFF);
-		}
-		else
-		{
-			TmpFlg = true;
-			LCD_DisplayBattery(BATTERY_LEVEL_0);	
-		}		
-	}	
+//	static bool	TmpFlg = false;
+//	
+//	if(drTIM_LowPwrPrompt.TimeOutFlg)
+//	{
+//		drTIM_LowPwrPrompt.TimeOutFlg = false;
+//		
+//		if(TmpFlg)
+//		{
+//			TmpFlg = false;
+//			LCD_DisplayBattery(BATTERY_LEVEL_OFF);
+//		}
+//		else
+//		{
+//			TmpFlg = true;
+//			LCD_DisplayBattery(BATTERY_LEVEL_0);	
+//		}		
+//	}	
 }
 
 
 void drTIM_SendResultStart(void)
 {
-	drTIMER_Start(&drTIM_SendResult, drTIM_SendResult_TIMING_MS);
+//	drTIM_Start_2(&drTIM_SendResult, drTIM_SendResult_TIMING_MS);
 }
 
 void drTIM_SendResultStop(void)
 {
-	drTIMER_Stop(&drTIM_SendResult);
+//	drTIM_Stop_2(&drTIM_SendResult);
 }
 
 void drTIM_SendResultHandler(void)
 {
-	if(drTIM_SendResult.TimeOutFlg)
-	{
-		drTIM_SendResult.TimeOutFlg = false;
-		
-		LCD.DATA.SendResultState = SEND_RESULT_CLEAR;
-		LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;
-	}	
+//	if(drTIM_SendResult.TimeOutFlg)
+//	{
+//		drTIM_SendResult.TimeOutFlg = false;
+//		
+//		LCD.DATA.SendResultState = SEND_RESULT_CLEAR;
+//		LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;
+//	}	
 }
 
 void drTIM_LCDStart(void)
 {
-	drTIMER_Start(&drTIM_LCD, drTIM_LCD_TIMING_MS);
+//	drTIM_Start_2(&drTIM_LCD, drTIM_LCD_TIMING_MS);
 }
 
 void drTIM_LCDStop(void)
 {
-	drTIMER_Stop(&drTIM_LCD);
+//	drTIM_Stop_2(&drTIM_LCD);
 }
 
 
 void drTIM_LCDHandler(void)
 {
-	if(drTIM_LCD.TimeOutFlg)
-	{
-		drTIM_LCD.TimeOutFlg = false;
-		
-		drTIM_LCDStop();
-		LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-	}	
+//	if(drTIM_LCD.TimeOutFlg)
+//	{
+//		drTIM_LCD.TimeOutFlg = false;
+//		
+//		drTIM_LCDStop();
+//		LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
+//	}	
 }
 
 void drTIM_ERRStart(void)
 {
-	drTIMER_Start(&drTIM_ERR, drTIM_ERR_TIMING_MS);
+//	drTIM_Start_2(&drTIM_ERR, drTIM_ERR_TIMING_MS);
 }
 
 void drTIM_ERRStop(void)
 {
-	drTIMER_Stop(&drTIM_ERR);
+//	drTIM_Stop_2(&drTIM_ERR);
 }
 
 
 void drTIM_ERRHandler(void)
 {
-	if(drTIM_ERR.TimeOutFlg)
-	{
-		drTIM_ERR.TimeOutFlg = false;
-		
-		drERR.HintFlg = true;
-	}	
+//	if(drTIM_ERR.TimeOutFlg)
+//	{
+//		drTIM_ERR.TimeOutFlg = false;
+//		
+//		drERR.HintFlg = true;
+//	}	
 }
 
 void drTIM_AutoSendStart(void)
 {
-	drTIMER_Start(&drTIM_AutoSend, drTIM_AutoSend_TIMING_MS);
+//	drTIM_Start_2(&drTIM_AutoSend, drTIM_AutoSend_TIMING_MS);
 }
 
 void drTIM_AutoSendStop(void)
 {
-	drTIMER_Stop(&drTIM_AutoSend);
+//	drTIM_Stop_2(&drTIM_AutoSend);
 }
 
 void drTIM_AutoSendHandler(void)
 {
-	if(drTIM_AutoSend.TimeOutFlg)
-	{
-		drTIM_AutoSend.TimeOutFlg = false;
-		
-		KEY.ScanDownFlg = true;
-		KEY.ScanValue = KEY_APP_A_1;
-	}	
+//	if(drTIM_AutoSend.TimeOutFlg)
+//	{
+//		drTIM_AutoSend.TimeOutFlg = false;
+//		
+//		KEY.ScanDownFlg = true;
+//		KEY.ScanValue = KEY_APP_A_1;
+//	}	
 }
 
 void drTIM_RSSIStart(void)
 {
-	drTIMER_Start(&drTIM_RSSI, drTIM_RSSI_TIMING_MS);
+//	drTIM_Start_2(&drTIM_RSSI, drTIM_RSSI_TIMING_MS);
 }
 
 void drTIM_RSSIStop(void)
 {
-	drTIMER_Stop(&drTIM_RSSI);
+//	drTIM_Stop_2(&drTIM_RSSI);
 }
 
 void drTIM_RSSIHandler(void)
 {
-	if(drTIM_RSSI.TimeOutFlg)
-	{
-		drTIM_RSSI.TimeOutFlg = false;
-		
-		LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
-	}	
+//	if(drTIM_RSSI.TimeOutFlg)
+//	{
+//		drTIM_RSSI.TimeOutFlg = false;
+//		
+//		LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
+//	}	
 }
 
 
 
 void drTIM_KeyFreqCtrlStart(void)
 {
-	drTIMER_Start(&drTIM_KeyFreqCtrl, drTIM_KeyFreqCtrl_TIMING_MS);
+//	drTIM_Start_2(&drTIM_KeyFreqCtrl, drTIM_KeyFreqCtrl_TIMING_MS);
 }
 
 void drTIM_KeyFreqCtrlStop(void)
 {
-	drTIMER_Stop(&drTIM_KeyFreqCtrl);
+//	drTIM_Stop_2(&drTIM_KeyFreqCtrl);
 }
 
 void drTIM_KeyFreqCtrlHandler(void)
 {
-	if(drTIM_KeyFreqCtrl.TimeOutFlg)
-	{
-		drTIM_KeyFreqCtrl.TimeOutFlg = false;
-		
-		drTIM_KeyFreqCtrlStop();
-		APP.KeyCntLimitFlg = false;
-	}	
+//	if(drTIM_KeyFreqCtrl.TimeOutFlg)
+//	{
+//		drTIM_KeyFreqCtrl.TimeOutFlg = false;
+//		
+//		drTIM_KeyFreqCtrlStop();
+//		APP.KeyCntLimitFlg = false;
+//	}	
 }
 
 void drTIM_SendLimitStart(void)
 {
-	drTIMER_Start(&drTIM_SendLimit, drTIM_SendLimit_TIMING_MS);
+//	drTIM_Start_2(&drTIM_SendLimit, drTIM_SendLimit_TIMING_MS);
 }
 
 void drTIM_SendLimitStop(void)
 {
-	drTIMER_Stop(&drTIM_SendLimit);
+//	drTIM_Stop_2(&drTIM_SendLimit);
 }
 
 void drTIM_SendLimitHandler(void)
 {
-	if(drTIM_SendLimit.TimeOutFlg)
-	{
-		drTIM_SendLimit.TimeOutFlg = false;
-		
-		drTIM_SendLimitStop();
-		APP.QUE.KeySendLimitFlg = false;
-	}	
+//	if(drTIM_SendLimit.TimeOutFlg)
+//	{
+//		drTIM_SendLimit.TimeOutFlg = false;
+//		
+//		drTIM_SendLimitStop();
+//		APP.QUE.KeySendLimitFlg = false;
+//	}	
 }
 
 void drTIM_NFCStart(void)
 {
-	drTIMER_Start(&drTIM_NFC, drTIM_NFC_TIMING_MS);
+//	drTIM_Start_2(&drTIM_NFC, drTIM_NFC_TIMING_MS);
 }
 
 void drTIM_NFCStop(void)
 {
-	drTIMER_Stop(&drTIM_NFC);
+//	drTIM_Stop_2(&drTIM_NFC);
 }
 
 void drTIM_NFCHandler(void)
 {
-	if(drTIM_NFC.TimeOutFlg)
-	{
-		drTIM_NFC.TimeOutFlg = false;
-		drTIM_NFCStop();
-		
-		APP.NRFUpdataFlg = true;		
-	}	
+//	if(drTIM_NFC.TimeOutFlg)
+//	{
+//		drTIM_NFC.TimeOutFlg = false;
+//		drTIM_NFCStop();
+//		
+//		APP.NRFUpdataFlg = true;		
+//	}	
 }
 
 

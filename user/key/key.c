@@ -186,7 +186,9 @@ void KEY_Scan(void)
 						{
 							LCD_DisVer();
 							drTIM_LCDStart();
-							drTIM_SysSleepStart();		
+							drTIMER_LCDStart(drTIMER_PERIOD_LCD);
+							drTIM_SysSleepStart();
+							drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 
 //							static bool TmpFlg = false;
 //							if(TmpFlg)

@@ -144,6 +144,7 @@ void ADC_LcdDisValue(void)
 		else if(ADC.LatestADCVal >= 2650 && ADC.LatestADCVal < 2700)
 		{
 			drTIM_LowPwrPromptStart();
+			drTIMER_LowPwrPromptStart(drTIMER_PERIOD_LowPwrPrompt);
 			LCD_DisplayBattery(BATTERY_LEVEL_0);
 		}	
 		else if( ADC.LatestADCVal < 2630)
@@ -168,6 +169,7 @@ void ADC_LcdDisValue(void)
 		else if(ADC.LatestADCVal > 2630 && ADC.LatestADCVal < 2680)
 		{
 			drTIM_LowPwrPromptStart();
+			drTIMER_LowPwrPromptStart(drTIMER_PERIOD_LowPwrPrompt);
 			LCD_DisplayBattery(BATTERY_LEVEL_0);		
 		}
 		else if(ADC.LatestADCVal < 2630)

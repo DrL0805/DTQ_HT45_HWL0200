@@ -110,6 +110,7 @@ uint32_t APP_ParUpdate(void)
 				if(SYS_ON == POWER.SysState)
 				{
 					drTIM_SysSleepStart();
+					drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				}
 				else if(SYS_SLEEP == POWER.SysState)
 				{
@@ -155,6 +156,7 @@ void APP_KeyHandler(void)
 			APP.KeyCnt++;
 			APP.KeyCntLimitFlg = true;
 			drTIM_KeyFreqCtrlStart();
+			drTIMER_KeyFreqCtrlStart(drTIMER_PERIOD_KeyFreqCtrl);
 		}
 		
 		if(RADIO.IM.TxIngFlg)
@@ -171,6 +173,7 @@ void APP_KeyHandler(void)
 				break;				
 			case SYS_ON:
 				drTIM_SysSleepStart();
+				drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
 				{
 					switch(APP.QUE.Type)

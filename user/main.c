@@ -17,7 +17,10 @@ int main (void)
 	drERROR_CHECK(CLOCK_Init());
 	drERROR_CHECK(DEBUG_Init());
 	drERROR_CHECK(TIMERS_Init());
-	drERROR_CHECK(RTC0_Init());
+	
+//	drERROR_CHECK(RTC0_Init());
+	drERROR_CHECK(drTIMER_Init());	// 定时器
+	
 	drERROR_CHECK(WDT_Init());	
 	drERROR_CHECK(KEY_Init());
 	drERROR_CHECK(NFC_Init());
@@ -30,12 +33,17 @@ int main (void)
 	drERROR_CHECK(LCD_Init());
 	drERROR_CHECK(ADC_Init());
 	
+//	drTIMER_TestStart(3);
+//	drTIMER_PublicStart(1000);	
+	
 //	W25_ReadTestData();
 	
 	TIMER_RxWindowStart();	
 	TIMER_ADCStart();
 	drTIM_SysSleepStart();
+	drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 	drTIM_RSSIStart();					// 信号强度显示
+	drTIMER_RSSIStart(drTIMER_PERIOD_RSSI);
 	
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
 	LCD_ClearScreen();
@@ -48,6 +56,7 @@ int main (void)
 	
 //	drTIM_TmpStart();					// 监测程序是否卡死
 //	drTIM_AutoSendStart();				// 自动按键发送测试定时器
+//  drTIMER_AutoSendStart(ddrTIMER_PERIOD_AutoSend);	// 自动按键发送测试定时器
 	
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
@@ -79,6 +88,7 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
+		drTIM_EventHandler();
 		drTIMER_EventHandler();
 		drERROR_CHECK(APP_ParUpdate());
 		MAIN_DebugFun();

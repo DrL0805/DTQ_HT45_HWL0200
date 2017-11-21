@@ -38,6 +38,22 @@ uint8_t drCMN_XorCal(uint8_t * dat,uint16_t length)
 	return temp_xor;
 }
  
+
+// 检测bool类型标志位是否为真：
+//		为真，清除标志位并返回true
+// 		为假，返回false
+bool drCMN_BoolFlgCheck(bool*	BoolFlg)
+{
+	if(*BoolFlg)
+	{
+		*BoolFlg = false;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
  
 
 
