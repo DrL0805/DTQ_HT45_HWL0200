@@ -12,6 +12,7 @@ typedef struct
 {
 	uint8_t		RxRssi;				//答题器收到接收器发出的RSSI
 	uint8_t 	TxRssi;				//答题器发出接收器收到的RSSI
+	uint8_t     JsqUid[4];			//测试模式时收到的接收器UID
 	
 	uint8_t 	LcdLetterVal;		//存储LCD字母键值	
 	
@@ -34,7 +35,7 @@ typedef struct
 extern void TEST_Init(void);
 extern void TEST_RssiTest(void);
 extern void TEST_LcdTest(void);
-extern void TEST_KeyTest(void);
+extern void TEST_KeyHandler(void);
 // Globals ------------------------------------------------------------
 extern TEST_PARAMETERS_T 		TEST;
 

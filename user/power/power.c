@@ -84,14 +84,28 @@ void POWER_SysOnToTest(void)
 {
 	POWER.SysState = SYS_TEST;
 	
-//	TIMER_SysStateStop();			//测试模式下，答题器30秒不休眠
-//	drTIM_Stop_2(&drTIM_SysSleep);
-	drTIM_SysSleepStop();
+	drTIM_SysSleepStop();			//测试模式下，答题器30秒不休眠
 	drTIMER_SysSleepStop();
 	
-	TEST.LcdLetterVal = 0;
 	TEST.RxRssi = 0;
 	TEST.TxRssi = 0;
+	
+//	for(uint8_t i = 0;i < 2;i++)
+//	{
+//		LCD_DisplayAll();
+//		nrf_delay_ms(1000);
+//		LCD_ClearScreen();
+//		nrf_delay_ms(1000);		
+//	}	
+	for(uint8_t i = 0;i < 64;i += 2)
+	{
+		LCD_DRV_DisplayOne(i,LCD_DRV_DOT_HANZI,0xBBD8);
+	}
+	nrf_delay_ms(2000);	
+	LCD_ClearScreen();	
+	nrf_delay_ms(300);	
+	
+	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
 }
 
 

@@ -54,14 +54,22 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
 				TEST.TxIrqCnt++;
 				TIMER_TxOvertimeStop();
 				
-				if(RADIO.IM.RxWindowAddFlg)
+				// 若处于生产测试模式，增加时间窗等待ACK
+				if(SYS_TEST == POWER.SysState)
 				{
-					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);
+					TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_ACK);
 				}
 				else
 				{
-					TIMER_RxWindowReset();		
-				}				
+					if(RADIO.IM.RxWindowAddFlg)
+					{
+						TIMER_RxWindowAdd(RX_WINDOW_ADD_WAIT_DATA);
+					}
+					else
+					{
+						TIMER_RxWindowReset();		
+					}					
+				}	
 			}
             break;
         case NRF_ESB_EVENT_TX_FAILED:

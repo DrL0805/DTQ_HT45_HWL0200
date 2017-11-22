@@ -361,7 +361,8 @@ void APP_KeyHandler(void)
 					}					
 				}			
 				break;
-			case SYS_TEST:	
+			case SYS_TEST:
+				
 				break;
 			case SYS_MATCH:
 				MATCH_KeyHandler();
@@ -401,8 +402,6 @@ void APP_CmdHandler(void)
 			break;
 		case CMD_SYS_OFF:
 			APP_CmdSysOffHandler();
-			break;
-		case CMD_TEST_SELF:	
 			break;
 		case CMD_CLEAR_SCREEN:
 			APP_CmdClearScreenHandler();
@@ -1291,7 +1290,36 @@ void APP_KeyEmptyHandler(void)
 /* 2.4GÃüÁî´¦Àíº¯Êý-------------------------------------------------------------------- */
 void APP_CmdTestHandler(void)
 {
+	uint8_t Suc[16] = {0xD0,0xC5,0xBA,0xC5,0xC7,0xBF,0xB6,0xC8,0xB2,0xE2,0xCA,0xD4,0xCD,0xA8,0xB9,0xFD};
+	uint8_t Fai[16] = {0xD0,0xC5,0xBA,0xC5,0xC7,0xBF,0xB6,0xC8,0xB2,0xE2,0xCA,0xD4,0xCA,0xA7,0xB0,0xDC};
+	char * RxString = "Rx: ";
+	char * TxString = "Tx: ";
 	
+	TEST.TxRssi = APP.CMD.CmdData[1];
+	
+	if(SYS_TEST != POWER.SysState)
+	{
+		POWER_SysOnToTest();
+		TEST.RxRssi = rx_payload.rssi&0x7F;
+		memcpy(RADIO.RX.SrcId, TEST.JsqUid, 4);
+	}	
+	else if(0 != TEST.TxRssi)
+	{
+		LCD_DRV_DisplayN(32, 4, (uint8_t *)RxString);
+		LCD_DisDigitN(36, TEST.RxRssi,2);
+		LCD_DRV_DisplayN(40, 4, (uint8_t *)TxString);
+		LCD_DisDigitN(44, TEST.TxRssi,2);
+		
+		if(TEST.RxRssi <= 48 && TEST.TxRssi <= 48)
+		{
+			LCD_DRV_DisplayN(16, 16, Suc);			
+		}
+		else
+		{
+			LCD_DRV_DisplayN(16, 16, Fai);	
+			
+		}
+	}
 }
 
 void APP_CmdQuestionHandler(void)

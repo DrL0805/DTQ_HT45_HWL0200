@@ -32,6 +32,7 @@ int main (void)
 	drERROR_CHECK(W25_Init());
 	drERROR_CHECK(LCD_Init());
 	drERROR_CHECK(ADC_Init());
+	TEST_Init();
 	
 //	drTIMER_TestStart(3);
 //	drTIMER_PublicStart(1000);	
@@ -61,9 +62,9 @@ int main (void)
 //	LCD_DisDigit(0, RADIO.MATCH.DtqNum);
 //	LCD_DisDigit(4, RADIO.MATCH.TxChannal);
 //	LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-	
+
 	while(true)
-	{
+	{	
 		switch(POWER.SysState)
 		{
 			case SYS_ON:	
@@ -80,7 +81,12 @@ int main (void)
 			case SYS_OFF:
 				APP_KeyHandler();
 				break;
-			case SYS_TEST:			
+			case SYS_TEST:	
+				TIMER_EventHandler();	
+				RADIO_RxDataHandler();	
+				TEST_KeyHandler();
+				LCD_Update();	
+				ADC_Update();					
 				break;
 			case SYS_MATCH:					
 				break;
