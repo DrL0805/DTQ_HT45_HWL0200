@@ -246,17 +246,23 @@ void drTIMER_PublicHandler(void)
 // 系统休眠定时器 --------------------------------------------------
 void drTIMER_SysSleepStart(uint32_t OutTick)
 {
+	#if SYS_NO_SLEEP_DEBUG
 	drTIMER_Start(&drTIMER_SysSleep, OutTick);
+	#endif
 }
 
 void drTIMER_SysSleepStop(void)
 {
+	#if SYS_NO_SLEEP_DEBUG
 	drTIMER_Stop(&drTIMER_SysSleep);
+	#endif
 }
 
 void drTIMER_SysSleepHandler(void)
 {
+	#if SYS_NO_SLEEP_DEBUG
 	drTIMER_SysSleep.TimeOutFlg = true;
+	#endif
 }
 
 void drTIMER_SysSleepEventHandler(void)

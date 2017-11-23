@@ -190,7 +190,7 @@ void RADIO_TxSuccess(void)
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;			
 //			TIMER_TxResultDisplayStop();
 //			TIMER_TxResultDisplayStart();
-			drTIM_SendResultStart();
+
 			drTIMER_SendResultStart(drTIMER_PERIOD_SendResult);
 			break;
 		case SYS_SLEEP:
@@ -218,7 +218,7 @@ void RADIO_TxFailed(void)
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;		
 //			TIMER_TxResultDisplayStop();
 //			TIMER_TxResultDisplayStart();
-			drTIM_SendResultStart();
+
 			drTIMER_SendResultStart(drTIMER_PERIOD_SendResult);
 			break;
 		case SYS_SLEEP:
@@ -246,7 +246,7 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			RADIO.IM.ReTxCount = 0;	
 			
 			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
-			drTIM_SendLimitStart();
+
 			drTIMER_SendLimitStart(drTIMER_PERIOD_SendLimit);
 			APP.KeyGapCnt = 0;					
 			

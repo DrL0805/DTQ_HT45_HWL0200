@@ -38,7 +38,7 @@ uint32_t KEY_Init(void)
 void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
 	/* 系统正在开机时，对中断不做处理 */
-	if((I2C_INT == pin) && POWER.SysInitializedFlg && !APP.NFCIrqFlg) 	
+	if((I2C_INT == pin) && !APP.NFCIrqFlg) 	
 	{		
 		APP.NFCIrqFlg = true;
 //		APP.NRFDelayFlg = true;		
@@ -185,22 +185,8 @@ void KEY_Scan(void)
 						if(KEY_CombinationValue == 0x25)	// 抢红包+D
 						{
 							LCD_DisVer();
-							drTIM_LCDStart();
 							drTIMER_LCDStart(drTIMER_PERIOD_LCD);
-							drTIM_SysSleepStart();
 							drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
-
-//							static bool TmpFlg = false;
-//							if(TmpFlg)
-//							{
-//								TmpFlg = false;
-//								nrf_drv_timer_enable(&TIMER_PUBLIC);	
-//							}
-//							else
-//							{
-//								TmpFlg = true;
-//								nrf_drv_timer_disable(&TIMER_PUBLIC);	
-//							}
 						}
 					}
 					else

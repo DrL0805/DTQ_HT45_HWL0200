@@ -52,7 +52,6 @@ uint32_t APP_ParUpdate(void)
 	{		
 		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
 		APP.NFCIrqFlg = false;			
-//		drTIM_NFCStart();
 		TIMER_NFCStart();
 	}
 	
@@ -109,7 +108,7 @@ uint32_t APP_ParUpdate(void)
 				// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
 				if(SYS_ON == POWER.SysState)
 				{
-					drTIM_SysSleepStart();
+
 					drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				}
 				else if(SYS_SLEEP == POWER.SysState)
@@ -155,7 +154,7 @@ void APP_KeyHandler(void)
 		{
 			APP.KeyCnt++;
 			APP.KeyCntLimitFlg = true;
-			drTIM_KeyFreqCtrlStart();
+
 			drTIMER_KeyFreqCtrlStart(drTIMER_PERIOD_KeyFreqCtrl);
 		}
 		
@@ -172,7 +171,7 @@ void APP_KeyHandler(void)
 			case SYS_OFF:	
 				break;				
 			case SYS_ON:
-				drTIM_SysSleepStart();
+
 				drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
 				{

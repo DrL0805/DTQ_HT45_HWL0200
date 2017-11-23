@@ -32,7 +32,7 @@ typedef struct
 }TEST_PARAMETERS_T;
 
 // Functions ----------------------------------------------------------
-extern void TEST_Init(void);
+extern uint32_t TEST_Init(void);
 extern void TEST_RssiTest(void);
 extern void TEST_LcdTest(void);
 extern void TEST_KeyHandler(void);

@@ -13,11 +13,12 @@ TEST_PARAMETERS_T 		TEST;
 
 
 
-void TEST_Init(void)
+uint32_t TEST_Init(void)
 {
 	TEST.RxRssi = 0;
 	TEST.TxRssi = 0;
-//	TEST.HuiXianNum = 0;
+
+	return 0;
 }
 
 void TEST_RssiTest(void)

@@ -16,8 +16,6 @@ typedef enum
 
 typedef struct
 {
-	bool					SysInitializedFlg;		//系统初始化完成标志
-	
 	POWER_SYSTEM_STATE_TYPE	SysState;
 }POWER_PARAMETERS_T;
 

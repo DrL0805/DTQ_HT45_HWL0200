@@ -15,7 +15,7 @@ drErrType drERR_Init(void)
 {
 	#if USE_ERR_CHECK
 	
-	drTIM_ERRStart();
+
 	drTIMER_ERRStart(drTIMER_PERIOD_ERR);
 	
 	#endif

@@ -381,11 +381,6 @@
               <FilePath>..\user\drl_lib\drl_err.c</FilePath>
             </File>
             <File>
-              <FileName>timer_0.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\timers\timer_0.c</FilePath>
-            </File>
-            <File>
               <FileName>drl_debug.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\drl_lib\drl_debug.c</FilePath>
