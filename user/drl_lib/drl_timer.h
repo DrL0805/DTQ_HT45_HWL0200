@@ -5,18 +5,22 @@
 #include "drl_library.h"
 
 // Defines ------------------------------------------------------------
-#define		drTIM_MAX_OUT_VALUE		(0xFFFFFF - 1)		//最大超时值
+#define 	drTIMER_CLOCK_FREQ			(32768)
+#define 	drTIEMR_PRESCALER			(0)		// 定时器分频系数
+#define 	drTIMER_TICK_CNT(MS)		(uint32_t)((((MS) * drTIMER_CLOCK_FREQ) / (1000 * (drTIEMR_PRESCALER + 1))))	
 
-#define 						drTIMER_PERIOD_SysSleep				(5000)
-#define 						drTIMER_PERIOD_LowPwrPrompt			(1000)
-#define 						drTIMER_PERIOD_SendResult			(1000)
-#define 						drTIMER_PERIOD_LCD						(3000)
-#define 						drTIMER_PERIOD_ERR						(2000)
-#define 						ddrTIMER_PERIOD_AutoSend				(200)
-#define 						drTIMER_PERIOD_RSSI					(1000)
-#define 						drTIMER_PERIOD_KeyFreqCtrl				(300)
-#define 						drTIMER_PERIOD_SendLimit				(300)
-#define 						drTIMER_PERIOD_NFC				(500)
+#define		drTIMER_MAX_OUT_VALUE		(0xFFFFFF - 1)		//最大超时值
+
+#define 						drTIMER_PERIOD_SysSleep				drTIMER_TICK_CNT(5000)
+#define 						drTIMER_PERIOD_LowPwrPrompt			drTIMER_TICK_CNT(1000)
+#define 						drTIMER_PERIOD_SendResult			drTIMER_TICK_CNT(1000)
+#define 						drTIMER_PERIOD_LCD					drTIMER_TICK_CNT(3000)
+#define 						drTIMER_PERIOD_ERR					drTIMER_TICK_CNT(2000)
+#define 						ddrTIMER_PERIOD_AutoSend			drTIMER_TICK_CNT(200)
+#define 						drTIMER_PERIOD_RSSI					drTIMER_TICK_CNT(1000)
+#define 						drTIMER_PERIOD_KeyFreqCtrl			drTIMER_TICK_CNT(300)
+#define 						drTIMER_PERIOD_SendLimit			drTIMER_TICK_CNT(300)
+#define 						drTIMER_PERIOD_NFC					drTIMER_TICK_CNT(500)
 
 
 // Typedefs -----------------------------------------------------------

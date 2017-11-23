@@ -3,9 +3,10 @@
 
 static void MAIN_DebugFun(void);
 
-
+	uint32_t i;
 int main (void)
 {
+
 	__disable_irq();	
 	
 	GPIO_Default();
@@ -47,6 +48,8 @@ int main (void)
 	
 	__enable_irq();
 
+	i = drTIMER_TICK_CNT(100);
+	i++;
 	while(true)
 	{	
 		switch(POWER.SysState)

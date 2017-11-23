@@ -82,8 +82,8 @@ uint32_t drTIMER_CreateTimer(drTIM_TIMER_PARAMETERS_T* pTIMER, void (*pTimerOutH
 	// 设定新定时器pTIMER参数
 	pTIMER->TimeOutFlg = false;
 	pTIMER->State = drTIM_UNINITIALIZED;
-	pTIMER->RemainTickVal = drTIM_MAX_OUT_VALUE;
-	pTIMER->TotalTickVal = drTIM_MAX_OUT_VALUE;
+	pTIMER->RemainTickVal = drTIMER_MAX_OUT_VALUE;
+	pTIMER->TotalTickVal = drTIMER_MAX_OUT_VALUE;
 	pTIMER->TimerOutHandler = pTimerOutHandler;
 	
 	// 在头结点之后插入新节点
@@ -127,7 +127,7 @@ void RTC0_IRQHandler(void)
 
 static uint32_t drTIMER_TickScheduler(void)
 {
-	uint32_t NextTickVal = drTIM_MAX_OUT_VALUE;			// 下一个定时器超时所需tick		
+	uint32_t NextTickVal = drTIMER_MAX_OUT_VALUE;			// 下一个定时器超时所需tick		
 	uint32_t CurCount;				
 	drTIM_TIMER_PARAMETERS_T* pNextTimer = pdrTIMER_HEAD->pNext;
 	
@@ -181,9 +181,13 @@ static uint32_t drTIMER_TickScheduler(void)
 // TICK源初始化
 static uint32_t drTIMER_TickSourceInit(void)
 {
-	NRF_RTC0->CC[0] = drTIM_MAX_OUT_VALUE;
-	NRF_RTC0->PRESCALER = 32;				// PRESCALER = 32：约1ms的TICK，COUNTER++，实际上是1.007ms
+	
+	NRF_RTC0->PRESCALER = drTIEMR_PRESCALER;	// fRTC [kHz] = 32.768 / (PRESCALER + 1 )
+												// PRESCALER = 32：约1ms的TICK，COUNTER++，实际上是1.007ms
+												// PRESCALER = 0：约30.517us
+	
 	NRF_RTC0->TASKS_CLEAR = 1;
+	NRF_RTC0->CC[0] = drTIMER_MAX_OUT_VALUE;
 	
 //	NRF_RTC0->EVTENSET |= 0x01 << 0;				// 使能TICK中断
 //	NRF_RTC0->INTENSET |= 0x01 << 0;
