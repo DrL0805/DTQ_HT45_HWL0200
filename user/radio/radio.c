@@ -52,7 +52,7 @@ void nrf_esb_event_handler(nrf_esb_evt_t const * p_event)
 			if(0 == get_tx_fifo_count())
 			{
 				TEST.TxIrqCnt++;
-				TIMER_TxOvertimeStop();
+				drTIMER_TxOvertimeStop();
 				
 				// 若处于生产测试模式，增加时间窗等待ACK
 				if(SYS_TEST == POWER.SysState)
@@ -185,11 +185,8 @@ void RADIO_TxSuccess(void)
 	switch(POWER.SysState)
 	{
 		case SYS_ON:
-//			APP.QUE.AnsweredFlg = true;
 			LCD.DATA.SendResultState = SEND_RESULT_OK;
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;			
-//			TIMER_TxResultDisplayStop();
-//			TIMER_TxResultDisplayStart();
 
 			drTIMER_SendResultStart(drTIMER_PERIOD_SendResult);
 			break;
@@ -216,8 +213,6 @@ void RADIO_TxFailed(void)
 		case SYS_ON:
 			LCD.DATA.SendResultState = SEND_RESULT_FAIL;
 			LCD.DATA.RefreshFlg |= LCD_REFRESH_RESULT;		
-//			TIMER_TxResultDisplayStop();
-//			TIMER_TxResultDisplayStart();
 
 			drTIMER_SendResultStart(drTIMER_PERIOD_SendResult);
 			break;
@@ -308,8 +303,7 @@ void RADIO_StartHardTx(uint32_t TxChannal, uint8_t *PayloadBuf, uint8_t PayloadL
 	
 	nrf_esb_write_payload(&tx_payload);
 	nrf_esb_write_payload(&tx_payload);
-	TIMER_TxOvertimeStop();
-	TIMER_TxOvertimeStart();
+	drTIMER_TxOvertimeStart(drTIMER_PERIOD_TxOvertime);
 }
 
 

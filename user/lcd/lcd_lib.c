@@ -442,50 +442,10 @@ void  LCD_DisplaySceneArea(void)
 			LCD.DATA.Scene[16*(i+1)] = 0x00;
 		LCD_DRV_DisplayN(16*(i+1), 16, LCD.DATA.Scene+1+16*i);	
 	}
-	
-	// 一次整屏刷新
-//	LCD_DRV_DisplayN(16, LCD.DATA.Scene[0], LCD.DATA.Scene+1);	
-	
-	// 分三行刷新
-//	if(LCD.DATA.Scene[1 + LCD.DATA.ScenePos*16 + 15] >= 0x81)	// 若每行最后一个字符是半个汉字
-//		LCD.DATA.Scene[1 + LCD.DATA.ScenePos*16 + 15] = 0x00;
-//	
-//	LCD_DRV_DisplayN(16+LCD.DATA.ScenePos*16, 16, LCD.DATA.Scene + 1 + LCD.DATA.ScenePos*16);	
-	
-	
-//	// 分3次刷新
-////	if(LCD.DATA.ScenePos%16 == 0)
-////	{
-//		LCD_DRV_DisplayN(16+LCD.DATA.ScenePos, 16, LCD.DATA.Scene + 1 + LCD.DATA.ScenePos);	
-////	}	
-////	else
-////	{
-////		LCD_DRV_DisplayN(16+LCD.DATA.ScenePos, 16, LCD.DATA.Scene + 1 + LCD.DATA.ScenePos);	
-////	}
-//	
-//	if(*(LCD.DATA.Scene + 1 + LCD.DATA.ScenePos + 15) >= 0x81)	// 汉字显示
-//	{
-//		LCD.DATA.ScenePos += 17;
-//	}
-//	else													// ASCII显示
-//	{
-//		LCD.DATA.ScenePos += 16;
-//	}	
-//	
-//	if(LCD.DATA.ScenePos < 48)
-//	{
-//		LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-//	}
 }
 
 void LCD_ClearSceneArea(void)
 {
-//	LCD.DATA.Scene[0] = 48;
-//	memset(LCD.DATA.Scene+1, 0x00, 48);
-//	
-//	LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-//	LCD.DATA.ScenePos = 0;
-	
 	uint8_t TmpBuf[48];
 	
 	memset(TmpBuf, 0x00, 48);
@@ -536,9 +496,6 @@ void LCD_DisDigitN(uint8_t Pos, uint32_t Digit, uint8_t Len)
 
 void LCD_DisVer(void)
 {
-//	LCD_DRV_DisplayN(16, 16, (uint8_t *)VERSION_LEVEL_COMPANY);
-//	LCD_DRV_DisplayN(32, 16, (uint8_t *)VERSION_LEVEL_NUMBER);
-//	LCD_DRV_DisplayN(48, 16, (uint8_t *)VERSION_LEVEL_TIME);
 	char* uID = "uID:";
 	char* Vol = "Vol:      mV";
 	uint32_t TmpUid;

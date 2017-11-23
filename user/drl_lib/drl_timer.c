@@ -28,6 +28,11 @@ drTIM_TIMER_PARAMETERS_T		drTIMER_RSSI;				// 定时刷新RSSI值
 drTIM_TIMER_PARAMETERS_T		drTIMER_KeyFreqCtrl;		// 按键频率控制				
 drTIM_TIMER_PARAMETERS_T		drTIMER_SendLimit;			// 发送频率限制			
 drTIM_TIMER_PARAMETERS_T		drTIMER_NFC;				// 读取13.56M中断延时
+drTIM_TIMER_PARAMETERS_T		drTIMER_WDT;				// 看门狗喂狗定时器
+drTIM_TIMER_PARAMETERS_T		drTIMER_KEY;				// 按键驱动定时器
+drTIM_TIMER_PARAMETERS_T		drTIMER_TxOvertime;			// 发送超时定时
+drTIM_TIMER_PARAMETERS_T		drTIMER_ADC;				// 电池电量ADC采集定时器
+
 
 
 // Locals -------------------------------------------------------------
@@ -56,6 +61,9 @@ uint32_t drTIMER_Init(void)
 	drTIMER_CreateTimer(&drTIMER_KeyFreqCtrl, drTIMER_KeyFreqCtrlHandler);
 	drTIMER_CreateTimer(&drTIMER_SendLimit, drTIMER_SendLimitHandler);
 	drTIMER_CreateTimer(&drTIMER_NFC, drTIMER_NFCHandler);
+	drTIMER_CreateTimer(&drTIMER_WDT, drTIMER_WDTHandler);
+	drTIMER_CreateTimer(&drTIMER_KEY, drTIMER_KEYHandler);
+	drTIMER_CreateTimer(&drTIMER_TxOvertime, drTIMER_TxOvertimeHandler);
 	
 	return 0;	
 }
@@ -73,6 +81,9 @@ void drTIMER_EventHandler(void)
 	drTIMER_KeyFreqCtrlEventHandler();
 	drTIMER_SendLimitEventHandler();
 	drTIMER_NFCEventHandler();
+	drTIMER_WDTEventHandler();
+	drTIMER_KEYEventHandler();	
+	drTIMER_TxOvertimeEventHandler();	
 	
 }
 
@@ -518,8 +529,78 @@ void drTIMER_NFCEventHandler(void)
 	}
 }
 
+// 看门狗喂狗定时器 -----------------------------------------------------
+void drTIMER_WDTStart(uint32_t OutTick)
+{
+	drTIMER_Start(&drTIMER_WDT, OutTick);
+}
 
+void drTIMER_WDTStop(void)
+{
+	drTIMER_Stop(&drTIMER_WDT);
+}
 
+void drTIMER_WDTHandler(void)
+{
+	drTIMER_WDT.TimeOutFlg = true;
+}
 
+void drTIMER_WDTEventHandler(void)
+{
+	if(drCMN_BoolFlgCheck(&drTIMER_WDT.TimeOutFlg))
+	{
+		WDT.FeedFlg = true;
+	}
+}
 
+// 按键驱动定时器 -------------------------------------------------
+void drTIMER_KEYStart(uint32_t OutTick)
+{
+	drTIMER_Start(&drTIMER_KEY, OutTick);
+}
+
+void drTIMER_KEYStop(void)
+{
+	drTIMER_Stop(&drTIMER_KEY);
+}
+
+void drTIMER_KEYHandler(void)
+{
+	drTIMER_KEY.TimeOutFlg = true;
+}
+
+void drTIMER_KEYEventHandler(void)
+{
+	if(drCMN_BoolFlgCheck(&drTIMER_KEY.TimeOutFlg))
+	{
+		KEY.PressFlg = true;
+	}
+}
+
+// 发送超时定时器 ---------------------------------------------------
+void drTIMER_TxOvertimeStart(uint32_t OutTick)
+{
+	drTIMER_Start(&drTIMER_TxOvertime, OutTick);
+}
+
+void drTIMER_TxOvertimeStop(void)
+{
+	drTIMER_Stop(&drTIMER_TxOvertime);
+}
+
+void drTIMER_TxOvertimeHandler(void)
+{
+	drTIMER_TxOvertime.TimeOutFlg = true;
+}
+
+void drTIMER_TxOvertimeEventHandler(void)
+{
+	if(drCMN_BoolFlgCheck(&drTIMER_TxOvertime.TimeOutFlg))
+	{
+		drTIMER_TxOvertimeStop();
+		
+		nrf_esb_flush_tx();
+		TIMER_RxWindowReset();
+	}
+}
 

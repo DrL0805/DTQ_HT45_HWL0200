@@ -210,18 +210,8 @@ void LCD_DRV_WriteCmd(uint8_t Cmd)
 	for(i = 0;i < 8;i++)
 	{
 		LCD_SCL_LOW();
-//		LCD_DRIVE_DELAY();
-
 		nrf_gpio_pin_write(LCD_PIN_SDA, Cmd & 0x80);		
-//		if(Cmd & 0x80)
-//			LCD_SDA_HIGH();
-//		else
-//			LCD_SDA_LOW();
-//		LCD_DRIVE_DELAY();
-		
 		LCD_SCL_HIGH();
-//		LCD_DRIVE_DELAY();
-		
 		Cmd = Cmd << 1;
 	}
 	
@@ -238,18 +228,8 @@ void LCD_DRV_WriteData(uint8_t Data)
 	for(i = 0;i < 8;i++)
 	{
 		LCD_SCL_LOW();
-//		LCD_DRIVE_DELAY();
-		
 		nrf_gpio_pin_write(LCD_PIN_SDA, Data & 0x80);	
-//		if(Cmd & 0x80)
-//			LCD_SDA_HIGH();
-//		else
-//			LCD_SDA_LOW();
-//		LCD_DRIVE_DELAY();
-		
 		LCD_SCL_HIGH();
-//		LCD_DRIVE_DELAY();
-		
 		Data = Data << 1;
 	}
 	

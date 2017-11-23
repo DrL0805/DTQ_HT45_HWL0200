@@ -51,14 +51,13 @@ uint32_t APP_ParUpdate(void)
 	if( APP.NFCIrqFlg && (nrf_gpio_pin_read(I2C_INT) == 1 ))
 	{		
 		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
-		APP.NFCIrqFlg = false;			
-		TIMER_NFCStart();
+		APP.NFCIrqFlg = false;	
+		drTIMER_NFCStart(drTIMER_PERIOD_NFC);
 	}
 	
 	if(APP.NRFUpdataFlg)
 	{
 		APP.NRFUpdataFlg = false;
-//		APP.NRFDelayFlg = false;
 		
 		M24SR_RFConfig(0);
 		__set_PRIMASK(1);
@@ -115,11 +114,6 @@ uint32_t APP_ParUpdate(void)
 				{
 					POWER_SysSleepToOn();
 				}	
-
-//				LCD_DisDigit(0, RADIO.MATCH.DtqNum);
-//				LCD_DisDigit(4, RADIO.MATCH.TxChannal);
-//				LCD_DisDigit(8, RADIO.MATCH.RxChannal);
-//				LCD_DisDigit(12, ++TmpCnt);	
 				
 				return drERROR_1356M_SUCCESS;
 			}

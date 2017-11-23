@@ -11,16 +11,19 @@
 
 #define		drTIMER_MAX_OUT_VALUE		(0xFFFFFF - 1)		//最大超时值
 
-#define 						drTIMER_PERIOD_SysSleep				drTIMER_TICK_CNT(5000)
-#define 						drTIMER_PERIOD_LowPwrPrompt			drTIMER_TICK_CNT(1000)
-#define 						drTIMER_PERIOD_SendResult			drTIMER_TICK_CNT(1000)
-#define 						drTIMER_PERIOD_LCD					drTIMER_TICK_CNT(3000)
-#define 						drTIMER_PERIOD_ERR					drTIMER_TICK_CNT(2000)
-#define 						ddrTIMER_PERIOD_AutoSend			drTIMER_TICK_CNT(200)
-#define 						drTIMER_PERIOD_RSSI					drTIMER_TICK_CNT(1000)
-#define 						drTIMER_PERIOD_KeyFreqCtrl			drTIMER_TICK_CNT(300)
-#define 						drTIMER_PERIOD_SendLimit			drTIMER_TICK_CNT(300)
-#define 						drTIMER_PERIOD_NFC					drTIMER_TICK_CNT(500)
+#define 	drTIMER_PERIOD_SysSleep				drTIMER_TICK_CNT(5000)
+#define 	drTIMER_PERIOD_LowPwrPrompt			drTIMER_TICK_CNT(1000)
+#define 	drTIMER_PERIOD_SendResult			drTIMER_TICK_CNT(1000)
+#define 	drTIMER_PERIOD_LCD					drTIMER_TICK_CNT(3000)
+#define 	drTIMER_PERIOD_ERR					drTIMER_TICK_CNT(2000)
+#define 	drTIMER_PERIOD_AutoSend				drTIMER_TICK_CNT(200)
+#define 	drTIMER_PERIOD_RSSI					drTIMER_TICK_CNT(1000)
+#define 	drTIMER_PERIOD_KeyFreqCtrl			drTIMER_TICK_CNT(300)
+#define 	drTIMER_PERIOD_SendLimit			drTIMER_TICK_CNT(300)
+#define 	drTIMER_PERIOD_NFC					drTIMER_TICK_CNT(500)
+#define 	drTIMER_PERIOD_WDT					drTIMER_TICK_CNT(1000)
+#define 	drTIMER_PERIOD_KEY					drTIMER_TICK_CNT(30)
+#define 	drTIMER_PERIOD_TxOvertime			drTIMER_TICK_CNT(20)
 
 
 // Typedefs -----------------------------------------------------------
@@ -120,6 +123,20 @@ extern void drTIMER_NFCStop(void);
 extern void drTIMER_NFCHandler(void);
 extern void drTIMER_NFCEventHandler(void);
 
+extern void drTIMER_WDTStart(uint32_t OutTick);
+extern void drTIMER_WDTStop(void);
+extern void drTIMER_WDTHandler(void);
+extern void drTIMER_WDTEventHandler(void);
+
+extern void drTIMER_KEYStart(uint32_t OutTick);
+extern void drTIMER_KEYStop(void);
+extern void drTIMER_KEYHandler(void);
+extern void drTIMER_KEYEventHandler(void);
+
+extern void drTIMER_TxOvertimeStart(uint32_t OutTick);
+extern void drTIMER_TxOvertimeStop(void);
+extern void drTIMER_TxOvertimeHandler(void);
+extern void drTIMER_TxOvertimeEventHandler(void);
 
 // Globals ------------------------------------------------------------
 extern drTIM_TIMER_PARAMETERS_T		drTIMER_TEST;

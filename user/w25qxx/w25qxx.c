@@ -92,26 +92,6 @@ void W25_FlashSectorErase(uint32_t SectorAddr)
 	{
 		spi_master_tx_rx(spi_base_address,2,check_tx_buf, check_rx_buf);
 	}while((check_rx_buf[1] & WIP_Flag) == 1);	
-	
-	
-//  /* Send write enable instruction */
-//  SPI_FLASH_WriteEnable();
-//  SPI_FLASH_WaitForWriteEnd();
-//  /* Sector Erase */
-//  /* Select the FLASH: Chip Select low */
-//  SPI_FLASH_CS_LOW();
-//  /* Send Sector Erase instruction */
-//  SPI_FLASH_SendByte(W25X_SectorErase);
-//  /* Send SectorAddr high nibble address byte */
-//  SPI_FLASH_SendByte((SectorAddr & 0xFF0000) >> 16);
-//  /* Send SectorAddr medium nibble address byte */
-//  SPI_FLASH_SendByte((SectorAddr & 0xFF00) >> 8);
-//  /* Send SectorAddr low nibble address byte */
-//  SPI_FLASH_SendByte(SectorAddr & 0xFF);
-//  /* Deselect the FLASH: Chip Select high */
-//  SPI_FLASH_CS_HIGH();
-//  /* Wait the end of Flash writing */
-//  SPI_FLASH_WaitForWriteEnd();
 }
 
 void W25_FlashPageWrite(uint8_t* pBuffer, uint32_t WtiteAddr, uint16_t NumByteToWrite)

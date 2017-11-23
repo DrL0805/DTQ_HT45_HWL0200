@@ -6,8 +6,7 @@ static void MAIN_DebugFun(void);
 	uint32_t i;
 int main (void)
 {
-
-	__disable_irq();	
+	__disable_irq();
 	
 	GPIO_Default();
 	
@@ -42,20 +41,19 @@ int main (void)
 	APP_PwrOnRequest();
 	
 	#if USE_AUTO_SEND
-	drTIMER_AutoSendStart(ddrTIMER_PERIOD_AutoSend);	// 自动按键发送测试定时器
+	drTIMER_AutoSendStart(drTIMER_PERIOD_AutoSend);	// 自动按键发送测试定时器
 	drTIMER_SysSleepStop();
 	#endif
 	
 	__enable_irq();
 
-	i = drTIMER_TICK_CNT(100);
-	i++;
 	while(true)
-	{	
+	{
+		drTIMER_EventHandler();
+		TIMER_EventHandler();	
 		switch(POWER.SysState)
 		{
-			case SYS_ON:	
-				TIMER_EventHandler();	
+			case SYS_ON:				
 				RADIO_RxDataHandler();	
 				APP_KeyHandler();
 				LCD_Update();	
@@ -69,7 +67,6 @@ int main (void)
 				APP_KeyHandler();
 				break;
 			case SYS_TEST:	
-				TIMER_EventHandler();	
 				RADIO_RxDataHandler();	
 				TEST_KeyHandler();
 				LCD_Update();	
@@ -81,16 +78,15 @@ int main (void)
 				NVIC_SystemReset();
 				break;
 		}
-		drTIMER_EventHandler();
 		drERROR_CHECK(APP_ParUpdate());
 		MAIN_DebugFun();
 		WDT_FeedDog();	
 		drERR_ErrHandler();
+		
 		// 若接收缓存数据全部处理完成，休眠
-		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg || !APP.NFCIrqFlg)
+		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
 		{
-			__WFE();							
-			__WFI();			
+			__WFE();										
 		}
 	}
 }

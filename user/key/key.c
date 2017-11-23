@@ -40,8 +40,7 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 	/* 系统正在开机时，对中断不做处理 */
 	if((I2C_INT == pin) && !APP.NFCIrqFlg) 	
 	{		
-		APP.NFCIrqFlg = true;
-//		APP.NRFDelayFlg = true;		
+		APP.NFCIrqFlg = true;	
 		LED_TOG(LED_0);			
 	}
 	else
@@ -150,7 +149,7 @@ void KEY_Scan(void)
 				if((0x00 != KEY_FirstValue) && (0x0F != KEY_FirstValue) && (0xF0 != KEY_FirstValue))
 				{
 					KEY.ScanState = KEY_TWO;	
-					TIMER_ButtonStart();
+					drTIMER_KEYStart(drTIMER_PERIOD_KEY);
 				}				
 				break;
 			case KEY_TWO:
@@ -162,7 +161,7 @@ void KEY_Scan(void)
 				}
 				else											//无效按键
 				{
-					TIMER_ButtonStop();	
+					drTIMER_KEYStop();
 					KEY.ScanState = KEY_ONE;
 				}					
 				break;
@@ -219,7 +218,7 @@ void KEY_Scan(void)
 						}
 						KEY.ScanDownFlg = true;	
 					}
-					TIMER_ButtonStop();
+					drTIMER_KEYStop();
 					KEY.ScanState = KEY_ONE;
 					KEY_FirstValue = 0;
 					KEY_NextValue = 0;						
