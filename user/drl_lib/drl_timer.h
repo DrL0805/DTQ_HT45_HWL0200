@@ -6,7 +6,7 @@
 
 // Defines ------------------------------------------------------------
 #define 	drTIMER_CLOCK_FREQ			(32768)
-#define 	drTIEMR_PRESCALER			(0)		// 定时器分频系数
+#define 	drTIEMR_PRESCALER			(32)		// 定时器分频系数
 #define 	drTIMER_TICK_CNT(MS)		(uint32_t)((((MS) * drTIMER_CLOCK_FREQ) / (1000 * (drTIEMR_PRESCALER + 1))))	
 
 #define		drTIMER_MAX_OUT_VALUE		(0xFFFFFF - 1)		//最大超时值

@@ -5,8 +5,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
+
 #include "main.h"
 
 // IST3308CA3 LCD Driver Command
@@ -123,15 +125,14 @@
 
 
 extern void LCD_DRV_Init(void);
+
+extern void LCD_DRV_WriteCmd(uint8_t Cmd);
+extern void LCD_DRV_WriteData(uint8_t Data);
+
 extern void LCD_Refresh(uint8_t dot);
 extern void LCD_DRV_DisplayOne(uint8_t Location, uint8_t DotType, uint16_t DotCode);
 extern void LCD_DRV_DisplayN(uint8_t Location, uint8_t CodeLen, uint8_t* CodeBuf);
 extern void LCD_DRV_DisplayDigit(uint8_t Location, uint8_t DigitValue);
-
-
-
-extern void LCD_DRV_WriteCmd(uint8_t Cmd);
-extern void LCD_DRV_WriteData(uint8_t Data);
 
 
 #endif 

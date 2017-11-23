@@ -3,7 +3,6 @@
 
 static void MAIN_DebugFun(void);
 
-	uint32_t i;
 int main (void)
 {
 	__disable_irq();
@@ -25,6 +24,12 @@ int main (void)
 	drERROR_CHECK(LED_Init());
 	drERROR_CHECK(W25_Init());
 	drERROR_CHECK(LCD_Init());
+	
+//	while(1)
+	{
+		LCD_UC1701_Test();		
+	}
+	
 	drERROR_CHECK(ADC_Init());
 	drERROR_CHECK(TEST_Init());
 	
@@ -46,6 +51,8 @@ int main (void)
 	#endif
 	
 	__enable_irq();
+
+
 
 	while(true)
 	{
@@ -84,10 +91,10 @@ int main (void)
 		drERR_ErrHandler();
 		
 		// 若接收缓存数据全部处理完成，休眠
-		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
-		{
-			__WFE();										
-		}
+//		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
+//		{
+//			__WFE();										
+//		}
 	}
 }
 

@@ -2,6 +2,7 @@
 #define	__LCD_LIB_H
 
 #include "lcd_drv.h"
+#include "lcd_uc1701_drv.h"
 
 //LCD应用层（学号、题号、评分值）关闭显示
 #define 	LCD_APP_CLEAR		(9999UL)
@@ -96,12 +97,18 @@ typedef enum
 	LCD_DIS_DATE			//显示生产日期
 }LCD_DISPLAY_TYPE;	
 
+typedef enum
+{
+	IST3308CA3,
+	UC1701			// 低功耗驱动
+}LCD_DRV_VER_T;
+
 typedef struct
 {
+	
+	
 	uint8_t		RefreshFlg;		// LCD刷新标志，每Bit对应一个刷新区域
 	
-//	uint8_t		Signal[64];
-//	uint8_t 	Battery[64];
 	uint8_t 	StudentId[8];		// 学生姓名/学号
 	uint8_t 	Input[16];			// 按键输入内容
 	
@@ -116,12 +123,11 @@ typedef struct
 	bool					UpdateFlg;
 	LCD_DISPLAY_TYPE		DisType;
 	LCD_REFRESH_DATA_T		DATA;
+	LCD_DRV_VER_T 			DrvVer;				// LCD硬件驱动版本
 	
 	uint8_t 				GBKCode[2];
 	uint8_t					DotMatrix[32];
 }LCD_PARAMETERS_T;
-
-
 
 extern LCD_PARAMETERS_T LCD;
 

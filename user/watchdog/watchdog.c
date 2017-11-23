@@ -27,7 +27,6 @@ uint32_t WDT_Init(void)
     nrf_drv_wdt_enable();	
 	
 	//Æô¶¯Î¹¹·¶¨Ê±Æ÷
-//	TIMER_WatchDogStart();
 	drTIMER_WDTStart(drTIMER_PERIOD_WDT);
 	WDT.FeedFlg = false;
 	
@@ -39,9 +38,8 @@ uint32_t WDT_Init(void)
 
 void WDT_FeedDog(void)
 {
-	if(WDT.FeedFlg)
+	if(drCMN_BoolFlgCheck(&WDT.FeedFlg))
 	{
-		WDT.FeedFlg = false;
 		nrf_drv_wdt_feed();
 	}
 }

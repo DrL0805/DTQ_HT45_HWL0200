@@ -23,6 +23,7 @@
 #include "drl_common.h"
 #include "drl_timer.h"
 
+#include "ascii.h"
 #include "simple_uart.h"
 #include "uart.h"
 #include "timers.h"
@@ -41,7 +42,6 @@
 #include "w25qxx.h"
 #include "lib_TagType4.h"
 #include "watchdog.h"
-//#include "timer_0.h"
 
 // 软件版本 -----------------------------------------------------------
 #define 	VERSION_PROTOCOL	(0)			//版本支持的协议,1表示自有协议
@@ -53,7 +53,7 @@
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(1)
-#define 	USE_WATCH_DOG			(1)
+#define 	USE_WATCH_DOG			(0)
 #define 	USE_UART_DEBUG			(0)
 #define		USE_AUTO_SEND			(1)		// 自动发送测试
 

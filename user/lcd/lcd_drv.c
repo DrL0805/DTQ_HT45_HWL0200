@@ -2,7 +2,6 @@
 
 /* Includes -----------------------------------------------------*/
 #include "lcd_drv.h"
-#include "ascii.h"
 
 void LCD_DRV_Init(void)
 {
