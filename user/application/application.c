@@ -486,7 +486,17 @@ void APP_KeyClearHandler(void)
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum] = 0;	// 清除上一个作答结果
 			
 			// 清除LCD显示
-			LCD_DRV_DisplayOne(32+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_CLEAR);				
+			switch(LCD.DrvVer)
+			{
+				case IST3308CA3:
+					LCD_DRV_DisplayOne(32+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_CLEAR);
+					break;
+				case UC1701:
+					LCD_UC1701_DisplayOne(32+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_CLEAR);
+					break;
+				default:
+					break;
+			}			
 			break;
 		default :
 			break;
@@ -961,28 +971,71 @@ void APP_KeyMultiSingleChoiceHandler(void)
 				return ;
 			
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x01;
-			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
+			switch(LCD.DrvVer)
+			{
+				case IST3308CA3:
+					LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
+					break;
+				case UC1701:
+					LCD_UC1701_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_A);
+					break;
+				default:
+					break;
+			}			
 			break;
 		case KEY_APP_B_2:
 			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
 				return ;			
 		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x02;
-			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);	
+			
+			switch(LCD.DrvVer)
+			{
+				case IST3308CA3:
+					LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);
+					break;
+				case UC1701:
+					LCD_UC1701_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_B);
+					break;
+				default:
+					break;
+			}			
 			break;
 		case KEY_APP_C_3:
 			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
 				return ;			
 		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x04;
-			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);	
+			
+			switch(LCD.DrvVer)
+			{
+				case IST3308CA3:
+					LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);
+					break;
+				case UC1701:
+					LCD_UC1701_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_C);
+					break;
+				default:
+					break;
+			}			
 			break;
 		case KEY_APP_D_4: 
 			if(APP.QUE.pMultiAnswerNum > 15)	// 多题单选最多16个题目，0~15
 				return ;			
 		
 			APP.QUE.MultiAnswer[APP.QUE.pMultiAnswerNum++] = 0x08;
-			LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);	
+			
+			switch(LCD.DrvVer)
+			{
+				case IST3308CA3:
+					LCD_DRV_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);
+					break;
+				case UC1701:
+					LCD_UC1701_DisplayOne(31+APP.QUE.pMultiAnswerNum,LCD_DRV_DOT_ASCII,ASCII_D);
+					break;
+				default:
+					break;
+			}			
 			break;
 		case KEY_APP_RINGHT:
 			APP_KeyMultiSendHandler();			
