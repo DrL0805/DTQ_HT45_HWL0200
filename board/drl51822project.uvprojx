@@ -436,16 +436,6 @@
               <FilePath>..\user\led\led.c</FilePath>
             </File>
             <File>
-              <FileName>lcd_drv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\lcd\lcd_drv.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcd_lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\lcd\lcd_lib.c</FilePath>
-            </File>
-            <File>
               <FileName>key.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\key\key.c</FilePath>
@@ -529,6 +519,31 @@
               <FileName>watchdog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\watchdog\watchdog.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>lcd</GroupName>
+          <Files>
+            <File>
+              <FileName>ascii.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\lcd\ascii.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\lcd\lcd_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\lcd\lcd_lib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_uc1701_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\lcd\lcd_uc1701_drv.c</FilePath>
             </File>
           </Files>
         </Group>

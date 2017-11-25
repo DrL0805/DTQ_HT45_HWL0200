@@ -53,9 +53,9 @@
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(1)
-#define 	USE_WATCH_DOG			(0)
+#define 	USE_WATCH_DOG			(1)
 #define 	USE_UART_DEBUG			(0)
-#define		USE_AUTO_SEND			(1)		// 自动发送测试
+#define		USE_AUTO_SEND			(0)		// 自动发送测试
 
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);

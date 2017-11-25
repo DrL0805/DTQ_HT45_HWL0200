@@ -1357,7 +1357,17 @@ void APP_CmdQuestionHandler(void)
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
 
-	LCD_DRV_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);			
+	switch(LCD.DrvVer)
+	{
+		case IST3308CA3:
+			LCD_DRV_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);	
+			break;
+		case UC1701:
+			LCD_UC1701_DisplayN(16, APP.CMD.CmdLen - 5, APP.CMD.CmdData+5);	
+			break;
+		default:
+			break;
+	}
 }
 
 void APP_CmdSysOffHandler(void)

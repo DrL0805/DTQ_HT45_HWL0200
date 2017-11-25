@@ -184,7 +184,7 @@ static uint32_t drTIMER_TickScheduler(void)
 		pNextTimer = pNextTimer->pNext;
 	}
 
-	NRF_RTC0->CC[0] = NextTickVal;	
+	NRF_RTC0->CC[0] = NextTickVal;		
 	
 	return 0;
 }
@@ -205,8 +205,8 @@ static uint32_t drTIMER_TickSourceInit(void)
 	NRF_RTC0->EVTENSET |= 0x01 << 16;				// 使能COMPARE0中断
 	NRF_RTC0->INTENSET |= 0x01 << 16;
 	
+	NVIC_ClearPendingIRQ(RTC0_IRQn);
     NVIC_SetPriority(RTC0_IRQn, 1);
-    NVIC_ClearPendingIRQ(RTC0_IRQn);
     NVIC_EnableIRQ(RTC0_IRQn);		
 	
 	NRF_RTC0->TASKS_START = 1;			// 开始运行RTC0定时器		

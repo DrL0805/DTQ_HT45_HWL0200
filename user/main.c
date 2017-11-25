@@ -24,18 +24,12 @@ int main (void)
 	drERROR_CHECK(LED_Init());
 	drERROR_CHECK(W25_Init());
 	drERROR_CHECK(LCD_Init());
-	
-//	while(1)
-	{
-		LCD_UC1701_Test();		
-	}
-	
 	drERROR_CHECK(ADC_Init());
 	drERROR_CHECK(TEST_Init());
 	
 	TIMER_RxWindowStart();	
 	TIMER_ADCStart();
-
+	
 	drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 	drTIMER_RSSIStart(drTIMER_PERIOD_RSSI);
 	LCD_DRV_WriteCmd(LCD_DISPLAY_ON);
@@ -51,9 +45,7 @@ int main (void)
 	#endif
 	
 	__enable_irq();
-
-
-
+	
 	while(true)
 	{
 		drTIMER_EventHandler();
@@ -90,11 +82,12 @@ int main (void)
 		WDT_FeedDog();	
 		drERR_ErrHandler();
 		
-		// 若接收缓存数据全部处理完成，休眠
-//		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
-//		{
-//			__WFE();										
-//		}
+		// 若无外设数据进行处理，CPU休眠
+		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
+		{
+			__WFE();
+			__WFI();
+		}
 	}
 }
 
