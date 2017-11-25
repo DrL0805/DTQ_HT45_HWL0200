@@ -49,13 +49,13 @@
 #define     VERSION_LEVEL_2		(3)			//二级版本号
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.7.0              "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.7.1              "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(1)
 #define 	USE_WATCH_DOG			(1)
 #define 	USE_UART_DEBUG			(0)
-#define		USE_AUTO_SEND			(0)		// 自动发送测试
+#define		USE_AUTO_SEND			(0)		// 自动发送测试 
 
 
 extern uint8_t XOR_Cal(uint8_t * dat,uint16_t length);
