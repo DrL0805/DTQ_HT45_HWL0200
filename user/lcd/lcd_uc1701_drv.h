@@ -83,6 +83,7 @@
 
 
 void LCD_UC1701_DRV_Init(void);
+void LCD_UC1701_PinSleep(void);
 void LCD_UC1701_Test(void);
 void LCD_UC1701_WriteCmd(uint8_t Cmd);
 void LCD_UC1701_WriteData(uint8_t Data);

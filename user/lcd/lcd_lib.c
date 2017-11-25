@@ -126,6 +126,8 @@ void LCD_Sleep(void)
 		case UC1701:
 			LCD_UC1701_WriteCmd(0xc9);  // Set Display disable
 			LCD_UC1701_WriteData(0xae);	
+			
+			LCD_UC1701_PinSleep();		
 			break;
 		default:
 			break;
@@ -205,29 +207,7 @@ void LCD_Update(void)
 		case UC1701:
 			if(LCD.DATA.RefreshFlg)
 			{		
-//				LCD_UC1701_WriteCmd(LCD_UC1701_SET_TEMP_COMP);
-//				
-//				LCD_UC1701_WriteCmd(0x2d);//Set Power Control 0x2d
-//				LCD_UC1701_WriteCmd(0xa2);//Set LC 0xa2
-//				LCD_UC1701_WriteCmd(0xe9);//Set LCD Bias Ratio 1/4
-//				
-//				LCD_UC1701_WriteCmd(0xf1);
-//				LCD_UC1701_WriteData(63);//Set COM End
-
-//				LCD_UC1701_WriteCmd(0x81); //Set VBIAS Potentiometer
-//				LCD_UC1701_WriteData(95); //4.8V
-//				
-//				LCD_UC1701_WriteCmd(0x2f);  //电流
-//				LCD_UC1701_WriteCmd(0x83);  //Set CKC
-//				LCD_UC1701_WriteData(0x02); //分频
-
-				LCD_UC1701_WriteCmd(0xab);  //set LC //频率 ,不加这条指令会导致LCD灭
-//				LCD_UC1701_WriteCmd(0x82);
-//				LCD_UC1701_WriteData(0x00);
-//				LCD_UC1701_WriteData(0x1a);
-
-//				LCD_UC1701_WriteCmd(0xc9);  // Set Display Enable
-//				LCD_UC1701_WriteData(0xaf);	
+				LCD_UC1701_WriteCmd(0xab);  //set LC //频率 ,不加这条指令会导致LCD显示颠倒
 				
 				if(LCD.DATA.RefreshFlg & LCD_REFRESH_SIGNAL)
 				{
@@ -262,7 +242,9 @@ void LCD_Update(void)
 				{
 					LCD.DATA.RefreshFlg &= ~LCD_REFRESH_RESULT;
 		//			LCD_DisplaySendResult(LCD.DATA.SendResultState);
-				}		
+				}
+				
+				LCD_UC1701_PinSleep();		// LCD 配置操作完后，配置引脚减少功耗
 			}			
 			break;
 		default:

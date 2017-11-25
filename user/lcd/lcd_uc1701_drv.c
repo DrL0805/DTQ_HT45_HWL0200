@@ -101,6 +101,17 @@ uint8_t LCD_UC1701_Read(uint8_t Cmd)
 	return ReadData;
 }
 
+void LCD_UC1701_PinSleep(void)
+{
+	// 配置引脚为输出状态，能降低LCD功耗约30+uA
+	nrf_gpio_pin_set(LCD_DRV_PIN_POWER);
+	nrf_gpio_pin_set(LCD_DRV_PIN_CSB);
+	nrf_gpio_pin_set(LCD_DRV_PIN_RST); 
+	nrf_gpio_pin_set(LCD_DRV_PIN_A0);	
+	nrf_gpio_pin_set(LCD_DRV_PIN_SCL);
+	nrf_gpio_pin_set(LCD_DRV_PIN_SDA);
+}
+
 void LCD_UC1701_DRV_Init(void)
 {
 	#if LCD_UC1701_SOFTWARE_SPI
