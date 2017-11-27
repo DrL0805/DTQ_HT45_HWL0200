@@ -32,7 +32,7 @@ uint32_t APP_Init(void)
 	else
 	{
 		memset(RADIO.MATCH.JsqUid,0xFF,4);			
-		memset(RADIO.MATCH.DtqUid,0xFF,4);
+		memcpy(RADIO.MATCH.DtqUid,NFC.UID+3,4);					//´ðÌâÆ÷UID-
 		RADIO.MATCH.TxChannal = NRF_DEFAULT_TX_CHANNEL;			
 		RADIO.MATCH.RxChannal = NRF_DEFAULT_RX_CHANNEL;		
 		RADIO.MATCH.TxPower = NRF_DEFAULT_TX_POWER;
