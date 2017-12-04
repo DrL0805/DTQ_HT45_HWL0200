@@ -11,7 +11,7 @@
 
 #define		drTIMER_MAX_OUT_VALUE		(0xFFFFFF - 1)		//最大超时值
 
-#define 	drTIMER_PERIOD_SysSleep				drTIMER_TICK_CNT(50000)
+#define 	drTIMER_PERIOD_SysSleep				drTIMER_TICK_CNT(5000)
 #define 	drTIMER_PERIOD_LowPwrPrompt			drTIMER_TICK_CNT(1000)
 #define 	drTIMER_PERIOD_SendResult			drTIMER_TICK_CNT(1000)
 #define 	drTIMER_PERIOD_LCD					drTIMER_TICK_CNT(3000)
