@@ -36,7 +36,7 @@ int main (void)
 	LCD_ClearScreen();
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_SIGNAL;
 	LCD.DATA.RefreshFlg |= LCD_REFRESH_STUDEN_ID;
-
+	
 	APP_PwrOnRequest();
 	
 	#if USE_AUTO_SEND

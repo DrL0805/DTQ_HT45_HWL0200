@@ -172,6 +172,7 @@ void LCD_Update(void)
 				{
 					LCD.DATA.RefreshFlg &= ~LCD_REFRESH_SIGNAL;
 					LCD_DisplayRSSI(RADIO.IM.LatestRssi);
+//					LCD_DisDigitN(0, (uint32_t)RADIO.IM.LatestRssi, 4);
 				}
 				
 				if(LCD.DATA.RefreshFlg & LCD_REFRESH_BATTERY)
