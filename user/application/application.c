@@ -159,13 +159,21 @@ void APP_KeyHandler(void)
 				APP.QUE.KeySendLimitFlg = false;
 			}
 		}
+		
+		// 键值保留，若在规定时间内收到了题目，则自动发送
+		// 若当前已收到题目，开始随机延时后自动发送键值，则不重置drTIMER_RetainKey定时器
+		if(!APP.RetainKeySendFlg)	
+		{
+			APP.RetainKeyExistFlg = true;
+			APP.RetainKeyVal = KEY.ScanValue;
+			drTIMER_RetainKeyStart(drTIMER_PERIOD_RetainKey);				
+		}
 
 		switch(POWER.SysState)
 		{					
 			case SYS_OFF:	
 				break;				
 			case SYS_ON:
-
 				drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
 				{
@@ -259,7 +267,7 @@ void APP_KeyHandler(void)
 						default:
 							break;
 					}					
-				}	
+				}
 				break;
 			case SYS_SLEEP:
 				POWER_SysSleepToOn();
@@ -352,7 +360,7 @@ void APP_KeyHandler(void)
 						default:
 							break;
 					}					
-				}			
+				}				
 				break;
 			case SYS_TEST:
 				
@@ -1404,13 +1412,21 @@ void APP_CmdQuestionHandler(void)
 	}	
 	else
 	{
-		APP.QUE.ReceiveQueFlg = true;	
+		APP.QUE.ReceiveQueFlg = true;
+		// 如果保存有键值，收到题目后自动发送
+		if(APP.RetainKeyExistFlg)
+		{
+			APP.RetainKeySendFlg = true;
+			drTIMER_RetainKeyStart(drTIMER_TICK_CNT(5+(GetRandomNumber()>>2))); 	// 随机延时5~5+63ms后发送键值
+//			KEY.ScanDownFlg = true;
+//			KEY.ScanValue = APP.RetainKeyVal;	
+		}
 	}
 	
 	APP.QUE.Answer = 0;
 	APP.QUE.pMultiAnswerNum = 0;
 	memset(APP.QUE.MultiAnswer, 0x00, 16);	
-
+	
 	switch(LCD.DrvVer)
 	{
 		case IST3308CA3:

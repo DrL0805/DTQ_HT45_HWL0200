@@ -24,6 +24,7 @@
 #define 	drTIMER_PERIOD_WDT					drTIMER_TICK_CNT(1000)
 #define 	drTIMER_PERIOD_KEY					drTIMER_TICK_CNT(30)
 #define 	drTIMER_PERIOD_TxOvertime			drTIMER_TICK_CNT(20)
+#define 	drTIMER_PERIOD_RetainKey			drTIMER_TICK_CNT(2000)
 
 
 // Typedefs -----------------------------------------------------------
@@ -137,6 +138,11 @@ extern void drTIMER_TxOvertimeStart(uint32_t OutTick);
 extern void drTIMER_TxOvertimeStop(void);
 extern void drTIMER_TxOvertimeHandler(void);
 extern void drTIMER_TxOvertimeEventHandler(void);
+
+extern void drTIMER_RetainKeyStart(uint32_t OutTick);
+extern void drTIMER_RetainKeyStop(void);
+extern void drTIMER_RetainKeyHandler(void);
+extern void drTIMER_RetainKeyEventHandler(void);
 
 // Globals ------------------------------------------------------------
 extern drTIM_TIMER_PARAMETERS_T		drTIMER_TEST;

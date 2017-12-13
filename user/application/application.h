@@ -88,8 +88,6 @@ typedef struct
 	PROJECT_DEVELOP_STATE_TYPE		ProjState;
 
 	bool				NFCIrqFlg;		// 13.56M刷卡中断标志
-//	bool				NRFDelayFlg;	// 13.56M延时等待更新标志（收到NFC中断后不立马更新，而延时等待RF磁场释放稳定，否则数据易出错）
-										// 且等待过程中不刷新屏幕显示，防止回显内容被清空
 	bool				NRFUpdataFlg;	// 13.56M更新标志
 	bool				KeyCntLimitFlg;	// 按键300ms限制定时器
 	
@@ -99,6 +97,11 @@ typedef struct
 	uint32_t			EchoCnt;	// 回显次数
 	
 	uint32_t 			KeyGapCnt;	// 物理按键和发送按键间隔计数，若大于3，允许发送
+	
+	// 按键触发后，若当前没收到题目，键值暂时存起来，若在规定时间内收到题目，自动提交键值
+	bool 				RetainKeyExistFlg;	// 当前保存有键值标志
+	bool				RetainKeySendFlg;	// 需要发送标志
+	uint8_t				RetainKeyVal;		// 当前保存的键值
 	
 	//当没收到题目时，按键结果仅作为显示（演示）用，无实际意义
 	uint8_t 			LcdDisType;				//显示类型，字母、判断、数字

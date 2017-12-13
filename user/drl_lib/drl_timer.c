@@ -32,6 +32,7 @@ drTIM_TIMER_PARAMETERS_T		drTIMER_WDT;				// 看门狗喂狗定时器
 drTIM_TIMER_PARAMETERS_T		drTIMER_KEY;				// 按键驱动定时器
 drTIM_TIMER_PARAMETERS_T		drTIMER_TxOvertime;			// 发送超时定时
 drTIM_TIMER_PARAMETERS_T		drTIMER_ADC;				// 电池电量ADC采集定时器
+drTIM_TIMER_PARAMETERS_T		drTIMER_RetainKey;			// 记住按键值，当收到题目时自动发送
 
 
 
@@ -64,7 +65,7 @@ uint32_t drTIMER_Init(void)
 	drTIMER_CreateTimer(&drTIMER_WDT, drTIMER_WDTHandler);
 	drTIMER_CreateTimer(&drTIMER_KEY, drTIMER_KEYHandler);
 	drTIMER_CreateTimer(&drTIMER_TxOvertime, drTIMER_TxOvertimeHandler);
-	
+	drTIMER_CreateTimer(&drTIMER_RetainKey, drTIMER_RetainKeyHandler);
 	return 0;	
 }
 
@@ -84,6 +85,7 @@ void drTIMER_EventHandler(void)
 	drTIMER_WDTEventHandler();
 	drTIMER_KEYEventHandler();	
 	drTIMER_TxOvertimeEventHandler();	
+	drTIMER_RetainKeyEventHandler();	
 	
 }
 
@@ -261,21 +263,21 @@ void drTIMER_PublicHandler(void)
 // 系统休眠定时器 --------------------------------------------------
 void drTIMER_SysSleepStart(uint32_t OutTick)
 {
-	#if SYS_NO_SLEEP_DEBUG
+	#if !SYS_NO_SLEEP_DEBUG
 	drTIMER_Start(&drTIMER_SysSleep, OutTick);
 	#endif
 }
 
 void drTIMER_SysSleepStop(void)
 {
-	#if SYS_NO_SLEEP_DEBUG
+	#if !SYS_NO_SLEEP_DEBUG
 	drTIMER_Stop(&drTIMER_SysSleep);
 	#endif
 }
 
 void drTIMER_SysSleepHandler(void)
 {
-	#if SYS_NO_SLEEP_DEBUG
+	#if !SYS_NO_SLEEP_DEBUG
 	drTIMER_SysSleep.TimeOutFlg = true;
 	#endif
 }
@@ -603,4 +605,40 @@ void drTIMER_TxOvertimeEventHandler(void)
 		TIMER_RxWindowReset();
 	}
 }
+
+// 记住按键键值，当收到题目是自动发键值 ---------------------------------------------------
+void drTIMER_RetainKeyStart(uint32_t OutTick)
+{
+	drTIMER_Start(&drTIMER_RetainKey, OutTick);
+}
+
+void drTIMER_RetainKeyStop(void)
+{
+	drTIMER_Stop(&drTIMER_RetainKey);
+}
+
+void drTIMER_RetainKeyHandler(void)
+{
+	drTIMER_RetainKey.TimeOutFlg = true;
+}
+
+void drTIMER_RetainKeyEventHandler(void)
+{
+	if(drCMN_BoolFlgCheck(&drTIMER_RetainKey.TimeOutFlg))
+	{
+		drTIMER_RetainKeyStop();
+		
+		APP.RetainKeyExistFlg = false;					
+		
+		if(drCMN_BoolFlgCheck(&APP.RetainKeySendFlg))	// 若需要发送键值（在按键保留时间内收到题目）则发送键值
+		{
+			KEY.ScanDownFlg = true;
+			KEY.ScanValue = APP.RetainKeyVal;			
+		}			
+
+	}
+}
+
+
+
 
