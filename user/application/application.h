@@ -96,8 +96,6 @@ typedef struct
 	uint32_t 			SendCnt;	// 按键发送次数							
 	uint32_t			EchoCnt;	// 回显次数
 	
-	uint32_t 			KeyGapCnt;	// 物理按键和发送按键间隔计数，若大于3，允许发送
-	
 	// 按键触发后，若当前没收到题目，键值暂时存起来，若在规定时间内收到题目，自动提交键值
 	bool 				RetainKeyExistFlg;	// 当前保存有键值标志
 	bool				RetainKeySendFlg;	// 需要发送标志

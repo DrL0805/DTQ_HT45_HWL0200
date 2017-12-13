@@ -129,9 +129,6 @@ uint32_t APP_ParUpdate(void)
 			return drERROR_1356M_LEN_ERR;
 		}		
 	}
-	
-	
-	
 	return drERROR_SUCCESS;
 }
 
@@ -139,25 +136,15 @@ void APP_KeyHandler(void)
 {
 	KEY_Scan();
 	
-	if(KEY.ScanDownFlg)				
+	if(drCMN_BoolFlgCheck(&KEY.ScanDownFlg))				
 	{				
-		KEY.ScanDownFlg = false;	
 		APP.PassCnt++;
 		
 		if(!APP.KeyCntLimitFlg)
 		{
 			APP.KeyCnt++;
 			APP.KeyCntLimitFlg = true;
-
 			drTIMER_KeyFreqCtrlStart(drTIMER_PERIOD_KeyFreqCtrl);
-		}
-		
-		if(RADIO.IM.TxIngFlg)
-		{	
-			if(++APP.KeyGapCnt > 3)
-			{
-				APP.QUE.KeySendLimitFlg = false;
-			}
 		}
 		
 		// 键值保留，若在规定时间内收到了题目，则自动发送
@@ -171,97 +158,54 @@ void APP_KeyHandler(void)
 
 		switch(POWER.SysState)
 		{					
-			case SYS_OFF:	
-				break;				
+			case SYS_OFF: break;				
 			case SYS_ON:
 				drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
-				{
+				{				
+					//发送允许标志，用于控制按发送键的频率
+					if(APP.QUE.KeySendLimitFlg)
+						return;					
+					
 					switch(APP.QUE.Type)
 					{
 						case QUE_SINGLE_CHOICE:					// 单选
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-							
-							// 不允许重复提交答案
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)		// 不允许重复提交答案
 							{								
 								APP_KeySingleChoiceHandler();
 							}						
-							
 							break;
 						case QUE_6_SINGLE_CHOICE:				// 6键单选
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-						
-							// 不允许重复提交答案
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)			// 不允许重复提交答案
 							{								
 								APP_Key6SingleChoiceHandler();
 							}							
-							break;						
-							
+							break;												
 						case QUE_JUDGE:						// 判断
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-							
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyJudgeHandler();
 							}							
 							break;
 						case QUE_MULTI_CHOICE:						// 单题多选
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;							
-							
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiChoiceHandler();
-							}
-							
+							}							
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;									
-						
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyActivityHandler();
-							}
-							
+							}						
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:			// 多个单选题
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;															
-						
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
 							}
-							
 							break;
-						case QUE_FREE:
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;																	
-							
-//							if(!RADIO.IM.TxIngFlg)
+						case QUE_FREE:							// 通用题
 								APP_KeyFreeHandler();
 							break;
 						default:
@@ -273,103 +217,61 @@ void APP_KeyHandler(void)
 				POWER_SysSleepToOn();
 				if(APP.QUE.ReceiveQueFlg)					//收到题目
 				{
+					//发送允许标志，用于控制按发送键的频率
+					if(APP.QUE.KeySendLimitFlg)
+						return;					
+					
 					switch(APP.QUE.Type)
 					{
 						case QUE_SINGLE_CHOICE:					// 单选
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-							
-							// 不允许重复提交答案
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)			// 不允许重复提交答案
 							{								
 								APP_KeySingleChoiceHandler();
 							}													
 							break;						
 						case QUE_6_SINGLE_CHOICE:				// 6键单选
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-						
-							// 不允许重复提交答案
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)			// 不允许重复提交答案
 							{								
 								APP_Key6SingleChoiceHandler();
 							}							
 							break;								
 						case QUE_JUDGE:						// 判断
-							
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;
-							
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)			// 不允许重复提交答案
 							{
 								APP_KeyJudgeHandler();
 							}							
 							break;
 						case QUE_MULTI_CHOICE:						// 多选
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;							
-						
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
-							if(!APP.QUE.AnsweredFlg)
+							if(!APP.QUE.AnsweredFlg)			// 不允许重复提交答案
 							{
 								APP_KeyMultiChoiceHandler();
-							}
-							
+							}							
 							break;
 						case QUE_ACTIVITY:					// 活动题（抢红包）
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;									
-						
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyActivityHandler();
-							}
-							
+							}						
 							break;
 						case QUE_MULTI_SINGLE_CHOICE:
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;								
-						
-//							if((!APP.QUE.AnsweredFlg && !RADIO.IM.TxIngFlg))
 							if(!APP.QUE.AnsweredFlg)
 							{
 								APP_KeyMultiSingleChoiceHandler();
-							}
-							
+							}							
 							break;
 						case QUE_FREE:
-							//发送允许标志，用于控制按发送键的频率
-							if(APP.QUE.KeySendLimitFlg)
-								return;								
-							
-//							if(!RADIO.IM.TxIngFlg)
-								APP_KeyFreeHandler();
+							APP_KeyFreeHandler();
 							break;
 						default:
 							break;
 					}					
 				}				
 				break;
-			case SYS_TEST:
-				
-				break;
+			case SYS_TEST: break;
 			case SYS_MATCH:
 				MATCH_KeyHandler();
 				break;
-			default:
-				break;
+			default: break;
 		}
 	}
 }
@@ -377,7 +279,6 @@ void APP_KeyHandler(void)
 void APP_CmdHandler(void)
 {
 	// 若已收到了有效数据且无更多包包，则立即关闭等待有效数据的接收窗，减少功耗
-//	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80) && !RADIO.IM.TxIngFlg)
 	if((CMD_PRE != APP.CMD.CmdType) && RADIO.IM.RxWindowWaitFlg && !(RADIO.RX.PackNum&0x80))
 	{
 		TIMER_RxWindowReset();

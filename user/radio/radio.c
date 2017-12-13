@@ -242,8 +242,7 @@ void RADIO_ActivLinkProcess(RADIO_LINK_TX_TYPE LinkTxType)
 			
 			APP.QUE.KeySendLimitFlg = true;			// 处于发送过程时，不允许再次按键发送数据
 
-			drTIMER_SendLimitStart(drTIMER_PERIOD_SendLimit);
-			APP.KeyGapCnt = 0;					
+			drTIMER_SendLimitStart(drTIMER_PERIOD_SendLimit);				
 			
 			TEST.StartCnt++;
 			
