@@ -83,10 +83,9 @@ int main (void)
 		drERR_ErrHandler();
 		
 		// 若无外设数据进行处理，CPU休眠
-		if(!get_rx_fifo_count() || !LCD.DATA.RefreshFlg)
+		if(!get_rx_fifo_count() && !LCD.DATA.RefreshFlg && nrf_esb_is_idle())
 		{
 			__WFE();
-			__WFI();
 		}
 	}
 }

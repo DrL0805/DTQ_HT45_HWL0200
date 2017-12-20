@@ -25,6 +25,9 @@ uint32_t RADIO_Init(void)
 	RADIO.IM.RxChannal = RADIO.MATCH.RxChannal;	
 	RADIO.IM.TxPower = RADIO.MATCH.TxPower;
 
+	RADIO.TX.SeqNum = GetRandomNumber();
+	RADIO.TX.PackNum = GetRandomNumber();
+	
 	err_code = RADIO_Config();
     APP_ERROR_CHECK(err_code);
 	
