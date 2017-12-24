@@ -47,7 +47,7 @@
 #define     NRF_ESB_MAX_PAYLOAD_LENGTH          250                  /**< The max size of the payload. Valid values are 1 to 252 */
 #endif
 
-#define     NRF_ESB_TX_FIFO_SIZE                4                   /**< The size of the transmission first in first out buffer. */
+#define     NRF_ESB_TX_FIFO_SIZE                8                   /**< The size of the transmission first in first out buffer. */
 #define     NRF_ESB_RX_FIFO_SIZE                18                   /**< The size of the reception first in first out buffer. */
 
 // 252 is the largest possible payload size according to the nRF5x architecture.
