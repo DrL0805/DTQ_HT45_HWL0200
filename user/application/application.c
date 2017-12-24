@@ -53,6 +53,7 @@ uint32_t APP_ParUpdate(void)
 		// 刷卡后不立马读取并更新数据，定时器适当延时，等RF磁场释放稳定。否则容易出现读取数据出错
 		APP.NFCIrqFlg = false;	
 		drTIMER_NFCStart(drTIMER_PERIOD_NFC);
+		memset(LCD.DATA.Scene+1, 0x00, 48);
 	}
 	
 	if(APP.NRFUpdataFlg)
