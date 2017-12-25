@@ -40,7 +40,8 @@ void button_event_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action
 	/* 系统正在开机时，对中断不做处理 */
 	if((I2C_INT == pin) && !APP.NFCIrqFlg) 	
 	{		
-		APP.NFCIrqFlg = true;	
+		APP.NFCIrqFlg = true;
+		memset(LCD.DATA.Scene+1, 0x00, 48);		// 清空LCD显示RAM
 		LED_TOG(LED_0);			
 	}
 	else
@@ -122,7 +123,6 @@ void KEY_Scan(void)
 	static uint8_t KEY_FirstValue = 0;				// 第一次扫描到的值
 	static uint8_t KEY_NextValue = 0;				// 之后扫描到的值,用于与第一次扫描的到值进行比较
 	static bool	CombinationKeyFlg = false;			// 组合键被按下标志
-	static uint8_t KEY_CombinationValue;			// 保存组合键的值
 	
 	if(true == KEY.PressFlg)
 	{
@@ -170,10 +170,30 @@ void KEY_Scan(void)
 				
 				if(0x0F != KEY_NextValue)		// 还有按键未被释放		
 				{
-					if(KEY_NextValue != KEY_FirstValue)
+					drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);			
+					
+					// 如果第一个按键是抢红包键，则是组合键
+					if(KEY_SCAN_FN == KEY_FirstValue && KEY_NextValue != KEY_FirstValue)
 					{
 						CombinationKeyFlg = true;
-						KEY_CombinationValue = KEY_NextValue;					
+						switch(KEY_NextValue)
+						{
+							case 0x29:			// 抢红包+A	
+								break;
+							case 0x2c:			// 抢红包+B
+								break;
+							case 0x35:			// 抢红包+C
+								break;
+							case 0x25:			// 抢红包+D
+								LCD_DisVer();
+								drTIMER_LCDStart(drTIMER_PERIOD_LCD);				
+								break;
+							case 0x39:			// 抢红包+对
+								break;
+							case 0x3d:			// 抢红包+错
+								break;
+							default: break;
+						}
 					}
 				}
 				else							// 所有按键都被释放
@@ -181,12 +201,6 @@ void KEY_Scan(void)
 					if(CombinationKeyFlg)		// 组合键
 					{
 						CombinationKeyFlg  = false;	
-						if(KEY_CombinationValue == 0x25)	// 抢红包+D
-						{
-							LCD_DisVer();
-							drTIMER_LCDStart(drTIMER_PERIOD_LCD);
-							drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
-						}
 					}
 					else
 					{
