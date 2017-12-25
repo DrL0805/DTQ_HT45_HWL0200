@@ -149,7 +149,8 @@ void APP_KeyHandler(void)
 		
 		// 键值保留，若在规定时间内收到了题目，则自动发送
 		// 若当前已收到题目，开始随机延时后自动发送键值，则不重置drTIMER_RetainKey定时器
-		if(!APP.RetainKeySendFlg)	
+		// 只有实际物理按键值才被记住，模拟按键不会
+		if((!APP.RetainKeySendFlg) && (KEY_TYPE_PHYSICS == KEY.Type))	
 		{
 			APP.RetainKeyExistFlg = true;
 			APP.RetainKeyVal = KEY.ScanValue;
@@ -1319,8 +1320,6 @@ void APP_CmdQuestionHandler(void)
 		{
 			APP.RetainKeySendFlg = true;
 			drTIMER_RetainKeyStart(drTIMER_TICK_CNT(5+(GetRandomNumber()>>2))); 	// 随机延时5~5+63ms后发送键值
-//			KEY.ScanDownFlg = true;
-//			KEY.ScanValue = APP.RetainKeyVal;	
 		}
 	}
 	

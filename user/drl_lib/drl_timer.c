@@ -425,6 +425,7 @@ void drTIMER_AutoSendEventHandler(void)
 	if(drCMN_BoolFlgCheck(&drTIMER_AutoSend.TimeOutFlg))
 	{
 		KEY.ScanDownFlg = true;
+		KEY.Type = KEY_TYPE_SIMULATION;
 		KEY.ScanValue = KEY_APP_A_1;		
 	}
 }
@@ -633,9 +634,9 @@ void drTIMER_RetainKeyEventHandler(void)
 		if(drCMN_BoolFlgCheck(&APP.RetainKeySendFlg))	// 若需要发送键值（在按键保留时间内收到题目）则发送键值
 		{
 			KEY.ScanDownFlg = true;
-			KEY.ScanValue = APP.RetainKeyVal;			
+			KEY.Type = KEY_TYPE_SIMULATION;
+			KEY.ScanValue = APP.RetainKeyVal;
 		}			
-
 	}
 }
 

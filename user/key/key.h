@@ -115,12 +115,19 @@ typedef enum {
 	KEY_THREE
 } __KEY_STATE;	
 
+typedef enum
+{
+	KEY_TYPE_PHYSICS,			// 物理按键
+	KEY_TYPE_SIMULATION 		// 模拟按键
+}KEY_TYPE;
 
 typedef struct 
 {
 	bool 		PressFlg;			//标记按键是否被按下
 	bool		ScanDownFlg;		//按键扫描完成，已经扫描到有效的键值
 	uint8_t 	ScanState;			//当前按键检测的状态			
+	
+	KEY_TYPE	Type;				// 按键类型，表明此按键是实际物理按压，还是程序模拟的
 	
 	uint8_t     ScanValue;			//按键扫描结果
 	bool	 	FnCombFlg;			//Fn组合键标志。防止Fn作为组合键后，释放Fn键时被认作一次单独的Fn按键

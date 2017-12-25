@@ -230,7 +230,8 @@ void KEY_Scan(void)
 							default:
 								break;
 						}
-						KEY.ScanDownFlg = true;	
+						KEY.ScanDownFlg = true;
+						KEY.Type = KEY_TYPE_PHYSICS;
 					}
 					drTIMER_KEYStop();
 					KEY.ScanState = KEY_ONE;
