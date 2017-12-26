@@ -49,7 +49,7 @@
 #define     VERSION_LEVEL_2		(3)			//二级版本号
 
 #define     VERSION_LEVEL_COMPANY	"HWL-SSLK                "
-#define     VERSION_LEVEL_NUMBER	"Ver: 0.12.6             "
+#define     VERSION_LEVEL_NUMBER	"Ver: 0.12.9             "
 #define		VERSION_LEVEL_TIME		"2017-11-2 20:51         "
 
 #define 	SYS_NO_SLEEP_DEBUG		(0)		//1，不休眠测试

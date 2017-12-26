@@ -341,24 +341,25 @@ void APP_CmdHandler(void)
 // 上电回显请求，
 void APP_PwrOnRequest(void)
 {
-	RADIO.TX.DataLen = 28;	
+	RADIO.TX.DataLen = 29;	
 	
 	RADIO.TX.Data[0] = NRF_DATA_HEAD;					// 头
 	memcpy(RADIO.TX.Data+1, RADIO.MATCH.DtqUid, 4);		// 源UID
 	memcpy(RADIO.TX.Data+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
 	RADIO.TX.Data[9] = 0x11;							// 设备ID
-	RADIO.TX.Data[10] = 0x20;
+	RADIO.TX.Data[10] = 0x20;				
 	RADIO.TX.Data[11] = 0;								// 回显指令的帧号/包号都为0
 	RADIO.TX.Data[12] = 0;
 	RADIO.TX.Data[13] = 0;								// 扩展字节长度
-	RADIO.TX.Data[14] = 11;								// PackLen
+	RADIO.TX.Data[14] = 12;								// PackLen
 	RADIO.TX.Data[15] = CMD_LCD_CTRL;					// 命令类型
-	RADIO.TX.Data[16] = 9;								// 命令长度，
+	RADIO.TX.Data[16] = 10;								// 命令长度，
 	RADIO.TX.Data[17] = 0x04;							// 回显请求命令
-	memset(RADIO.TX.Data+18, 0x00, 4);					// 序列号
-	memcpy(RADIO.TX.Data+22, RADIO.MATCH.DtqUid, 4);	// 答题器UID
-	RADIO.TX.Data[26] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
-	RADIO.TX.Data[27] = NRF_DATA_END;
+	RADIO.TX.Data[18] = 0x00;							// ACK序号
+	memset(RADIO.TX.Data+19, 0x00, 4);					// 序列号
+	memcpy(RADIO.TX.Data+23, RADIO.MATCH.DtqUid, 4);	// 答题器UID
+	RADIO.TX.Data[27] = XOR_Cal(RADIO.TX.Data+1, RADIO.TX.DataLen - 3);
+	RADIO.TX.Data[28] = NRF_DATA_END;
 	
 	RADIO_ActivLinkProcess(RADIO_TX_NEED_RETRY);		
 }
@@ -1499,7 +1500,7 @@ void APP_CmdLcdCtrlHandler(void)
 					LCD.DATA.ScenePos = 0;	
 					
 					LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
-				}				
+				}
 			}
 			
 			// bit0作为是否有ACK标志位
@@ -1519,15 +1520,15 @@ void APP_CmdLcdCtrlHandler(void)
 			memcpy(RADIO.TX.EchoData+1, RADIO.MATCH.DtqUid, 4);		// 源UID
 			memcpy(RADIO.TX.EchoData+5, RADIO.MATCH.JsqUid, 4);		// 目标UID
 			RADIO.TX.EchoData[9] = 0x11;							// 设备ID
-			RADIO.TX.EchoData[10] = 0x20;
+			RADIO.TX.EchoData[10] = 0x20;							// 协议版本
 			RADIO.TX.EchoData[11] = 0;								// 回显指令的帧号/包号都为0
 			RADIO.TX.EchoData[12] = 0;
 			RADIO.TX.EchoData[13] = 0;								// 扩展字节长度
-			RADIO.TX.EchoData[14] = 11;								// PackLen
+			RADIO.TX.EchoData[14] = 12;								// PackLen
 			RADIO.TX.EchoData[15] = CMD_LCD_CTRL;					// 命令类型
-			RADIO.TX.EchoData[16] = 9;								// 命令长度，
-			RADIO.TX.EchoData[17] = RADIO.RX.PackData[RADIO.RX.PackData[2+i*58]];			// 回显/ACK控制位
-			RADIO.TX.EchoData[18] = RADIO.RX.PackData[RADIO.RX.PackData[3+i*58]];			// ACK序号原样返回
+			RADIO.TX.EchoData[16] = 10;								// 命令长度，
+			RADIO.TX.EchoData[17] = RADIO.RX.PackData[2+i*58];			// 回显/ACK控制位
+			RADIO.TX.EchoData[18] = RADIO.RX.PackData[3+i*58];			// ACK序号原样返回
 			memcpy(RADIO.TX.EchoData+19, RADIO.RX.PackData+4+i*58, 4);	// 序列号原样返回
 			memcpy(RADIO.TX.EchoData+23, RADIO.MATCH.DtqUid, 4);
 			RADIO.TX.EchoData[27] = XOR_Cal(RADIO.TX.EchoData+1, RADIO.TX.EchoLen - 3);

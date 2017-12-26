@@ -158,7 +158,7 @@ void KEY_Scan(void)
 			
 				if(KEY_NextValue == KEY_FirstValue)				//如果两个值相等，消抖完成,有效按键
 				{
-					KEY.ScanState = KEY_THREE;	
+					KEY.ScanState = KEY_THREE;
 				}
 				else											//无效按键
 				{
@@ -211,6 +211,8 @@ void KEY_Scan(void)
 					}
 					else
 					{
+						KEY.ScanDownFlg = true;
+						KEY.Type = KEY_TYPE_PHYSICS;						
 						switch (KEY_FirstValue)
 						{
 							case KEY_SCAN_A_1:
@@ -235,10 +237,10 @@ void KEY_Scan(void)
 								KEY.ScanValue = KEY_APP_FN;
 								break;
 							default:
+								KEY.ScanValue = KEY_APP_INVALID;
+								KEY.ScanDownFlg = false;
 								break;
-						}
-						KEY.ScanDownFlg = true;
-						KEY.Type = KEY_TYPE_PHYSICS;
+						}	
 					}
 					drTIMER_KEYStop();
 					KEY.ScanState = KEY_ONE;
