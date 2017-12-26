@@ -123,6 +123,7 @@ void KEY_Scan(void)
 	static uint8_t KEY_FirstValue = 0;				// 第一次扫描到的值
 	static uint8_t KEY_NextValue = 0;				// 之后扫描到的值,用于与第一次扫描的到值进行比较
 	static bool	CombinationKeyFlg = false;			// 组合键被按下标志
+	static bool	SpecialKeyFlg = false;				// 特殊按键标志
 	
 	if(true == KEY.PressFlg)
 	{
@@ -172,10 +173,15 @@ void KEY_Scan(void)
 				{
 					drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);			
 					
+					if(KEY_FirstValue != KEY_NextValue)
+					{
+						SpecialKeyFlg = true;	// 根据好未来要求，交替长按、多个按键一起按不能作为有效键值
+					}
+					
 					// 如果第一个按键是抢红包键，则是组合键
 					if(KEY_SCAN_FN == KEY_FirstValue && KEY_NextValue != KEY_FirstValue)
 					{
-						CombinationKeyFlg = true;
+						CombinationKeyFlg  = true;
 						switch(KEY_NextValue)
 						{
 							case 0x29:			// 抢红包+A	
@@ -198,9 +204,10 @@ void KEY_Scan(void)
 				}
 				else							// 所有按键都被释放
 				{
-					if(CombinationKeyFlg)		// 组合键
+					if(CombinationKeyFlg || SpecialKeyFlg)		// 组合键
 					{
 						CombinationKeyFlg  = false;	
+						SpecialKeyFlg = false;
 					}
 					else
 					{
