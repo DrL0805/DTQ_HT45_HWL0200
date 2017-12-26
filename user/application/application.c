@@ -427,7 +427,6 @@ void APP_KeySendHandler(void)
 		return;
 	}
 	
-	
 	// 没有作答，发送键无效
 	if(0x00 == APP.QUE.Answer)
 	{
@@ -435,7 +434,6 @@ void APP_KeySendHandler(void)
 		return;
 	}
 		
-	
 	/*
 		答题器2.4G链路层数据格式
 		0：包头0x61
@@ -480,6 +478,17 @@ void APP_KeySendHandler(void)
 		RADIO.TX.PackNum = 1;
 	else
 		RADIO.TX.PackNum++;		
+	
+	RADIO.TX.AckNum = RADIO.TX.PackNum;	
+	// 如果不是通用题，只允许按键作答一次，所以要检测ACK有效性
+	if(QUE_FREE == APP.QUE.Type)
+	{
+		RADIO.TX.AckActiveFlg = false;	
+	}
+	else
+	{
+		RADIO.TX.AckActiveFlg = true;	
+	}
 	
 	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = RADIO.TX.PackNum;
@@ -571,6 +580,17 @@ void APP_KeyMultiSendHandler(void)
 	else
 		RADIO.TX.PackNum++;		
 	
+	RADIO.TX.AckNum = RADIO.TX.PackNum;	
+	// 如果不是通用题，只允许按键作答一次，所以要检测ACK有效性
+	if(QUE_FREE == APP.QUE.Type)
+	{
+		RADIO.TX.AckActiveFlg = false;	
+	}
+	else
+	{
+		RADIO.TX.AckActiveFlg = true;	
+	}	
+
 	RADIO.TX.Data[11] = RADIO.TX.SeqNum;
 	RADIO.TX.Data[12] = RADIO.TX.PackNum;
 	RADIO.TX.Data[13] = 0;						// 扩展字节长度
@@ -871,9 +891,6 @@ void APP_KeyMultiChoiceHandler(void)
 // 多题单选
 void APP_KeyMultiSingleChoiceHandler(void)
 {
-
-	
-	
 	switch(KEY.ScanValue)
 	{
 		case KEY_APP_A_1:
@@ -1400,19 +1417,6 @@ void APP_CmdAckHandler(void)
 //				RADIO.IM.TxSucFlg = true;
 			}
 		}
-	
-	
-//	uint8_t i, pUid = 1;
-//	
-//	for(i = 0;i < APP.CMD.CmdData[0];i++)
-//	{
-//		// 检测此答题器是否收到ACK
-//		if(ArrayCmp(APP.CMD.CmdData+pUid, RADIO.MATCH.DtqUid, 4))
-//		{
-//			RADIO.IM.TxSucFlg = true;
-//		}
-//		pUid += 4;
-//	}
 }
 	
 void APP_CmdGetStateHandler(void)
@@ -1451,7 +1455,6 @@ void APP_CmdSetScoreHandler(void)
 			RADIO.MATCH.Student.Score = APP.CMD.CmdData[5*i + 4];
 		}
 	}
-
 }
 
 void APP_CmdLcdCtrlHandler(void)
@@ -1479,22 +1482,19 @@ void APP_CmdLcdCtrlHandler(void)
 	*/
 	uint8_t i;
 	static uint8_t  EchoSeq[4];				// 回显序号
-	uint8_t TmpBuf[64];
 	
-	memset(TmpBuf, 0x00, 64);
-	
-	for(i = 0;i < ((RADIO.RX.PackLen-2) / 57);i++) 
+	for(i = 0;i < ((RADIO.RX.PackLen-2) / 58);i++) 
 	{
 		// 查看名单里是否有此答题器
-		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+7 + i*57, 4))
-		{		
+		if(ArrayCmp(RADIO.MATCH.DtqUid, RADIO.RX.PackData+8 + i*58, 4))
+		{
 			//bit1作为是否有回显标志位
-			if(RADIO.RX.PackData[2+i*57] & 0x02)
+			if(RADIO.RX.PackData[2+i*58] & 0x02)
 			{
 				// 查看是否是新的回显信息
-				if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+3 + i*57, 4))
+				if(!ArrayCmp(EchoSeq, RADIO.RX.PackData+4 + i*58, 4))
 				{
-					memcpy(EchoSeq, RADIO.RX.PackData+3 + i*57, 4);				
+					memcpy(EchoSeq, RADIO.RX.PackData+4 + i*58, 4);				
 					APP.EchoCnt++;
 					LCD.DATA.ScenePos = 0;	
 					
@@ -1503,18 +1503,17 @@ void APP_CmdLcdCtrlHandler(void)
 			}
 			
 			// bit0作为是否有ACK标志位
-			if(RADIO.RX.PackData[2+i*57] & 0x01)
+			if((RADIO.RX.PackData[2+i*58] & 0x01) && RADIO.TX.AckActiveFlg && (RADIO.RX.PackData[3+i*58] == RADIO.TX.AckNum))
 			{
 				APP.QUE.AnsweredFlg = true;
-//				RADIO.IM.TxSucFlg = true;
-			}			
+			}
 			
 			// 根据指令更新LCD显示	
 			LCD.DATA.Scene[0] = 48;		
-			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+11 + i*57, LCD.DATA.Scene[0]);
+			memcpy(LCD.DATA.Scene+1, RADIO.RX.PackData+12 + i*58, LCD.DATA.Scene[0]);
 			
 			// 返回回显确认信息
-			RADIO.TX.EchoLen = 28;	
+			RADIO.TX.EchoLen = 29;	
 			
 			RADIO.TX.EchoData[0] = NRF_DATA_HEAD;					// 头
 			memcpy(RADIO.TX.EchoData+1, RADIO.MATCH.DtqUid, 4);		// 源UID
@@ -1527,11 +1526,12 @@ void APP_CmdLcdCtrlHandler(void)
 			RADIO.TX.EchoData[14] = 11;								// PackLen
 			RADIO.TX.EchoData[15] = CMD_LCD_CTRL;					// 命令类型
 			RADIO.TX.EchoData[16] = 9;								// 命令长度，
-			RADIO.TX.EchoData[17] = RADIO.RX.PackData[2];			// 回显/ACK控制位	
-			memcpy(RADIO.TX.EchoData+18, RADIO.RX.PackData+3+i*57, 4);	// 序列号原样返回
-			memcpy(RADIO.TX.EchoData+22, RADIO.MATCH.DtqUid, 4);
-			RADIO.TX.EchoData[26] = XOR_Cal(RADIO.TX.EchoData+1, RADIO.TX.EchoLen - 3);
-			RADIO.TX.EchoData[27] = NRF_DATA_END;
+			RADIO.TX.EchoData[17] = RADIO.RX.PackData[RADIO.RX.PackData[2+i*58]];			// 回显/ACK控制位
+			RADIO.TX.EchoData[18] = RADIO.RX.PackData[RADIO.RX.PackData[3+i*58]];			// ACK序号原样返回
+			memcpy(RADIO.TX.EchoData+19, RADIO.RX.PackData+4+i*58, 4);	// 序列号原样返回
+			memcpy(RADIO.TX.EchoData+23, RADIO.MATCH.DtqUid, 4);
+			RADIO.TX.EchoData[27] = XOR_Cal(RADIO.TX.EchoData+1, RADIO.TX.EchoLen - 3);
+			RADIO.TX.EchoData[28] = NRF_DATA_END;
 			
 			RADIO_ActivLinkProcess(RADIO_TX_NO_RETRY_RANDOM_DELAY);					
 			break;				

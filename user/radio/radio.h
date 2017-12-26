@@ -88,6 +88,12 @@ typedef struct
 	
 	uint8_t 		SeqNum;
 	uint8_t			PackNum;
+	
+	bool			AckActiveFlg;				// Ack有效标志位，不能重复提交的题目类型(单选、判断、抢红包、6键单选)ACK才起作用。
+	uint8_t         AckNum;						// ACK序号，每次发送前AckNum = PackNum，
+												// 接收器收到答题器按键作答后，会以PackNum作为Ack序号返回给答题器
+												// 答题器通过这个序号来判断是否是想要的Ack
+												// 注：
 }NRF_TX_LINK_LAYER_T;
 
 typedef struct
