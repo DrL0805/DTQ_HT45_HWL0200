@@ -107,7 +107,6 @@ uint32_t APP_ParUpdate(void)
 				// 若答题器休眠，刷卡唤醒，并重置30秒休眠定时器
 				if(SYS_ON == POWER.SysState)
 				{
-
 					drTIMER_SysSleepStart(drTIMER_PERIOD_SysSleep);
 				}
 				else if(SYS_SLEEP == POWER.SysState)
@@ -1482,7 +1481,7 @@ void APP_CmdLcdCtrlHandler(void)
 		26：包尾0x21
 	*/
 	uint8_t i;
-	static uint8_t  EchoSeq[4];				// 回显序号
+	static uint8_t  EchoSeq[4];				// 上次的回显序号
 	
 	for(i = 0;i < ((RADIO.RX.PackLen-2) / 58);i++) 
 	{
@@ -1497,8 +1496,7 @@ void APP_CmdLcdCtrlHandler(void)
 				{
 					memcpy(EchoSeq, RADIO.RX.PackData+4 + i*58, 4);				
 					APP.EchoCnt++;
-					LCD.DATA.ScenePos = 0;	
-					
+					LCD.DATA.ScenePos = 0;						
 					LCD.DATA.RefreshFlg |= LCD_REFRESH_SCENE;
 				}
 			}
